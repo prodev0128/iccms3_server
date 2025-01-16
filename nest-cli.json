@@ -1,9 +1,19 @@
 {
   "compilerOptions": {
-    "tsConfigPath": "tsconfig.json"
+    "tsConfigPath": "tsconfig.json",
+    "webpack": true
   },
   "monorepo": true,
   "projects": {
+    "incoming": {
+      "type": "application",
+      "root": "apps/incoming",
+      "entryFile": "main",
+      "sourceRoot": "apps/incoming/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/incoming/tsconfig.app.json"
+      }
+    },
     "api": {
       "type": "application",
       "root": "apps/api",
@@ -38,6 +48,15 @@
       "sourceRoot": "libs/database/src",
       "compilerOptions": {
         "tsConfigPath": "libs/database/tsconfig.lib.json"
+      }
+    },
+    "jwt": {
+      "type": "library",
+      "root": "libs/jwt",
+      "entryFile": "index",
+      "sourceRoot": "libs/jwt/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/jwt/tsconfig.lib.json"
       }
     }
   }

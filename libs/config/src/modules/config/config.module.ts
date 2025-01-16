@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import * as process from 'node:process';
 
 @Module({
   imports: [
@@ -28,4 +27,4 @@ import * as process from 'node:process';
   providers: [ConfigService],
   exports: [ConfigService], // Export ConfigService to be used in other modules
 })
-export class ConfigMyModule {}
+export class ConfigEnvModule {}

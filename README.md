@@ -31,6 +31,22 @@
 ```bash
 $ npm install
 ```
+## Project Scaling and Maintenance
+
+```bash
+# add app service
+$ nest generate app my-app-name
+```
+
+```bash
+# add library service
+$ nest generate library my-library-name
+```
+
+### Check out a few config files.
+- nest-cli.json
+- tsconfig.json
+- package.json
 
 ## Compile and run the project
 
@@ -38,7 +54,9 @@ $ npm install
 # development
 $ npm run start:api:dev
 $ npm run start:auth:dev
+```
 
+```bash
 # production mode
 $ npm run start:api:prod
 $ npm run start:auth:prod
