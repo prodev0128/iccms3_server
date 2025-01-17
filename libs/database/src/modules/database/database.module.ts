@@ -1,10 +1,17 @@
+import { ConfigEnvModule } from '@app/config';
 import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { User, UserSchema } from '../../schemas/user.schema'; // Import User schema
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]), // Register User schema
+    MongooseModule.forRootAsync({
+      imports: [ConfigEnvModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('mongodb.uri'), // Get MongoDB URI from ConfigModule
+      }),
+      inject: [ConfigService],
+    }),
   ],
   exports: [MongooseModule], // Export MongooseModule for use in other apps
 })
