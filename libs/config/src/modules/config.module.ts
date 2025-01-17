@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import {
+  ConfigModule as NestConfigModule,
+  ConfigService,
+} from '@nestjs/config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
+    NestConfigModule.forRoot({
       isGlobal: true, // Makes the ConfigModule available globally
       load: [
         () => ({
@@ -25,6 +28,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     }),
   ],
   providers: [ConfigService],
-  exports: [ConfigService], // Export ConfigService to be used in other modules
+  exports: [ConfigService], // Export ConfigService to be used in other services
 })
-export class ConfigEnvModule {}
+export class ConfigModule {}

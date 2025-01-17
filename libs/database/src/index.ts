@@ -1,1 +1,2 @@
-export * from './modules/module';
+export * from './modules';
+export * from './schemas';

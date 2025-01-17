@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { FtpIncomingModule } from './ftp-incoming/ftp-incoming.module';
+import { FtpIncomingModule } from './modules/ftp-incoming/ftp-incoming.module';
 
 @Module({
   imports: [FtpIncomingModule],

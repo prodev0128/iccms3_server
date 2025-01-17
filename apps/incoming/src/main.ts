@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { CustomTransportStrategy } from '@nestjs/microservices';
 
-import { MainModule } from './modules/module';
+import { MainModule } from './modules';
 
 class KeepAliveStrategy implements CustomTransportStrategy {
   private closing = false;

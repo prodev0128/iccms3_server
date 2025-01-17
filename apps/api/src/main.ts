@@ -2,7 +2,7 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-import { MainModule } from './modules/module';
+import { MainModule } from './modules';
 
 async function bootstrap() {
   const app = await NestFactory.create(MainModule);
@@ -17,7 +17,7 @@ async function bootstrap() {
   SwaggerModule.setup('doc', app, document);
 
   const configService = app.get(ConfigService);
-  const port = configService.get<number>('port.api') || 3128;
+  const port = configService.get<number>('port.api');
   await app.listen(port);
   console.log(`🟢 Api Module listening at ${port} 🟢\n`);
 }
