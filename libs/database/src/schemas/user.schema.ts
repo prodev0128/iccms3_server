@@ -5,14 +5,17 @@ export type UserDocument = User & Document;
 
 @Schema()
 export class User {
-  @Prop({ required: true })
-  username: string;
+  @Prop()
+  userID: string;
 
-  @Prop({ required: true })
-  email: string;
-
-  @Prop({ required: true })
+  @Prop()
   password: string;
+
+  @Prop()
+  name: string;
+
+  @Prop()
+  permissions: Array<string>;
 
   @Prop({ default: Date.now })
   createdAt: Date;

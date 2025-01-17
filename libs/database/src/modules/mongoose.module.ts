@@ -1,18 +1,16 @@
-import { ConfigModule } from '@app/config';
+import { config } from '@app/config';
+import { User, UserSchema } from '@app/database/schemas/user.schema';
 import { Module } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { MongooseModule as NestMongooseModule } from '@nestjs/mongoose';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
-    NestMongooseModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('mongodb.uri'), // Get MongoDB URI from ConfigModule
-      }),
-      inject: [ConfigService],
-    }),
+    MongooseModule.forRoot(config.mongodb.uri),
+    MongooseModule.forFeature([
+      { name: User.name, schema: UserSchema },
+      { name: User.name, schema: UserSchema },
+    ]),
   ],
-  exports: [NestMongooseModule], // Export MongooseModule for use in other apps
+  exports: [MongooseModule], // Export MongooseModule for use in other apps
 })
-export class MongooseModule {}
+export class DatabaseModule {}

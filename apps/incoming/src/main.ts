@@ -27,5 +27,6 @@ async function bootstrap() {
     strategy: new KeepAliveStrategy(),
   });
   await app.listen();
+  console.log(`🟢 Incoming Module working at background 🟢\n`);
 }
 bootstrap();

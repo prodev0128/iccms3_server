@@ -1,23 +1,16 @@
-import { ConfigService } from '@nestjs/config';
+import { config } from '@app/config';
+import { setupLogger, setupSwagger } from '@app/utils';
 import { NestFactory } from '@nestjs/core';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { MainModule } from './modules';
 
 async function bootstrap() {
   const app = await NestFactory.create(MainModule);
 
-  const config = new DocumentBuilder()
-    .setTitle('ICCMS3 API DOCUMENTATION')
-    .setDescription('The API documentation for NestJS with Swagger')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('doc', app, document);
+  setupSwagger(app);
+  setupLogger(app);
 
-  const configService = app.get(ConfigService);
-  const port = configService.get<number>('port.api');
+  const port = config.port.api;
   await app.listen(port);
   console.log(`🟢 Api Module listening at ${port} 🟢\n`);
 }
