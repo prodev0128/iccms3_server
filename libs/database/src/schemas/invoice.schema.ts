@@ -9,10 +9,10 @@ export class Invoice {
   name: string;
 
   @Prop()
-  age: number;
+  org: string;
 
-  @Prop()
-  breed: string;
+  @Prop({ default: Date.now })
+  createdAt: Date;
 }
 
 export const InvoiceSchema = SchemaFactory.createForClass(Invoice);

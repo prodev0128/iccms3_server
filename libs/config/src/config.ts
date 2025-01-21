@@ -5,7 +5,8 @@ dotenv.config();
 export const config = {
   port: {
     auth: parseInt(process.env.PORT_APP_AUTH, 10) || 3128,
-    api: parseInt(process.env.PORT_APP_API, 10) || 3129,
+    admin: parseInt(process.env.PORT_APP_ADMIN, 10) || 3129,
+    api: parseInt(process.env.PORT_APP_API, 10) || 3130,
   },
   mongodb: {
     uri:
