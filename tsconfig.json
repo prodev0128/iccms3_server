@@ -46,7 +46,8 @@
   },
   "include": [
     "apps/**/*",
-    "libs/**/*"
+    "libs/**/*",
+    "scripts/*"
   ],
   "exclude": [
     "node_modules"
