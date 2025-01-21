@@ -1,14 +1,13 @@
 import { config } from '@app/config';
 import { setupLogger, setupSwagger } from '@app/utils';
-import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
 import { AuthModule } from './modules/auth/auth.module';
 
 async function bootstrap() {
-  const logger = new Logger(config.auth.name);
   const app = await NestFactory.create(AuthModule);
 
+  const logger = app.get('GLOBAL_LOGGER');
   setupSwagger(app);
   setupLogger(app);
 

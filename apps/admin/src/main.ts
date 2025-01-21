@@ -7,12 +7,13 @@ import { MainModule } from './modules';
 async function bootstrap() {
   const app = await NestFactory.create(MainModule);
 
+  const logger = app.get('GLOBAL_LOGGER');
   setupSwagger(app);
   setupLogger(app);
 
   const port = config.admin.port;
   await app.listen(port);
-  console.log(`🟢 Api Module listening at ${port} 🟢\n`);
+  logger.log(`🟢 Api Module listening at ${port} 🟢`);
 }
 
 bootstrap();
