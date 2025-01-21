@@ -17,7 +17,7 @@
     "build:utils": "nest build utils",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "lint": "eslint \"{src,apps,libs,test,scripts}/**/*.ts\" --fix",
-    "start:dev": "ts-node scripts/start.dev.ts",
+    "start:dev": "ts-node scripts/start-dev.ts",
     "start:dev:admin": "nest start admin --watch",
     "start:dev:api": "nest start api --watch",
     "start:dev:auth": "nest start auth --watch",
