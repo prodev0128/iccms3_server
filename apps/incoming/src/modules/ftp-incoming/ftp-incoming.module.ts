@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common';
 
-import { FtpIncomingController } from './ftp-incoming.controller';
 import { FtpIncomingService } from './ftp-incoming.service';
+import { FileWatcherModule } from '../file-watcher/file-watcher.module';
 
 @Module({
-  imports: [],
-  controllers: [FtpIncomingController],
+  imports: [FileWatcherModule],
   providers: [FtpIncomingService],
 })
 export class FtpIncomingModule {}
