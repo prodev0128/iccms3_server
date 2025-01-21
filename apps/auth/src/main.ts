@@ -1,18 +1,20 @@
 import { config } from '@app/config';
 import { setupLogger, setupSwagger } from '@app/utils';
+import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
-import { MainModule } from './modules';
+import { AuthModule } from './modules/auth/auth.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(MainModule);
+  const logger = new Logger(config.auth.name);
+  const app = await NestFactory.create(AuthModule);
 
   setupSwagger(app);
   setupLogger(app);
 
-  const port = config.port.auth;
+  const port = config.auth.port;
   await app.listen(port);
-  console.log(`🟢 Auth Module listening at ${port} 🟢\n`);
+  logger.log(`🟢 Auth Module listening at ${port} 🟢`);
 }
 
 bootstrap();

@@ -1,10 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 
-import { MainModule } from './modules';
+import { AppModule } from './modules/app/app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice(MainModule);
+  const app = await NestFactory.createMicroservice(AppModule);
+  const logger = app.get('GLOBAL_LOGGER');
   await app.listen();
-  console.log(`🟢 Incoming Module working at background 🟢\n`);
+  logger.log(`🟢 Incoming Module working at background 🟢`);
 }
 bootstrap();

@@ -19,5 +19,6 @@ export const setupSwagger = (
 };
 
 export const setupLogger = (app: INestApplication) => {
-  app.use(new LoggerMiddleware().use);
+  const loggerMiddleware = new LoggerMiddleware();
+  app.use(loggerMiddleware.use);
 };

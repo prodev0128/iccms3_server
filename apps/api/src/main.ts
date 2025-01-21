@@ -10,7 +10,7 @@ async function bootstrap() {
   setupSwagger(app);
   setupLogger(app);
 
-  const port = config.port.api;
+  const port = config.api.port;
   await app.listen(port);
   console.log(`🟢 Api Module listening at ${port} 🟢\n`);
 }

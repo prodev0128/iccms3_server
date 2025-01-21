@@ -3,15 +3,24 @@ import { exec } from 'child_process';
 export const runProcess = (cli: string, key: string) => {
   const child = exec(cli);
 
+  const log = (key: string, data: string) => {
+    data
+      .trim()
+      .split(/\n/)
+      .forEach((line: string) => {
+        console.log(`${key.padEnd(8)}: ${line}`);
+      });
+  };
+
   child.stdout.on('data', (data) => {
-    console.log(`${key}: ${data.trim()}`);
+    log(key, data);
   });
 
   child.stderr.on('data', (data) => {
-    console.error(`${key}: ${data.trim()}`);
+    log(key, data);
   });
 
   child.on('close', (code) => {
-    console.log(`${key}: process exited with code ${code}`);
+    log(key, `process exited with code ${code}`);
   });
 };

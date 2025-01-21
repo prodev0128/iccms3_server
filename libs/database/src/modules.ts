@@ -1,1 +1,1 @@
-export * from './modules/mongoose.module';
+export * from './modules/database.module';

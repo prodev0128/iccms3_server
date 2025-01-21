@@ -1,23 +1,29 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import * as chokidar from 'chokidar';
 import * as fs from 'fs';
 
 @Injectable()
-export class FileWatcherService implements OnModuleInit {
-  constructor(private readonly eventEmitter: EventEmitter2) {}
+export class FileWatcherService {
+  private eventEmitter = new EventEmitter2();
 
-  // Path to the directory to watch
-  private watchDirectory = './watched-directory/ftp';
+  constructor(
+    @Inject('GLOBAL_LOGGER') private readonly logger: Logger,
+    @Inject('WATCH_DIRECTORY') private watchDirectory: string,
+  ) {}
 
-  onModuleInit() {
+  getEventEmitter() {
+    return this.eventEmitter;
+  }
+
+  startWatching() {
     try {
       fs.mkdirSync(this.watchDirectory, { recursive: true });
-      console.log(`Directory created at ${this.watchDirectory}`);
+      this.watchFileChanges();
     } catch (err) {
-      console.error('Error creating directory:', err);
+      console.error('[FileWatcher] Error creating directory:', err);
     }
-    this.watchFileChanges();
   }
 
   watchFileChanges() {
@@ -25,20 +31,15 @@ export class FileWatcherService implements OnModuleInit {
       ignored: /^\./, // Ignore dotfiles
       persistent: true, // Keep watching indefinitely
     });
-
     watcher.on('change', (path) => {
-      console.log(`File changed: ${path}`);
       this.eventEmitter.emit('file.changed', path);
     });
-
     watcher.on('add', (path) => {
-      console.log(`File added: ${path}`);
       this.eventEmitter.emit('file.added', path);
     });
-
     watcher.on('unlink', (path) => {
-      console.log(`File removed: ${path}`);
       this.eventEmitter.emit('file.removed', path);
     });
+    this.logger.log(`Watching Directory: ${this.watchDirectory}`);
   }
 }
