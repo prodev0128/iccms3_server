@@ -16,7 +16,12 @@ export const config = {
   },
   incoming: {
     name: 'IncomingApp',
-    watchDirectory: JSON.parse(process.env.WATCH_DIRECTORIES) || [],
+  },
+  env: {
+    watchDirectory: process.env.WATCH_DIRECTORY || '',
+    subDirs: JSON.parse(process.env.SUBDIRS) || [],
+    progress: JSON.parse(process.env.PROGRESS) || {},
+    intervalTime: 10 * 1000,
   },
   jwt: {
     secret: process.env.JWT_SECRET || 'secret',

@@ -1,45 +1,47 @@
+import { config } from '@app/config';
 import { Inject, Injectable } from '@nestjs/common';
 import { Logger } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import * as chokidar from 'chokidar';
 import * as fs from 'fs';
+import * as path from 'path';
 
 @Injectable()
 export class FileWatcherService {
-  private eventEmitter = new EventEmitter2();
-
   constructor(
     @Inject('GLOBAL_LOGGER') private readonly logger: Logger,
-    @Inject('WATCH_DIRECTORY') private watchDirectory: string,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
-  getEventEmitter() {
-    return this.eventEmitter;
-  }
-
-  startWatching() {
+  start(instanceID: string) {
     try {
-      fs.mkdirSync(this.watchDirectory, { recursive: true });
-      this.watchFileChanges();
+      const watchDirectory = path.join(
+        config.env.watchDirectory,
+        instanceID,
+        config.env.progress.before,
+      );
+      fs.mkdirSync(watchDirectory, { recursive: true });
+      const watcher = chokidar.watch(watchDirectory, {
+        ignored: /^\./, // Ignore dotfiles
+        persistent: true, // Keep watching indefinitely
+      });
+      watcher.on('change', (path) => {
+        this.eventEmitter.emit(
+          `file.added.${instanceID}`,
+          path,
+          watchDirectory,
+        );
+      });
+      watcher.on('add', (path) => {
+        this.eventEmitter.emit(
+          `file.added.${instanceID}`,
+          path,
+          watchDirectory,
+        );
+      });
+      this.logger.log(`Watching Directory: ${watchDirectory}`);
     } catch (err) {
-      console.error('[FileWatcher] Error creating directory:', err);
+      this.logger.error('Error while watching directory:', err);
     }
-  }
-
-  watchFileChanges() {
-    const watcher = chokidar.watch(this.watchDirectory, {
-      ignored: /^\./, // Ignore dotfiles
-      persistent: true, // Keep watching indefinitely
-    });
-    watcher.on('change', (path) => {
-      this.eventEmitter.emit('file.changed', path);
-    });
-    watcher.on('add', (path) => {
-      this.eventEmitter.emit('file.added', path);
-    });
-    watcher.on('unlink', (path) => {
-      this.eventEmitter.emit('file.removed', path);
-    });
-    this.logger.log(`Watching Directory: ${this.watchDirectory}`);
   }
 }

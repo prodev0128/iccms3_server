@@ -21,26 +21,27 @@ export class FileLogger extends Logger {
     }
   }
 
-  private writeToFile(message: string) {
-    fs.appendFileSync(this.logFilePath, message + '\n');
-  }
-
-  private printLog(message: string, type: string) {
+  private writeToFile(message: string, type: string) {
     const timestamp = new Date().toISOString();
     const formattedMessage = `${timestamp} ${type} [${this.appName}] ${message}`;
+    fs.appendFileSync(this.logFilePath, formattedMessage + '\n');
+  }
+
+  log(...messages: string[]) {
+    const message = messages.join(' ');
     super.log(message); // Log to Console
-    this.writeToFile(formattedMessage); // Log to File
+    this.writeToFile(message, 'LOG');
   }
 
-  log(message: string) {
-    this.printLog(message, 'LOG');
+  error(...messages: string[]) {
+    const message = messages.join(' ');
+    super.error(message); // Log to Console
+    this.writeToFile(message, 'ERROR');
   }
 
-  error(message: string) {
-    this.printLog(message, 'ERROR');
-  }
-
-  warn(message: string) {
-    this.printLog(message, 'WARN');
+  warn(...messages: string[]) {
+    const message = messages.join(' ');
+    super.warn(message); // Log to Console
+    this.writeToFile(message, 'WARN');
   }
 }
