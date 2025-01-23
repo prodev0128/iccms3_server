@@ -1,5 +1,5 @@
 import { Logger } from '@nestjs/common';
-import * as fs from 'fs';
+import * as fs from 'fs-extra';
 import * as path from 'path';
 
 export class FileLogger extends Logger {
