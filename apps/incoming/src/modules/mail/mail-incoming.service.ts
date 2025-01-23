@@ -1,4 +1,10 @@
-import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  Logger,
+  OnModuleDestroy,
+  OnModuleInit,
+} from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
 import { EmailParserService } from '../email-parser/email-parser.service';
@@ -6,7 +12,7 @@ import { FileMoveService } from '../file-move/file-move.service';
 import { FileWatcherService } from '../file-watcher/file-watcher.service';
 
 @Injectable()
-export class MailIncomingService implements OnModuleInit {
+export class MailIncomingService implements OnModuleInit, OnModuleDestroy {
   constructor(
     @Inject('GLOBAL_LOGGER') private readonly logger: Logger,
     @Inject('INSTANCE_ID') private readonly instanceID: string,
@@ -14,28 +20,49 @@ export class MailIncomingService implements OnModuleInit {
     private readonly fileWatcherService: FileWatcherService,
     private readonly fileMoveService: FileMoveService,
     private readonly emailParseService: EmailParserService,
-  ) {
-    this.eventEmitter.on(`file.added.${this.instanceID}`, (filePath) => {
-      this.logger.log('File Added:', filePath);
-      this.handleFileAddedEvent(filePath);
-    });
-    this.eventEmitter.on(`file.changed.${this.instanceID}`, (filePath) => {
-      this.logger.log('File Changed:', filePath);
-      this.handleFileAddedEvent(filePath);
-    });
-    this.eventEmitter.on(`file.moved.${this.instanceID}`, (filePath) => {
-      this.logger.log('File Moved:', filePath);
-      this.handleFileMovedEvent(filePath);
-    });
-    this.eventEmitter.on(`email.parsed.${this.instanceID}`, (filePath) => {
-      this.logger.log('Email Parsed:', filePath);
-      this.handleFileMovedEvent(filePath);
+  ) {}
+
+  private readonly events = [
+    {
+      name: `file.added.${this.instanceID}`,
+      handler: this.handleFileAddedEvent.bind(this),
+    },
+    {
+      name: `file.changed.${this.instanceID}`,
+      handler: this.handleFileAddedEvent.bind(this),
+    },
+    {
+      name: `file.moved.${this.instanceID}`,
+      handler: this.handleFileMovedEvent.bind(this),
+    },
+    {
+      name: `email.parsed.${this.instanceID}`,
+      handler: this.handleFileMovedEvent.bind(this),
+    },
+  ];
+
+  onModuleInit() {
+    this.registerEventListeners();
+    this.logger.log('File Watching:', this.instanceID);
+    this.fileWatcherService.start(this.instanceID);
+  }
+
+  onModuleDestroy() {
+    this.unregisterEventListeners();
+    this.fileWatcherService.stop(this.instanceID);
+    this.logger.log(`Destroyed File Watching for: ${this.instanceID}`);
+  }
+
+  private registerEventListeners() {
+    this.events.forEach(({ name, handler }) => {
+      this.eventEmitter.on(name, handler);
     });
   }
 
-  onModuleInit() {
-    this.logger.log('File Watching:', this.instanceID);
-    this.fileWatcherService.start(this.instanceID);
+  private unregisterEventListeners() {
+    this.events.forEach(({ name }) =>
+      this.eventEmitter.removeAllListeners(name),
+    );
   }
 
   handleFileAddedEvent(filePath: string) {

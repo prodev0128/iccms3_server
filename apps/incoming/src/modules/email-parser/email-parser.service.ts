@@ -7,9 +7,10 @@ import * as path from 'path';
 
 @Injectable()
 export class EmailParserService {
-  private eventEmitter = new EventEmitter2();
-
-  constructor(@Inject('GLOBAL_LOGGER') private readonly logger: Logger) {}
+  constructor(
+    @Inject('GLOBAL_LOGGER') private readonly logger: Logger,
+    private readonly eventEmitter: EventEmitter2,
+  ) {}
 
   async parseEmail(orgPath: string, destDir: string) {
     try {
@@ -22,52 +23,62 @@ export class EmailParserService {
         await fs.writeFile(attachmentPath, attachment.content);
       }
       return parsed;
-    } catch (e) {
-      this.logger.error('EmailParserService/parseEmail:', e.message);
-      throw e;
+    } catch (error) {
+      this.logger.error('EmailParseService/parseEmail:', error.message);
+      throw error;
     }
   }
 
-  async composeEmailWithoutAttachment(destDir: string, parsed: any) {
-    for (const key in parsed) {
-      if (key === 'attachments') {
-        delete parsed[key];
-      } else if (parsed[key].text) {
-        parsed[key] = parsed[key].text;
-      }
-    }
+  async composeEmail(destDir: string, parsed: any) {
     const mailOptions = { ...parsed };
-    console.log('mailOptions', { ...mailOptions });
 
-    const mail = new MailComposer({ ...mailOptions });
-    mail.build(async (err: any, message: any) => {
-      if (err) {
-        return;
+    // Remove attachments
+    delete mailOptions.attachments;
+
+    // To, From field
+    Object.keys(mailOptions).forEach((key) => {
+      if (mailOptions[key]?.text) {
+        mailOptions[key] = mailOptions[key].text;
       }
-      const destPath = path.join(destDir, '0.eml');
-      await fs.writeFile(destPath, message);
+    });
+
+    // mail compose
+    const mail = new MailComposer(mailOptions);
+
+    // mail build
+    return new Promise<void>((resolve, reject) => {
+      mail.build(async (error: any, message: any) => {
+        if (error) {
+          this.logger.error('EmailParserService/composeEmail:', error.message);
+          reject(error);
+          return;
+        }
+        const destPath = path.join(destDir, '0.eml');
+        await fs.writeFile(destPath, message);
+        resolve();
+      });
     });
   }
 
-  // Start the email parsing and composing process
   async start(instanceID: string, orgPath: string) {
     try {
       if (!fs.existsSync(orgPath)) {
-        this.logger.error('EmailParserService/start:', orgPath);
+        this.logger.error('EmailParseService/start:', orgPath);
         return;
       }
+
       // make dir
       const destDir = orgPath.replace(/\.[^/.]+$/, '');
       await fs.mkdir(destDir, { recursive: true });
 
       // parse & compose email
       const parsedEmail = await this.parseEmail(orgPath, destDir);
-      await this.composeEmailWithoutAttachment(destDir, parsedEmail);
+      await this.composeEmail(destDir, parsedEmail);
 
       // emit event
       this.eventEmitter.emit(`email.parsed.${instanceID}`, destDir);
-    } catch (e) {
-      this.logger.error('EmailParserService/start:', orgPath, e.message);
+    } catch (error) {
+      this.logger.error('EmailParseService/start:', orgPath, error.message);
     }
   }
 }

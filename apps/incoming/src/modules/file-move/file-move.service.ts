@@ -13,6 +13,7 @@ export class FileMoveService {
 
   async start(instanceID: string, orgPath: string) {
     if (!fs.existsSync(orgPath)) {
+      this.logger.warn('File does not exist:', orgPath);
       return;
     }
     const orgDir = path.join(
@@ -20,7 +21,7 @@ export class FileMoveService {
       instanceID,
       config.env.progress.before,
     );
-    const fileName = orgPath.split(orgDir)[1];
+    const fileName = path.relative(orgDir, orgPath);
     const destPath = path.join(
       config.env.watchDirectory,
       instanceID,
@@ -32,8 +33,8 @@ export class FileMoveService {
       await fs.mkdir(destDir, { recursive: true });
       await fs.rename(orgPath, destPath);
       this.eventEmitter.emit(`file.moved.${instanceID}`, destPath);
-    } catch (e) {
-      this.logger.error('FileMoveService:', orgPath, e.message);
+    } catch (error) {
+      this.logger.error('file move error:', orgPath, error.message);
     }
   }
 }
