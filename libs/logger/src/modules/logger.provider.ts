@@ -14,17 +14,25 @@ export class FileLogger extends Logger {
     this.ensureLogFile();
   }
 
-  private ensureLogFile() {
+  private async ensureLogFile() {
     const logDir = path.dirname(this.logFilePath);
-    if (!fs.existsSync(logDir)) {
-      fs.mkdirSync(logDir, { recursive: true });
+    try {
+      if (!fs.existsSync(logDir)) {
+        await fs.mkdir(logDir, { recursive: true });
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 
-  private writeToFile(message: string, type: string) {
+  private async writeToFile(message: string, type: string) {
     const timestamp = new Date().toISOString();
     const formattedMessage = `${timestamp} ${type} [${this.appName}] ${message}`;
-    fs.appendFileSync(this.logFilePath, formattedMessage + '\n');
+    try {
+      await fs.appendFile(this.logFilePath, formattedMessage + '\n');
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   log(...messages: string[]) {

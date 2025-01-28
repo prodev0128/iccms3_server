@@ -13,7 +13,7 @@ export class FileMoveService {
 
   async start(instanceID: string, orgPath: string) {
     if (!fs.existsSync(orgPath)) {
-      this.logger.warn('File does not exist:', orgPath);
+      this.logger.warn(`File move skipped. File not found: ${orgPath}`);
       return;
     }
     const orgDir = path.join(
@@ -32,9 +32,13 @@ export class FileMoveService {
     try {
       await fs.mkdir(destDir, { recursive: true });
       await fs.rename(orgPath, destPath);
+      this.logger.log(`File successfully moved to: ${destPath}`);
       this.eventEmitter.emit(`file.moved.${instanceID}`, destPath);
     } catch (error) {
-      this.logger.error('file move error:', orgPath, error.message);
+      this.logger.error(
+        `Failed to move file: ${orgPath}. Retrying in 10 seconds. Reason: ${error.message}`,
+      );
+      setTimeout(() => this.start(instanceID, orgPath), 10000);
     }
   }
 }

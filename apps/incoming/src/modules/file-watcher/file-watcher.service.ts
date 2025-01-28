@@ -25,21 +25,28 @@ export class FileWatcherService {
       if (this.watchers.has(instanceID)) {
         await this.watchers.get(instanceID).close();
         this.watchers.delete(instanceID);
+        this.logger.warn(
+          `Existing file watcher for instance ${instanceID} was stopped and replaced.`,
+        );
       }
       const watcher = chokidar.watch(watchDirectory, {
         ignored: /^\./, // Ignore dotfiles
         persistent: true, // Keep watching indefinitely
       });
-      watcher.on('change', (path) => {
-        this.eventEmitter.emit(`file.changed.${instanceID}`, path);
-      });
-      watcher.on('add', (path) => {
+      watcher.on('add', async (path) => {
         this.eventEmitter.emit(`file.added.${instanceID}`, path);
       });
+      watcher.on('error', (error) => {
+        this.logger.error(
+          `Error in file watcher for instance ${instanceID}: ${error.message}`,
+        );
+      });
       this.watchers.set(instanceID, watcher);
-      this.logger.log(`FileWatchService/start: ${watchDirectory}`);
+      this.logger.log(`File watcher started for directory: ${watchDirectory}`);
     } catch (error) {
-      this.logger.error('FileWatchService/start:', error.message);
+      this.logger.error(
+        `Failed to start file watcher for directory: ${watchDirectory}. Reason: ${error.message}`,
+      );
     }
   }
 
@@ -47,7 +54,11 @@ export class FileWatcherService {
     if (this.watchers.has(instanceID)) {
       await this.watchers.get(instanceID).close();
       this.watchers.delete(instanceID);
-      this.logger.log(`FileWatchService/stop: ${instanceID}`);
+      this.logger.log(`File watcher stopped for instance: ${instanceID}`);
+    } else {
+      this.logger.warn(
+        `No active file watcher found for instance: ${instanceID}`,
+      );
     }
   }
 }
