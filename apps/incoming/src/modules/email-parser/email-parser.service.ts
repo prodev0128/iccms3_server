@@ -87,9 +87,7 @@ export class EmailParserService {
         await fs.remove(destDir);
       }
       this.logger.log(`Email processing completed for instance: ${instanceID}`);
-
-      // emit event
-      this.eventEmitter.emit(`email.parsed.${instanceID}`, destPaths);
+      return destPaths;
     } catch (error) {
       this.logger.error(
         `Error during email processing for file: ${orgPath}. Reason: ${error.message}`,

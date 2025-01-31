@@ -1,5 +1,6 @@
 import { Logger } from '@nestjs/common';
 import * as fs from 'fs-extra';
+import * as moment from 'moment';
 import * as path from 'path';
 
 export class FileLogger extends Logger {
@@ -10,7 +11,11 @@ export class FileLogger extends Logger {
     private readonly appName: string,
   ) {
     super(context);
-    this.logFilePath = path.join(process.cwd(), 'logs', `${this.appName}.log`);
+    this.logFilePath = path.join(
+      process.cwd(),
+      'logs',
+      `${this.appName}_${moment().format('YYYY-MM-DD-HH-mm-ss')}.log`,
+    );
     this.ensureLogFile();
   }
 

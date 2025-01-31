@@ -1,4 +1,4 @@
-import { Process } from '@nestjs/bull';
+import { InjectQueue, Process, Processor } from '@nestjs/bull';
 import {
   Inject,
   Injectable,
@@ -7,6 +7,7 @@ import {
   OnModuleInit,
 } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { Queue } from 'bull';
 
 import { DbRegisterService } from '../db-register/db-register.service';
 import { EmailParserService } from '../email-parser/email-parser.service';
@@ -14,10 +15,12 @@ import { FileMoveService } from '../file-move/file-move.service';
 import { FileWatcherService } from '../file-watcher/file-watcher.service';
 
 @Injectable()
+@Processor('TASK_QUEUE')
 export class MailIncomingService implements OnModuleInit, OnModuleDestroy {
   constructor(
     @Inject('GLOBAL_LOGGER') private readonly logger: Logger,
     @Inject('INSTANCE_ID') private readonly instanceID: string,
+    @InjectQueue('TASK_QUEUE') private readonly taskQueue: Queue,
     private readonly eventEmitter: EventEmitter2,
     private readonly fileWatcherService: FileWatcherService,
     private readonly fileMoveService: FileMoveService,
@@ -27,7 +30,7 @@ export class MailIncomingService implements OnModuleInit, OnModuleDestroy {
 
   onModuleInit() {
     this.eventEmitter.on(`file.added.${this.instanceID}`, (filePath) => {
-      this.handleFileAddedEvent(filePath);
+      this.taskQueue.add(filePath);
     });
     this.logger.log(
       `Initializing file watcher for instance: ${this.instanceID}`,
@@ -42,25 +45,18 @@ export class MailIncomingService implements OnModuleInit, OnModuleDestroy {
   }
 
   @Process('TASK')
-  handleFileAddedEvent(filePath: string) {
+  async handleFileAddedEvent(filePath: string) {
     this.logger.log(`New file detected: ${filePath}. Initiating file move.`);
-    this.fileMoveService.start(this.instanceID, filePath);
-  }
-
-  handleFileMovedEvent(filePath: string) {
-    this.logger.log(`File moved: ${filePath}. Starting email parsing.`);
-    this.emailParseService.start(this.instanceID, filePath);
-  }
-
-  async handleEmailParsedEvent(filePaths: string[]) {
-    this.logger.log(`Email parsed: ${filePaths}. Starting db registering.`);
-    for (const filePath of filePaths) {
-      await this.dbRegisterService.start(this.instanceID, filePath);
+    const destPath = await this.fileMoveService.start(
+      this.instanceID,
+      filePath,
+    );
+    const emailPaths = await this.emailParseService.start(
+      this.instanceID,
+      destPath,
+    );
+    for (const emailPath of emailPaths) {
+      await this.dbRegisterService.start(this.instanceID, emailPath);
     }
-  }
-
-  handleDbRegisteredEvent(filePath: string) {
-    this.logger.log(`Db registered: ${filePath}. Starting file checking.`);
-    // this.emailParseService.start(this.instanceID, filePath);
   }
 }

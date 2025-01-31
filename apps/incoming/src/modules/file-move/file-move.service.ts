@@ -33,7 +33,7 @@ export class FileMoveService {
       await fs.mkdir(destDir, { recursive: true });
       await fs.rename(orgPath, destPath);
       this.logger.log(`File successfully moved to: ${destPath}`);
-      this.eventEmitter.emit(`file.moved.${instanceID}`, destPath);
+      return destPath;
     } catch (error) {
       this.logger.error(
         `Failed to move file: ${orgPath}. Retrying in 10 seconds. Reason: ${error.message}`,
