@@ -1,4 +1,5 @@
 import { DynamicModule, Module } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 import { MailIncomingService } from './mail-incoming.service';
 import { DbRegisterModule } from '../db-register/db-register.module';
@@ -10,6 +11,8 @@ import { TaskQueueModule } from '../task-queue/task-queue.module';
 @Module({})
 export class MailIncomingModule {
   static forRoot(directory: string): DynamicModule {
+    const eventEmitter = new EventEmitter2(); // Create independent emitter
+
     return {
       module: MailIncomingModule,
       imports: [
@@ -23,6 +26,10 @@ export class MailIncomingModule {
         {
           provide: 'INSTANCE_ID',
           useValue: directory, // The connection string will be passed dynamically
+        },
+        {
+          provide: EventEmitter2,
+          useValue: eventEmitter, // Provide scoped EventEmitter
         },
         MailIncomingService,
       ],

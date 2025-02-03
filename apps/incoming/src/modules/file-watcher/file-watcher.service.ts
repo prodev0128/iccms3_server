@@ -34,7 +34,7 @@ export class FileWatcherService {
         persistent: true, // Keep watching indefinitely
       });
       watcher.on('add', async (path) => {
-        this.eventEmitter.emit(`file.added.${instanceID}`, path);
+        this.eventEmitter.emit(`file.added`, path);
       });
       watcher.on('error', (error) => {
         this.logger.error(

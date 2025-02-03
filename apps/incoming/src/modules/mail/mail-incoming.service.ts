@@ -7,11 +7,11 @@ import {
   OnModuleInit,
 } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { Queue } from 'bull';
+import { Job, Queue } from 'bull';
 
-import { DbRegisterService } from '../db-register/db-register.service';
-import { EmailParserService } from '../email-parser/email-parser.service';
-import { FileMoveService } from '../file-move/file-move.service';
+// import { DbRegisterService } from '../db-register/db-register.service';
+// import { EmailParserService } from '../email-parser/email-parser.service';
+// import { FileMoveService } from '../file-move/file-move.service';
 import { FileWatcherService } from '../file-watcher/file-watcher.service';
 
 @Injectable()
@@ -23,40 +23,53 @@ export class MailIncomingService implements OnModuleInit, OnModuleDestroy {
     @InjectQueue('TASK_QUEUE') private readonly taskQueue: Queue,
     private readonly eventEmitter: EventEmitter2,
     private readonly fileWatcherService: FileWatcherService,
-    private readonly fileMoveService: FileMoveService,
-    private readonly emailParseService: EmailParserService,
-    private readonly dbRegisterService: DbRegisterService,
+    // private readonly fileMoveService: FileMoveService,
+    // private readonly emailParseService: EmailParserService,
+    // private readonly dbRegisterService: DbRegisterService,
   ) {}
 
   onModuleInit() {
-    this.eventEmitter.on(`file.added.${this.instanceID}`, (filePath) => {
-      this.taskQueue.add(filePath);
+    this.eventEmitter.on(`file.added`, async (filePath) => {
+      this.taskQueue
+        .add('TASK', { filePath })
+        .then(() => {
+          this.logger.log(`Job successfully added for file: ${filePath}`);
+        })
+        .catch((err) => {
+          this.logger.error(
+            `Failed to add job for file: ${filePath}. Error: ${err.message}`,
+          );
+        });
     });
-    this.logger.log(
-      `Initializing file watcher for instance: ${this.instanceID}`,
-    );
+    this.logger.log(`Initializing file watcher`);
     this.fileWatcherService.start(this.instanceID);
   }
 
   onModuleDestroy() {
-    this.eventEmitter.removeAllListeners(`file.added.${this.instanceID}`);
+    this.eventEmitter.removeAllListeners(`file.added`);
     this.fileWatcherService.stop(this.instanceID);
-    this.logger.log(`Cleaning up resources for instance: ${this.instanceID}`);
+    this.logger.log(`Cleaning up resources`);
   }
 
   @Process('TASK')
-  async handleFileAddedEvent(filePath: string) {
-    this.logger.log(`New file detected: ${filePath}. Initiating file move.`);
-    const destPath = await this.fileMoveService.start(
-      this.instanceID,
-      filePath,
-    );
-    const emailPaths = await this.emailParseService.start(
-      this.instanceID,
-      destPath,
-    );
-    for (const emailPath of emailPaths) {
-      await this.dbRegisterService.start(this.instanceID, emailPath);
+  async handleFileAddedEvent(job: Job<{ filePath: string }>) {
+    try {
+      const { filePath } = job.data;
+      this.logger.log(`Initiating file move: ${filePath}`);
+    } catch (error) {
+      this.logger.log(`Error while initializing file move: ${error}`);
     }
+
+    // const destPath = await this.fileMoveService.start(
+    //   this.instanceID,
+    //   filePath,
+    // );
+    // const emailPaths = await this.emailParseService.start(
+    //   this.instanceID,
+    //   destPath,
+    // );
+    // for (const emailPath of emailPaths) {
+    //   await this.dbRegisterService.start(this.instanceID, emailPath);
+    // }
   }
 }

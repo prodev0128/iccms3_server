@@ -19,7 +19,7 @@ export const config = {
   },
   env: {
     watchDirectory: process.env.WATCH_DIRECTORY || '',
-    subDirs: JSON.parse(process.env.SUBDIRS) || [],
+    watchSubDirs: JSON.parse(process.env.WATCH_SUB_DIRS) || [],
     progress: JSON.parse(process.env.PROGRESS) || {},
     intervalTime: 10 * 1000,
   },

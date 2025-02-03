@@ -5,6 +5,10 @@ import { Module } from '@nestjs/common';
   imports: [
     BullModule.registerQueue({
       name: 'TASK_QUEUE',
+      redis: {
+        host: 'localhost', // Redis connection (update as needed)
+        port: 6379,
+      },
     }),
   ],
   exports: [BullModule],

@@ -1,5 +1,4 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 import * as fs from 'fs-extra';
 import { simpleParser } from 'mailparser';
 import * as nodemailer from 'nodemailer';
@@ -7,10 +6,7 @@ import * as path from 'path';
 
 @Injectable()
 export class EmailParserService {
-  constructor(
-    @Inject('GLOBAL_LOGGER') private readonly logger: Logger,
-    private readonly eventEmitter: EventEmitter2,
-  ) {}
+  constructor(@Inject('GLOBAL_LOGGER') private readonly logger: Logger) {}
 
   async parseEmail(orgPath: string, destDir: string) {
     try {
