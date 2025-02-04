@@ -7,7 +7,7 @@ import * as path from 'path';
 
 @Injectable()
 export class FileWatcherService {
-  private watchers = new Map<string, chokidar.FSWatcher>();
+  private watcher: chokidar.FSWatcher;
 
   constructor(
     @Inject('GLOBAL_LOGGER') private readonly logger: Logger,
@@ -22,26 +22,23 @@ export class FileWatcherService {
     );
     try {
       await fs.mkdir(watchDirectory, { recursive: true });
-      if (this.watchers.has(instanceID)) {
-        await this.watchers.get(instanceID).close();
-        this.watchers.delete(instanceID);
-        this.logger.warn(
-          `Existing file watcher for instance ${instanceID} was stopped and replaced.`,
-        );
-      }
-      const watcher = chokidar.watch(watchDirectory, {
+
+      this.watcher = chokidar.watch(watchDirectory, {
         ignored: /^\./, // Ignore dotfiles
         persistent: true, // Keep watching indefinitely
       });
-      watcher.on('add', async (path) => {
+
+      this.watcher.on('add', async (path) => {
+        this.logger.log(`File added: ${path}`);
         this.eventEmitter.emit(`file.added`, path);
       });
-      watcher.on('error', (error) => {
+
+      this.watcher.on('error', (error) => {
         this.logger.error(
           `Error in file watcher for instance ${instanceID}: ${error.message}`,
         );
       });
-      this.watchers.set(instanceID, watcher);
+
       this.logger.log(`File watcher started for directory: ${watchDirectory}`);
     } catch (error) {
       this.logger.error(
@@ -50,15 +47,10 @@ export class FileWatcherService {
     }
   }
 
-  async stop(instanceID: string) {
-    if (this.watchers.has(instanceID)) {
-      await this.watchers.get(instanceID).close();
-      this.watchers.delete(instanceID);
-      this.logger.log(`File watcher stopped for instance: ${instanceID}`);
-    } else {
-      this.logger.warn(
-        `No active file watcher found for instance: ${instanceID}`,
-      );
+  async stop() {
+    if (this.watcher) {
+      await this.watcher.close();
+      this.logger.log(`File watcher stopped.`);
     }
   }
 }

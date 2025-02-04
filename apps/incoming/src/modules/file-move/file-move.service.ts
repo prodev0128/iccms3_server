@@ -1,15 +1,11 @@
 import { config } from '@app/config';
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 
 @Injectable()
 export class FileMoveService {
-  constructor(
-    @Inject('GLOBAL_LOGGER') private readonly logger: Logger,
-    private readonly eventEmitter: EventEmitter2,
-  ) {}
+  constructor(@Inject('GLOBAL_LOGGER') private readonly logger: Logger) {}
 
   async start(instanceID: string, orgPath: string) {
     if (!fs.existsSync(orgPath)) {

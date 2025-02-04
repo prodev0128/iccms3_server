@@ -1,4 +1,3 @@
-import { InjectQueue, Process, Processor } from '@nestjs/bull';
 import {
   Inject,
   Injectable,
@@ -6,70 +5,46 @@ import {
   OnModuleDestroy,
   OnModuleInit,
 } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import { Job, Queue } from 'bull';
+import { OnEvent } from '@nestjs/event-emitter';
 
-// import { DbRegisterService } from '../db-register/db-register.service';
-// import { EmailParserService } from '../email-parser/email-parser.service';
-// import { FileMoveService } from '../file-move/file-move.service';
+import { DbRegisterService } from '../db-register/db-register.service';
+import { EmailParserService } from '../email-parser/email-parser.service';
+import { FileMoveService } from '../file-move/file-move.service';
 import { FileWatcherService } from '../file-watcher/file-watcher.service';
+import { TaskQueueService } from '../task-queue/task-queue.service';
 
 @Injectable()
-@Processor('TASK_QUEUE')
 export class MailIncomingService implements OnModuleInit, OnModuleDestroy {
   constructor(
     @Inject('GLOBAL_LOGGER') private readonly logger: Logger,
     @Inject('INSTANCE_ID') private readonly instanceID: string,
-    @InjectQueue('TASK_QUEUE') private readonly taskQueue: Queue,
-    private readonly eventEmitter: EventEmitter2,
+    private readonly taskQueueService: TaskQueueService,
     private readonly fileWatcherService: FileWatcherService,
-    // private readonly fileMoveService: FileMoveService,
-    // private readonly emailParseService: EmailParserService,
-    // private readonly dbRegisterService: DbRegisterService,
+    private readonly fileMoveService: FileMoveService,
+    private readonly emailParseService: EmailParserService,
+    private readonly dbRegisterService: DbRegisterService,
   ) {}
 
   onModuleInit() {
-    this.eventEmitter.on(`file.added`, async (filePath) => {
-      this.taskQueue
-        .add('TASK', { filePath })
-        .then(() => {
-          this.logger.log(`Job successfully added for file: ${filePath}`);
-        })
-        .catch((err) => {
-          this.logger.error(
-            `Failed to add job for file: ${filePath}. Error: ${err.message}`,
-          );
-        });
-    });
     this.logger.log(`Initializing file watcher`);
     this.fileWatcherService.start(this.instanceID);
   }
 
   onModuleDestroy() {
-    this.eventEmitter.removeAllListeners(`file.added`);
-    this.fileWatcherService.stop(this.instanceID);
+    this.fileWatcherService.stop();
     this.logger.log(`Cleaning up resources`);
   }
 
-  @Process('TASK')
-  async handleFileAddedEvent(job: Job<{ filePath: string }>) {
-    try {
-      const { filePath } = job.data;
-      this.logger.log(`Initiating file move: ${filePath}`);
-    } catch (error) {
-      this.logger.log(`Error while initializing file move: ${error}`);
-    }
+  @OnEvent('file.added')
+  async handleFileAdded(filePath: string) {
+    this.taskQueueService.addTask(filePath);
+  }
 
-    // const destPath = await this.fileMoveService.start(
-    //   this.instanceID,
-    //   filePath,
-    // );
-    // const emailPaths = await this.emailParseService.start(
-    //   this.instanceID,
-    //   destPath,
-    // );
-    // for (const emailPath of emailPaths) {
-    //   await this.dbRegisterService.start(this.instanceID, emailPath);
-    // }
+  @OnEvent('task.added')
+  async handleIncomingMail(tasks: any) {
+    this.logger.log('------------');
+    for (const task of tasks) {
+      await this.fileMoveService.start(this.instanceID, task.data);
+    }
   }
 }

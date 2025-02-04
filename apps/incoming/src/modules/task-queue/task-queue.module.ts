@@ -1,16 +1,9 @@
-import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
 
+import { TaskQueueService } from './task-queue.service';
+
 @Module({
-  imports: [
-    BullModule.registerQueue({
-      name: 'TASK_QUEUE',
-      redis: {
-        host: 'localhost', // Redis connection (update as needed)
-        port: 6379,
-      },
-    }),
-  ],
-  exports: [BullModule],
+  providers: [TaskQueueService],
+  exports: [TaskQueueService],
 })
 export class TaskQueueModule {}
