@@ -42,9 +42,10 @@ export class MailIncomingService implements OnModuleInit, OnModuleDestroy {
 
   @OnEvent('task.added')
   async handleIncomingMail(tasks: any) {
-    this.logger.log('------------');
+    this.logger.log('------------', tasks.length);
     for (const task of tasks) {
       await this.fileMoveService.start(this.instanceID, task.data);
+      this.taskQueueService.completeTask(task);
     }
   }
 }

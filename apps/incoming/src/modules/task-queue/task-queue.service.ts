@@ -11,7 +11,6 @@ export class TaskQueueService {
   private tasks: Task[] = [];
   private timer: NodeJS.Timeout | null = null;
   private taskThresholdCount = 10;
-  private taskPendingCount = 0;
   private delayBeforeProcessing = 3000;
 
   constructor(
@@ -25,8 +24,10 @@ export class TaskQueueService {
       status: 'pending',
     };
     this.tasks.push(newTask);
-    this.taskPendingCount++;
-    if (this.taskPendingCount > this.taskThresholdCount) {
+    if (this.countOfTasks('in-progress') >= this.taskThresholdCount) {
+      return;
+    }
+    if (this.countOfTasks() >= this.taskThresholdCount) {
       this.doTasks();
     }
     if (this.timer) {
@@ -42,12 +43,31 @@ export class TaskQueueService {
     }
     const foundTasks = this.tasks
       .filter((task) => task.status === 'pending')
-      .slice(0, this.taskThresholdCount);
+      .slice(0, this.taskThresholdCount - this.countOfTasks('in-progress'));
     for (const task of foundTasks) {
       task.status = 'in-progress';
     }
-    this.taskPendingCount -= foundTasks.length;
+    if (!foundTasks.length) {
+      return;
+    }
     this.eventEmitter.emit('task.added', foundTasks);
-    return foundTasks;
+  }
+
+  completeTask(completedTask: Task) {
+    const foundIndex = this.tasks.findIndex(
+      (task) => task.data === completedTask.data,
+    );
+    if (foundIndex < 0) {
+      return;
+    }
+    this.tasks.splice(foundIndex, 1);
+    this.doTasks();
+  }
+
+  countOfTasks(status: 'pending' | 'in-progress' | 'all' = 'all'): number {
+    if (status === 'pending' || status === 'in-progress') {
+      return this.tasks.filter((task) => task.status === status).length;
+    }
+    return this.tasks.length;
   }
 }
