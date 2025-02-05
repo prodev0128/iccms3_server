@@ -1,4 +1,5 @@
 import { config } from '@app/config';
+import { delay } from '@app/utils';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import * as fs from 'fs-extra';
 import * as path from 'path';
@@ -25,16 +26,18 @@ export class FileMoveService {
       fileName,
     );
     const destDir = path.dirname(destPath);
-    try {
-      await fs.mkdir(destDir, { recursive: true });
-      await fs.rename(orgPath, destPath);
-      this.logger.log(`File successfully moved to: ${destPath}`);
-      return destPath;
-    } catch (error) {
-      this.logger.error(
-        `Failed to move file: ${orgPath}. Retrying in 10 seconds. Reason: ${error.message}`,
-      );
-      setTimeout(() => this.start(instanceID, orgPath), 10000);
+    while (true) {
+      try {
+        await fs.mkdir(destDir, { recursive: true });
+        await fs.rename(orgPath, destPath);
+        this.logger.log(`File successfully moved to: ${destPath}`);
+        return destPath;
+      } catch (error) {
+        this.logger.error(
+          `Failed to move file: ${orgPath}. Retrying in 10 seconds. Reason: ${error.message}`,
+        );
+        await delay(10 * 1000);
+      }
     }
   }
 }
