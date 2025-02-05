@@ -26,12 +26,12 @@ export class FileWatcherService implements OnModuleDestroy {
         persistent: true, // Keep watching indefinitely
       });
 
-      this.watcher.on('add', async (path) => {
+      this.watcher.on('add', (path) => {
         this.logger.log(`File added: ${path}`);
         this.eventEmitter.emit(`file.added`, path);
       });
 
-      this.watcher.on('error', (error) => {
+      this.watcher.on('error', (error: any) => {
         this.logger.error(`Error in file watcher for instance ${this.instanceID}: ${error.message}`);
       });
 
