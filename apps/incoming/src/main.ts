@@ -1,5 +1,6 @@
 import { config } from '@app/config';
 import { NestFactory } from '@nestjs/core';
+import { exec } from 'child_process';
 
 import { AppModule } from './app/app.module';
 
@@ -13,3 +14,4 @@ async function bootstrap() {
   }
 }
 bootstrap();
+exec(`del logs\\${config.incoming.name}*.*`);

@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class PermissionsDto {
+export class RolesDto {
   @ApiProperty({
-    description: 'The permissions of the user',
+    description: 'The roles of the user',
     example: ['read', 'write', 'delete'],
   })
-  permissions: Array<string>;
+  roles: Array<string>;
 }
