@@ -8,9 +8,9 @@ import * as path from 'path';
 export class EmailParserService {
   constructor(@Inject('GLOBAL_LOGGER') private readonly logger: Logger) {}
 
-  async parseEmail(orgPath: string, destDir: string) {
+  async parseEmail(srcPath: string, destDir: string) {
     try {
-      const emailContent = await fs.readFile(orgPath);
+      const emailContent = await fs.readFile(srcPath);
       const parsed = await simpleParser(emailContent);
 
       // Save attachments
@@ -21,7 +21,7 @@ export class EmailParserService {
         await fs.writeFile(attachmentPath, attachment.content);
         this.logger.log(`Attachment saved: ${attachmentPath}`);
       }
-      this.logger.log(`Email successfully parsed from: ${orgPath}`);
+      this.logger.log(`Email successfully parsed from: ${srcPath}`);
       return { parsed, destPaths };
     } catch (error) {
       this.logger.error('EmailParseService/parseEmail:', error.message);
@@ -60,33 +60,33 @@ export class EmailParserService {
     }
   }
 
-  async start(instanceID: string, orgPath: string) {
+  async start(instanceID: string, srcPath: string) {
     try {
-      if (!fs.existsSync(orgPath)) {
-        this.logger.warn(`Email parse skipped. File not found: ${orgPath}`);
+      if (!fs.existsSync(srcPath)) {
+        this.logger.warn(`Email parse skipped. File not found: ${srcPath}`);
         return;
       }
 
       // make dir
-      const destDir = orgPath.replace(/\.[^/.]+$/, '');
+      const destDir = srcPath.replace(/\.[^/.]+$/, '');
       await fs.mkdir(destDir, { recursive: true });
       this.logger.log(`Output directory created: ${destDir}`);
 
       // parse & compose email
-      const { parsed, destPaths } = await this.parseEmail(orgPath, destDir);
+      const { parsed, destPaths } = await this.parseEmail(srcPath, destDir);
       if (destPaths.length) {
         const destPath = await this.composeEmail(destDir, parsed);
         destPaths.push(destPath);
-        await fs.remove(orgPath);
+        await fs.remove(srcPath);
       } else {
-        destPaths.push(orgPath);
+        destPaths.push(srcPath);
         await fs.remove(destDir);
       }
       this.logger.log(`Email processing completed for instance: ${instanceID}`);
       return destPaths;
     } catch (error) {
       this.logger.error(
-        `Error during email processing for file: ${orgPath}. Reason: ${error.message}`,
+        `Error during email processing for file: ${srcPath}. Reason: ${error.message}`,
       );
     }
   }

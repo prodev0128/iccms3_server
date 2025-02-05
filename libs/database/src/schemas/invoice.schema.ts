@@ -1,18 +1,15 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 export type InvoiceDocument = Invoice & Document;
 
-@Schema()
+@Schema({ timestamps: true })
 export class Invoice {
   @Prop()
   name: string;
 
-  @Prop()
-  org: string;
-
-  @Prop({ default: Date.now })
-  createdAt: Date;
+  @Prop({ type: Types.ObjectId, ref: 'Organization' })
+  orgID: Types.ObjectId;
 }
 
 export const InvoiceSchema = SchemaFactory.createForClass(Invoice);

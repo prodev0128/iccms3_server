@@ -11,21 +11,22 @@ export class DbRegisterService {
     @InjectModel(File.name) private fileModel: Model<FileDocument>,
   ) {}
 
-  async start(orgPath: string) {
+  async start(srcPath: string) {
+    if (!fs.existsSync(srcPath)) {
+      this.logger.warn(`Database register skipped. File not found: ${srcPath}`);
+      return;
+    }
     try {
-      if (!fs.existsSync(orgPath)) {
-        this.logger.warn(
-          `Database register skipped. File not found: ${orgPath}`,
-        );
-      }
       const file = new this.fileModel({
-        name: orgPath,
+        name: srcPath,
+        path: srcPath,
+        orgID: srcPath,
       });
       await file.save();
-      this.logger.log(`Database successfully registered to: ${orgPath}`);
+      this.logger.log(`Database successfully registered to: ${srcPath}`);
     } catch (error) {
       this.logger.error(
-        `Error during database registering for file: ${orgPath}. Reason: ${error.message}`,
+        `Error during database registering for file: ${srcPath}. Reason: ${error.message}`,
       );
     }
   }
