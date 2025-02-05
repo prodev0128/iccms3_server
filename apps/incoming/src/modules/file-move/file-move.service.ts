@@ -13,18 +13,9 @@ export class FileMoveService {
       this.logger.warn(`File move skipped. File not found: ${srcPath}`);
       return;
     }
-    const srcDir = path.join(
-      config.env.watchDirectory,
-      instanceID,
-      config.env.progress.before,
-    );
+    const srcDir = path.join(config.env.watchDirectory, instanceID, config.env.progress.before);
     const fileName = path.relative(srcDir, srcPath);
-    const destPath = path.join(
-      config.env.watchDirectory,
-      instanceID,
-      config.env.progress.during,
-      fileName,
-    );
+    const destPath = path.join(config.env.watchDirectory, instanceID, config.env.progress.during, fileName);
     const destDir = path.dirname(destPath);
     while (true) {
       try {
@@ -33,9 +24,7 @@ export class FileMoveService {
         this.logger.log(`File successfully moved to: ${destPath}`);
         return destPath;
       } catch (error) {
-        this.logger.error(
-          `Failed to move file: ${srcPath}. Retrying in 10 seconds. Reason: ${error.message}`,
-        );
+        this.logger.error(`Failed to move file: ${srcPath}. Retrying in 10 seconds. Reason: ${error.message}`);
         await delay(10 * 1000);
       }
     }

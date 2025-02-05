@@ -38,9 +38,7 @@ export class TaskQueueService {
   }
 
   completeTask(completedTask: Task) {
-    const foundIndex = this.tasks.findIndex(
-      (task) => task.data === completedTask.data,
-    );
+    const foundIndex = this.tasks.findIndex((task) => task.data === completedTask.data);
     if (foundIndex < 0) {
       return;
     }

@@ -54,9 +54,7 @@ export class EmailParserService {
       this.logger.log(`Email composed and saved to file: ${destPath}`);
       return destPath;
     } catch (error) {
-      this.logger.error(
-        `Failed to compose and save email to: ${destDir}. Reason: ${error.message}`,
-      );
+      this.logger.error(`Failed to compose and save email to: ${destDir}. Reason: ${error.message}`);
     }
   }
 
@@ -85,9 +83,7 @@ export class EmailParserService {
       this.logger.log(`Email processing completed for instance: ${instanceID}`);
       return destPaths;
     } catch (error) {
-      this.logger.error(
-        `Error during email processing for file: ${srcPath}. Reason: ${error.message}`,
-      );
+      this.logger.error(`Error during email processing for file: ${srcPath}. Reason: ${error.message}`);
     }
   }
 }

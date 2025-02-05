@@ -16,7 +16,8 @@ export class AppService implements OnModuleInit {
     private readonly fileWatcherService: FileWatcherService,
     private readonly fileMoveService: FileMoveService,
     private readonly dbRegisterService: DbRegisterService,
-  ) {}
+  ) {
+  }
 
   onModuleInit() {
     this.logger.log(`Initializing file watcher`);
@@ -50,5 +51,6 @@ export class AppService implements OnModuleInit {
     this.taskQueueService.completeTask(task);
   }
 
-  async handleIncomingFtp(task: any) {}
+  async handleIncomingFtp(task: any) {
+  }
 }

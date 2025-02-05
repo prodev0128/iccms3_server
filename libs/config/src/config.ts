@@ -34,8 +34,6 @@ export const config = {
     expiresIn: process.env.EXPIRESIN || '1h',
   },
   mongodb: {
-    uri:
-      process.env.MONGODB_URI ||
-      'mongodb://admin:qjsslftys128@0.0.0.0:27017/iccms3',
+    uri: process.env.MONGODB_URI || 'mongodb://admin:qjsslftys128@0.0.0.0:27017/iccms3',
   },
 };

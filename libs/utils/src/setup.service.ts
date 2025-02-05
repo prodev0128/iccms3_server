@@ -4,10 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { LoggerMiddleware } from './middleware/logger.middleware';
 
-export const setupSwagger = (
-  app: INestApplication,
-  info: SwaggerInfoDto = {},
-) => {
+export const setupSwagger = (app: INestApplication, info: SwaggerInfoDto = {}) => {
   const config = new DocumentBuilder()
     .setTitle(info.title || 'ICCMS3 API DOCUMENTATION')
     .setDescription(info.description || 'The API documentation for ICCMS3')

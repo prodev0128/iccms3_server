@@ -17,11 +17,7 @@ export class FileWatcherService implements OnModuleDestroy {
 
   async start(instanceID: string) {
     this.instanceID = instanceID;
-    const watchDirectory = path.join(
-      config.env.watchDirectory,
-      this.instanceID,
-      config.env.progress.before,
-    );
+    const watchDirectory = path.join(config.env.watchDirectory, this.instanceID, config.env.progress.before);
     try {
       await fs.mkdir(watchDirectory, { recursive: true });
 
@@ -36,16 +32,12 @@ export class FileWatcherService implements OnModuleDestroy {
       });
 
       this.watcher.on('error', (error) => {
-        this.logger.error(
-          `Error in file watcher for instance ${this.instanceID}: ${error.message}`,
-        );
+        this.logger.error(`Error in file watcher for instance ${this.instanceID}: ${error.message}`);
       });
 
       this.logger.log(`File watcher started for directory: ${watchDirectory}`);
     } catch (error) {
-      this.logger.error(
-        `Failed to start file watcher for directory: ${watchDirectory}. Reason: ${error.message}`,
-      );
+      this.logger.error(`Failed to start file watcher for directory: ${watchDirectory}. Reason: ${error.message}`);
     }
   }
 
