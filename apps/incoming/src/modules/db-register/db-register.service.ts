@@ -11,7 +11,7 @@ export class DbRegisterService {
     @InjectModel(File.name) private fileModel: Model<FileDocument>,
   ) {}
 
-  async start(instanceID: string, orgPath: string) {
+  async start(orgPath: string) {
     try {
       if (!fs.existsSync(orgPath)) {
         this.logger.warn(
@@ -22,6 +22,7 @@ export class DbRegisterService {
         name: orgPath,
       });
       await file.save();
+      this.logger.log(`Database successfully registered to: ${orgPath}`);
     } catch (error) {
       this.logger.error(
         `Error during database registering for file: ${orgPath}. Reason: ${error.message}`,

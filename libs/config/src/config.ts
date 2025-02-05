@@ -1,6 +1,12 @@
 import * as dotenv from 'dotenv';
 
 dotenv.config();
+
+export interface AppInfo {
+  path: string;
+  type: 'mail' | 'ftp' | 'outftp'; // Customize types as needed
+}
+
 export const config = {
   admin: {
     name: 'AdminApp',
@@ -19,7 +25,7 @@ export const config = {
   },
   env: {
     watchDirectory: process.env.WATCH_DIRECTORY || '',
-    watchSubDirs: JSON.parse(process.env.WATCH_SUB_DIRS) || [],
+    watchSubDirs: (JSON.parse(process.env.WATCH_SUB_DIRS) || []) as AppInfo[],
     progress: JSON.parse(process.env.PROGRESS) || {},
     intervalTime: 10 * 1000,
   },

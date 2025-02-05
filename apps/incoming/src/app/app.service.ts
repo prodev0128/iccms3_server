@@ -1,27 +1,26 @@
+import { AppInfo } from '@app/config';
 import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 
 import { DbRegisterService } from '../modules/db-register/db-register.service';
-import { EmailParserService } from '../modules/email-parser/email-parser.service';
 import { FileMoveService } from '../modules/file-move/file-move.service';
 import { FileWatcherService } from '../modules/file-watcher/file-watcher.service';
 import { TaskQueueService } from '../modules/task-queue/task-queue.service';
 
 @Injectable()
-export class MailIncomingService implements OnModuleInit {
+export class AppService implements OnModuleInit {
   constructor(
     @Inject('GLOBAL_LOGGER') private readonly logger: Logger,
-    @Inject('INSTANCE_ID') private readonly instanceID: string,
+    @Inject('APP_INFO') private readonly appInfo: AppInfo,
     private readonly taskQueueService: TaskQueueService,
     private readonly fileWatcherService: FileWatcherService,
     private readonly fileMoveService: FileMoveService,
-    private readonly emailParseService: EmailParserService,
     private readonly dbRegisterService: DbRegisterService,
   ) {}
 
   onModuleInit() {
     this.logger.log(`Initializing file watcher`);
-    this.fileWatcherService.start(this.instanceID);
+    this.fileWatcherService.start(this.appInfo.path);
   }
 
   @OnEvent('file.added')
@@ -30,9 +29,26 @@ export class MailIncomingService implements OnModuleInit {
   }
 
   @OnEvent('task.added')
+  handleTask(task: any) {
+    switch (this.appInfo.type) {
+      case 'mail':
+        this.handleIncomingMail(task);
+        break;
+      case 'ftp':
+        this.handleIncomingFtp(task);
+        break;
+      case 'outftp':
+        break;
+      default:
+        break;
+    }
+  }
+
   async handleIncomingMail(task: any) {
-    const res1 = await this.fileMoveService.start(this.instanceID, task.data);
-    await this.dbRegisterService.start(this.instanceID, res1);
+    const res1 = await this.fileMoveService.start(this.appInfo.path, task.data);
+    await this.dbRegisterService.start(res1);
     this.taskQueueService.completeTask(task);
   }
+
+  async handleIncomingFtp(task: any) {}
 }
