@@ -1,8 +1,8 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import * as fs from 'fs-extra';
+import fs from 'fs-extra';
 import { simpleParser } from 'mailparser';
-import * as nodemailer from 'nodemailer';
-import * as path from 'path';
+import nodemailer from 'nodemailer';
+import path from 'path';
 
 @Injectable()
 export class EmailParserService {

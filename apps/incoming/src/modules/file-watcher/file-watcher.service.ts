@@ -1,13 +1,13 @@
 import { config } from '@app/config';
 import { Inject, Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import * as chokidar from 'chokidar';
-import * as fs from 'fs-extra';
-import * as path from 'path';
+import chokidar, { FSWatcher } from 'chokidar';
+import fs from 'fs-extra';
+import path from 'path';
 
 @Injectable()
 export class FileWatcherService implements OnModuleDestroy {
-  private watcher: chokidar.FSWatcher;
+  private watcher: FSWatcher;
   private instanceID = '';
 
   constructor(

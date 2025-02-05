@@ -1,7 +1,7 @@
 import { File, FileDocument } from '@app/database';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import * as fs from 'fs-extra';
+import fs from 'fs-extra';
 import { Model } from 'mongoose';
 
 @Injectable()

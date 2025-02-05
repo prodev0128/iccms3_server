@@ -1,7 +1,7 @@
 import { Logger } from '@nestjs/common';
-import * as fs from 'fs-extra';
-import * as moment from 'moment';
-import * as path from 'path';
+import fs from 'fs-extra';
+import moment from 'moment';
+import path from 'path';
 
 export class FileLogger extends Logger {
   private readonly logFilePath: string;
