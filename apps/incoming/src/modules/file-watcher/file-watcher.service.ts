@@ -1,13 +1,14 @@
 import { config } from '@app/config';
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import * as chokidar from 'chokidar';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 
 @Injectable()
-export class FileWatcherService {
+export class FileWatcherService implements OnModuleDestroy {
   private watcher: chokidar.FSWatcher;
+  private instanceID = '';
 
   constructor(
     @Inject('GLOBAL_LOGGER') private readonly logger: Logger,
@@ -15,9 +16,10 @@ export class FileWatcherService {
   ) {}
 
   async start(instanceID: string) {
+    this.instanceID = instanceID;
     const watchDirectory = path.join(
       config.env.watchDirectory,
-      instanceID,
+      this.instanceID,
       config.env.progress.before,
     );
     try {
@@ -35,7 +37,7 @@ export class FileWatcherService {
 
       this.watcher.on('error', (error) => {
         this.logger.error(
-          `Error in file watcher for instance ${instanceID}: ${error.message}`,
+          `Error in file watcher for instance ${this.instanceID}: ${error.message}`,
         );
       });
 
@@ -47,10 +49,11 @@ export class FileWatcherService {
     }
   }
 
-  async stop() {
-    if (this.watcher) {
-      await this.watcher.close();
-      this.logger.log(`File watcher stopped.`);
+  async onModuleDestroy() {
+    if (!this.watcher) {
+      return;
     }
+    await this.watcher.close();
+    this.logger.log(`File watcher ${this.instanceID} stopped.`);
   }
 }

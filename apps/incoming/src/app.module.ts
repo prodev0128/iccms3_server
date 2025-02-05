@@ -2,7 +2,8 @@ import { config } from '@app/config';
 import { LoggerModule } from '@app/logger';
 import { DynamicModule, Module } from '@nestjs/common';
 
-import { MailIncomingModule } from './modules/mail/mail-incoming.module';
+import { FtpIncomingModule } from './ftp/ftp-incoming.module';
+import { MailIncomingModule } from './mail/mail-incoming.module';
 
 @Module({})
 export class AppModule {
@@ -14,7 +15,7 @@ export class AppModule {
         module.type === 'mail'
           ? MailIncomingModule.forRoot(module.path)
           : module.type === 'ftp'
-            ? MailIncomingModule.forRoot(module.path)
+            ? FtpIncomingModule.forRoot(module.path)
             : MailIncomingModule.forRoot(module.path),
       ],
     };
