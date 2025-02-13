@@ -1,12 +1,14 @@
-import { User, UserDocument } from '@app/database';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import type { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import bcrypt from 'bcryptjs';
-import { Model } from 'mongoose';
+import type { Model } from 'mongoose';
 
-import { LoginDto } from './dto/login.dto';
-import { RegisterDto } from './dto/register.dto';
+import type { UserDocument } from '@app/database';
+import { User } from '@app/database';
+
+import type { LoginDto } from './dto/login.dto';
+import type { RegisterDto } from './dto/register.dto';
 
 @Injectable()
 export class AuthService {
@@ -16,25 +18,25 @@ export class AuthService {
   ) {}
 
   async login(body: LoginDto) {
-    const { userID, password } = body;
+    const { password, userID } = body;
     const user = await this.userModel.findOne({ userID });
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new UnauthorizedException();
     }
     const payload = {
-      userID: user.userID,
       name: user.name,
       roles: user.roles,
+      userID: user.userID,
     };
     return { accessToken: this.jwtService.sign(payload) };
   }
 
   async register(body: RegisterDto) {
-    const { userID, password } = body;
+    const { password, userID } = body;
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new this.userModel({
-      userID,
       password: hashedPassword,
+      userID,
     });
     return await user.save();
   }

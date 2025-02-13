@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import type { Document } from 'mongoose';
+import { Types } from 'mongoose';
 
 export type InvoiceDocument = Invoice & Document;
 
@@ -8,7 +9,7 @@ export class Invoice {
   @Prop()
   name: string;
 
-  @Prop({ type: Types.ObjectId, ref: 'Organization' })
+  @Prop({ ref: 'Organization', type: Types.ObjectId })
   orgID: Types.ObjectId;
 }
 

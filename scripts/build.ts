@@ -1,5 +1,5 @@
+import './App.css';
 import fs from 'fs-extra';
-
 import { runProcess } from './run-process';
 
 const config = JSON.parse(fs.readFileSync('./nest-cli.json', 'utf8'));

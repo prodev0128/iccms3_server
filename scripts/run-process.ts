@@ -8,7 +8,7 @@ export const runProcess = (cli: string, key: string) => {
       .trim()
       .split(/\n/)
       .forEach((line: string) => {
-        console.log(`${key.padEnd(8)}: ${line}`);
+        console.log(`${key.padEnd(8)} : ${line}`);
       });
   };
 

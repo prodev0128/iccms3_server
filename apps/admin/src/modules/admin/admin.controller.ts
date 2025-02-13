@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 
-import { AdminService } from './admin.service';
+import type { AdminService } from './admin.service';
 
 @Controller()
 export class AdminController {

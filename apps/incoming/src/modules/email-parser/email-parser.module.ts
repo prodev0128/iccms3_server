@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { EmailParserService } from './email-parser.service';
 
 @Module({
-  providers: [EmailParserService],
   exports: [EmailParserService],
+  providers: [EmailParserService],
 })
 export class EmailParserModule {}

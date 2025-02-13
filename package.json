@@ -15,8 +15,8 @@
     "build:database": "nest build database",
     "build:jwt": "nest build jwt",
     "build:utils": "nest build utils",
-    "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
-    "lint": "eslint \"{src,apps,libs,test,scripts}/**/*.ts\" --fix",
+    "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\" \"scripts/**/*.ts\"",
+    "lint": "eslint {apps,libs,scripts}/**/*.ts --fix",
     "start:dev": "ts-node scripts/start-dev.ts",
     "start:dev:admin": "nest start admin --watch",
     "start:dev:api": "nest start api --watch",
@@ -45,6 +45,9 @@
     "@nestjs/swagger": "^11.0.3",
     "bcryptjs": "^2.4.3",
     "chokidar": "^4.0.3",
+    "eslint-plugin-n": "^17.15.1",
+    "eslint-plugin-sort": "^4.0.0",
+    "fs-extra": "^11.3.0",
     "i18n": "^0.15.1",
     "jsonwebtoken": "^9.0.2",
     "mailparser": "^3.7.2",
@@ -59,6 +62,9 @@
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
+    "@eslint/compat": "^1.2.6",
+    "@eslint/eslintrc": "^3.2.0",
+    "@eslint/js": "^9.20.0",
     "@nestjs/cli": "^11.0.2",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.7",
@@ -74,10 +80,11 @@
     "@typescript-eslint/eslint-plugin": "^8.23.0",
     "@typescript-eslint/parser": "^8.23.0",
     "concurrently": "^9.1.2",
-    "eslint": "^9.19.0",
+    "eslint": "^9.20.1",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-prettier": "^5.2.3",
+    "globals": "^15.14.0",
     "jest": "^29.7.0",
     "prettier": "^3.4.2",
     "source-map-support": "^0.5.21",
@@ -86,7 +93,8 @@
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.24.0"
   },
   "jest": {
     "moduleFileExtensions": [
@@ -106,7 +114,8 @@
     "testEnvironment": "node",
     "roots": [
       "<rootDir>/apps/",
-      "<rootDir>/libs/"
+      "<rootDir>/libs/",
+      "<rootDir>/scripts/"
     ],
     "moduleNameMapper": {
       "^@app/config(|/.*)$": "<rootDir>/libs/config/src/$1",

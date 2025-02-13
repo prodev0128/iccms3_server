@@ -29,7 +29,7 @@
 ## Project setup
 
 ```bash
-$ npm install
+$ yarn install
 ```
 ## Project Scaling and Maintenance
 
@@ -52,27 +52,27 @@ $ nest generate library my-library-name
 
 ```bash
 # development
-$ npm run start:api:dev
-$ npm run start:auth:dev
+$ yarn start:api:dev
+$ yarn start:auth:dev
 ```
 
 ```bash
 # production mode
-$ npm run start:api:prod
-$ npm run start:auth:prod
+$ yarn start:api:prod
+$ yarn start:auth:prod
 ```
 
 ## Run tests
 
 ```bash
 # unit tests
-$ npm run test
+$ yarn test
 
 # e2e tests
-$ npm run test:e2e
+$ yarn test:e2e
 
 # test coverage
-$ npm run test:cov
+$ yarn test:cov
 ```
 
 ## Deployment
@@ -82,7 +82,7 @@ When you're ready to deploy your NestJS application to production, there are som
 If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
 
 ```bash
-$ npm install -g mau
+$ yarn global add mau
 $ mau deploy
 ```
 

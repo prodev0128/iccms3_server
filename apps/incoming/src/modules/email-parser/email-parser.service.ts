@@ -1,4 +1,5 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import type { Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import fs from 'fs-extra';
 import { simpleParser } from 'mailparser';
 import nodemailer from 'nodemailer';
@@ -22,7 +23,7 @@ export class EmailParserService {
         this.logger.log(`Attachment saved: ${attachmentPath}`);
       }
       this.logger.log(`Email successfully parsed from: ${srcPath}`);
-      return { parsed, destPaths };
+      return { destPaths, parsed };
     } catch (error) {
       this.logger.error('EmailParseService/parseEmail:', error.message);
       throw error;
@@ -31,9 +32,10 @@ export class EmailParserService {
 
   async composeEmail(destDir: string, parsed: any) {
     const transporter = nodemailer.createTransport({
-      streamTransport: true, // Only generates the email, does not send it
-      newline: 'unix', // Use UNIX newlines for compatibility
-      buffer: true, // Buffer the generated email
+      // Use UNIX newlines for compatibility
+      buffer: true, // Only generates the email, does not send it
+      newline: 'unix',
+      streamTransport: true, // Buffer the generated email
     });
 
     const emailOptions = { ...parsed };
@@ -71,7 +73,7 @@ export class EmailParserService {
       this.logger.log(`Output directory created: ${destDir}`);
 
       // parse & compose email
-      const { parsed, destPaths } = await this.parseEmail(srcPath, destDir);
+      const { destPaths, parsed } = await this.parseEmail(srcPath, destDir);
       if (destPaths.length) {
         const destPath = await this.composeEmail(destDir, parsed);
         destPaths.push(destPath);

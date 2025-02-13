@@ -1,8 +1,10 @@
-import { config } from '@app/config';
-import { delay } from '@app/utils';
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import type { Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import fs from 'fs-extra';
 import path from 'path';
+
+import { config } from '@app/config';
+import { delay } from '@app/utils';
 
 @Injectable()
 export class FileMoveService {

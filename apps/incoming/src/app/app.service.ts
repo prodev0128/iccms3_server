@@ -1,11 +1,13 @@
-import { AppInfo } from '@app/config';
-import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import type { Logger, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 
-import { DbRegisterService } from '../modules/db-register/db-register.service';
-import { FileMoveService } from '../modules/file-move/file-move.service';
-import { FileWatcherService } from '../modules/file-watcher/file-watcher.service';
-import { TaskQueueService } from '../modules/task-queue/task-queue.service';
+import type { AppInfo } from '@app/config';
+
+import type { DbRegisterService } from '../modules/db-register/db-register.service';
+import type { FileMoveService } from '../modules/file-move/file-move.service';
+import type { FileWatcherService } from '../modules/file-watcher/file-watcher.service';
+import type { Task, TaskQueueService } from '../modules/task-queue/task-queue.service';
 
 @Injectable()
 export class AppService implements OnModuleInit {
@@ -16,8 +18,7 @@ export class AppService implements OnModuleInit {
     private readonly fileWatcherService: FileWatcherService,
     private readonly fileMoveService: FileMoveService,
     private readonly dbRegisterService: DbRegisterService,
-  ) {
-  }
+  ) {}
 
   onModuleInit() {
     this.logger.log(`Initializing file watcher`);
@@ -30,7 +31,7 @@ export class AppService implements OnModuleInit {
   }
 
   @OnEvent('task.added')
-  handleTask(task: any) {
+  handleTask(task: Task) {
     switch (this.appInfo.type) {
       case 'mail':
         this.handleIncomingMail(task);
@@ -45,12 +46,11 @@ export class AppService implements OnModuleInit {
     }
   }
 
-  async handleIncomingMail(task: any) {
+  async handleIncomingMail(task: Task) {
     const res1 = await this.fileMoveService.start(this.appInfo.path, task.data);
     await this.dbRegisterService.start(res1);
     this.taskQueueService.completeTask(task);
   }
 
-  async handleIncomingFtp(task: any) {
-  }
+  async handleIncomingFtp(_: Task) {}
 }

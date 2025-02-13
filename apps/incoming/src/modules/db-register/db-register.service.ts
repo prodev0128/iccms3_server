@@ -1,8 +1,11 @@
-import { File, FileDocument } from '@app/database';
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import type { Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import fs from 'fs-extra';
-import { Model } from 'mongoose';
+import type { Model } from 'mongoose';
+
+import type { FileDocument } from '@app/database';
+import { File } from '@app/database';
 
 @Injectable()
 export class DbRegisterService {
@@ -19,8 +22,8 @@ export class DbRegisterService {
     try {
       const file = new this.fileModel({
         name: srcPath,
-        path: srcPath,
         orgID: srcPath,
+        path: srcPath,
       });
       await file.save();
       this.logger.log(`Database successfully registered to: ${srcPath}`);

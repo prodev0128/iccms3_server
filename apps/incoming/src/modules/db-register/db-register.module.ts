@@ -1,11 +1,12 @@
-import { DatabaseModule } from '@app/database';
 import { Module } from '@nestjs/common';
+
+import { DatabaseModule } from '@app/database';
 
 import { DbRegisterService } from './db-register.service';
 
 @Module({
+  exports: [DbRegisterService],
   imports: [DatabaseModule],
   providers: [DbRegisterService],
-  exports: [DbRegisterService],
 })
 export class DbRegisterModule {}

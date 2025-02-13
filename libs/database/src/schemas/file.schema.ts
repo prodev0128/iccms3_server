@@ -1,11 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import type { Document } from 'mongoose';
+import { Types } from 'mongoose';
 
 export type FileDocument = File & Document;
 
 @Schema({ timestamps: true })
 export class File {
-  @Prop({ type: Types.ObjectId, ref: 'Organization' })
+  @Prop({ ref: 'Organization', type: Types.ObjectId })
   orgID: Types.ObjectId;
 
   @Prop({ required: true })

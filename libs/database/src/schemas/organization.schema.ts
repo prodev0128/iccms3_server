@@ -1,14 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import type { Document } from 'mongoose';
 
 export type OrganizationDocument = Organization & Document;
 
 @Schema({ timestamps: true })
 export class Organization {
-  @Prop({ unique: true, required: true })
+  @Prop({ required: true, unique: true })
   name: string;
 
-  @Prop({ unique: true, required: true })
+  @Prop({ required: true, unique: true })
   orgID: string;
 }
 

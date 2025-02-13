@@ -1,6 +1,7 @@
+import { NestFactory } from '@nestjs/core';
+
 import { config } from '@app/config';
 import { setupLogger, setupSwagger } from '@app/utils';
-import { NestFactory } from '@nestjs/core';
 
 import { AuthModule } from './modules/auth/auth.module';
 

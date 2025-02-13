@@ -1,7 +1,8 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
+import type { Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import type { EventEmitter2 } from '@nestjs/event-emitter';
 
-interface Task {
+export interface Task {
   data: string;
   status: 'pending' | 'in-progress';
 }

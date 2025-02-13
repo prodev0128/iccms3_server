@@ -1,9 +1,12 @@
-import { config } from '@app/config';
-import { Inject, Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import chokidar, { FSWatcher } from 'chokidar';
+import type { Logger, OnModuleDestroy } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import type { EventEmitter2 } from '@nestjs/event-emitter';
+import type { FSWatcher } from 'chokidar';
+import chokidar from 'chokidar';
 import fs from 'fs-extra';
 import path from 'path';
+
+import { config } from '@app/config';
 
 @Injectable()
 export class FileWatcherService implements OnModuleDestroy {
@@ -31,7 +34,7 @@ export class FileWatcherService implements OnModuleDestroy {
         this.eventEmitter.emit(`file.added`, path);
       });
 
-      this.watcher.on('error', (error: any) => {
+      this.watcher.on('error', (error: Error) => {
         this.logger.error(`Error in file watcher for instance ${this.instanceID}: ${error.message}`);
       });
 

@@ -54,9 +54,11 @@
   "include": [
     "apps/**/*",
     "libs/**/*",
-    "scripts/*"
+    "scripts/**/*"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "dist",
+    "logs",
   ]
 }

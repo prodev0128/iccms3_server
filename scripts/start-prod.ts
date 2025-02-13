@@ -8,5 +8,5 @@ Object.keys(projects).forEach((key) => {
   if (projects[key].type !== 'application') {
     return;
   }
-  runProcess(`nest start ${key} --watch`, key);
+  runProcess(`node dist/apps/${key}/main.ts`, key);
 });
