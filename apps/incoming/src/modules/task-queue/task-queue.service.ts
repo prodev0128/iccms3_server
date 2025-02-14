@@ -1,6 +1,6 @@
-import type { Logger } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { Inject, Injectable } from '@nestjs/common';
-import type { EventEmitter2 } from '@nestjs/event-emitter';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 export interface Task {
   data: string;

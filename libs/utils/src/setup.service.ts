@@ -1,7 +1,7 @@
-import type { INestApplication } from '@nestjs/common';
+import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-import type { SwaggerInfoDto } from '@app/utils/dto/swaggerInfo.dto';
+import { SwaggerInfoDto } from '@app/utils/dto/swaggerInfo.dto';
 
 import { LoggerMiddleware } from './middleware/logger.middleware';
 

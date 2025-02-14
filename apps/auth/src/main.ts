@@ -1,12 +1,14 @@
 import { NestFactory } from '@nestjs/core';
+import { execSync } from 'child_process';
 
 import { config } from '@app/config';
 import { setupLogger, setupSwagger } from '@app/utils';
 
-import { AuthModule } from './modules/auth/auth.module';
+import { AppModule } from './app/app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AuthModule);
+  execSync(`del logs\\${config.auth.name}*.*`);
+  const app = await NestFactory.create(AppModule);
 
   const logger = app.get('GLOBAL_LOGGER');
   setupSwagger(app);

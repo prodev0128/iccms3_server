@@ -1,12 +1,14 @@
 import { NestFactory } from '@nestjs/core';
+import { execSync } from 'child_process';
 
 import { config } from '@app/config';
 import { setupLogger, setupSwagger } from '@app/utils';
 
-import { MainModule } from './modules';
+import { AppModule } from './app/app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(MainModule);
+  execSync(`del logs\\${config.admin.name}*.*`);
+  const app = await NestFactory.create(AppModule);
 
   const logger = app.get('GLOBAL_LOGGER');
   setupSwagger(app);
@@ -14,7 +16,7 @@ async function bootstrap() {
 
   const port = config.admin.port;
   await app.listen(port);
-  logger.log(`🟢 Api Module listening at ${port} 🟢`);
+  logger.log(`🟢 Admin Module listening at ${port} 🟢`);
 }
 
 bootstrap();

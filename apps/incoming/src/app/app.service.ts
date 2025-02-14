@@ -1,13 +1,13 @@
-import type { Logger, OnModuleInit } from '@nestjs/common';
+import { Logger, OnModuleInit } from '@nestjs/common';
 import { Inject, Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 
-import type { AppInfo } from '@app/config';
+import { AppInfo } from '@app/config';
 
-import type { DbRegisterService } from '../modules/db-register/db-register.service';
-import type { FileMoveService } from '../modules/file-move/file-move.service';
-import type { FileWatcherService } from '../modules/file-watcher/file-watcher.service';
-import type { Task, TaskQueueService } from '../modules/task-queue/task-queue.service';
+import { DbRegisterService } from '../modules/db-register/db-register.service';
+import { FileMoveService } from '../modules/file-move/file-move.service';
+import { FileWatcherService } from '../modules/file-watcher/file-watcher.service';
+import { Task, TaskQueueService } from '../modules/task-queue/task-queue.service';
 
 @Injectable()
 export class AppService implements OnModuleInit {

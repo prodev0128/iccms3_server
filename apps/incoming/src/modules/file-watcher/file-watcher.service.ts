@@ -1,7 +1,7 @@
-import type { Logger, OnModuleDestroy } from '@nestjs/common';
+import { Logger, OnModuleDestroy } from '@nestjs/common';
 import { Inject, Injectable } from '@nestjs/common';
-import type { EventEmitter2 } from '@nestjs/event-emitter';
-import type { FSWatcher } from 'chokidar';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { FSWatcher } from 'chokidar';
 import chokidar from 'chokidar';
 import fs from 'fs-extra';
 import path from 'path';

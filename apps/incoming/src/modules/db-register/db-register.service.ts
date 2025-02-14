@@ -1,10 +1,10 @@
-import type { Logger } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import fs from 'fs-extra';
-import type { Model } from 'mongoose';
+import { Model } from 'mongoose';
 
-import type { FileDocument } from '@app/database';
+import { FileDocument } from '@app/database';
 import { File } from '@app/database';
 
 @Injectable()

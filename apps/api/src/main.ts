@@ -1,11 +1,13 @@
 import { NestFactory } from '@nestjs/core';
+import { execSync } from 'child_process';
 
 import { config } from '@app/config';
 import { setupLogger, setupSwagger } from '@app/utils';
 
-import { AppModule } from './modules/app/app.module';
+import { AppModule } from './app/app.module';
 
 async function bootstrap() {
+  execSync(`del logs\\${config.api.name}*.*`);
   const app = await NestFactory.create(AppModule);
 
   const logger = app.get('GLOBAL_LOGGER');

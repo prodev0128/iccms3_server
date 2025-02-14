@@ -1,4 +1,4 @@
-import type { Logger } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { Inject, Injectable } from '@nestjs/common';
 import fs from 'fs-extra';
 import path from 'path';
