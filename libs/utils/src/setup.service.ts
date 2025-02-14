@@ -1,4 +1,4 @@
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, Logger } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { SwaggerInfoDto } from '@app/utils/dto/swaggerInfo.dto';
@@ -16,7 +16,7 @@ export const setupSwagger = (app: INestApplication, info: SwaggerInfoDto = {}) =
   SwaggerModule.setup('doc', app, document);
 };
 
-export const setupLogger = (app: INestApplication) => {
-  const loggerMiddleware = new LoggerMiddleware();
-  app.use(loggerMiddleware.use);
+export const setupLogger = (app: INestApplication, logger: Logger) => {
+  const loggerMiddleware = new LoggerMiddleware(logger);
+  app.use(loggerMiddleware.use.bind(loggerMiddleware)); // Bind the middleware function
 };

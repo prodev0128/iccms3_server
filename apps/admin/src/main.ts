@@ -12,7 +12,7 @@ async function bootstrap() {
 
   const logger = app.get('GLOBAL_LOGGER');
   setupSwagger(app);
-  setupLogger(app);
+  setupLogger(app, logger);
 
   const port = config.admin.port;
   await app.listen(port);

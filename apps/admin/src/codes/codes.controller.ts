@@ -8,32 +8,57 @@ import { CodesService } from './codes.service';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
-@Controller('codes')
+@Controller('codeoptions')
 export class CodesController {
-  constructor(private readonly usersService: CodesService) {}
+  constructor(private readonly codesService: CodesService) {}
 
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  findAllCodeOptions() {
+    return this.codesService.findAllCodeOptions();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
+  findOneCodeOption(@Param('id') id: string) {
+    return this.codesService.findOneCodeOption(id);
   }
 
   @Post()
-  create(@Param('id') id: string, @Body() codeDto: CodeDto) {
-    return this.usersService.create(codeDto);
+  createCodeOption(@Param('id') id: string, @Body() codeDto: CodeDto) {
+    return this.codesService.createCodeOption(codeDto);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() codeDto: CodeDto) {
-    return this.usersService.update(id, codeDto);
+  updateCodeOption(@Param('id') id: string, @Body() codeDto: CodeDto) {
+    return this.codesService.updateCodeOption(id, codeDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(id);
+  removeCodeOption(@Param('id') id: string) {
+    return this.codesService.removeCodeOption(id);
+  }
+
+  @Get(':codeOptionId/codes')
+  findAllCodes() {
+    return this.codesService.findAllCodes();
+  }
+
+  @Get(':codeOptionId/codes/:id')
+  findOneCode(@Param('id') id: string) {
+    return this.codesService.findOneCode(id);
+  }
+
+  @Post(':codeOptionId/codes')
+  createCode(@Param('id') id: string, @Body() codeDto: CodeDto) {
+    return this.codesService.createCode(codeDto);
+  }
+
+  @Put(':codeOptionId/codes/:id')
+  updateCode(@Param('id') id: string, @Body() codeDto: CodeDto) {
+    return this.codesService.updateCode(id, codeDto);
+  }
+
+  @Delete(':codeOptionId/codes/:id')
+  removeCode(@Param('id') id: string) {
+    return this.codesService.removeCode(id);
   }
 }
