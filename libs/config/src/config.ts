@@ -10,15 +10,11 @@ export interface AppInfo {
 export const config = {
   admin: {
     name: 'AdminApp',
-    port: parseInt(process.env.PORT_APP_ADMIN, 10) || 3129,
+    port: parseInt(process.env.PORT_APP_ADMIN, 10) || 3128,
   },
   api: {
     name: 'ApiApp',
-    port: parseInt(process.env.PORT_APP_API, 10) || 3130,
-  },
-  auth: {
-    name: 'AuthApp',
-    port: parseInt(process.env.PORT_APP_AUTH, 10) || 3128,
+    port: parseInt(process.env.PORT_APP_API, 10) || 3129,
   },
   env: {
     intervalTime: 10 * 1000,

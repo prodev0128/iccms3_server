@@ -52,14 +52,14 @@ $ nest generate library my-library-name
 
 ```bash
 # development
+$ yarn start:admin:dev
 $ yarn start:api:dev
-$ yarn start:auth:dev
 ```
 
 ```bash
 # production mode
+$ yarn start:admin:prod
 $ yarn start:api:prod
-$ yarn start:auth:prod
 ```
 
 ## Run tests
