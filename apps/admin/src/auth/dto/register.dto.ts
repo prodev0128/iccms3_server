@@ -12,4 +12,10 @@ export class RegisterDto {
     example: 'password',
   })
   password: string;
+
+  @ApiProperty({
+    description: 'The name of the user',
+    example: 'name',
+  })
+  name: string;
 }

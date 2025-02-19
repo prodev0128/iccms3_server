@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { execSync } from 'child_process';
 
 import { config } from '@app/config';
-import { setupLogger, setupSwagger } from '@app/utils';
+import { SetupService } from '@app/setup';
 
 import { AppModule } from './app/app.module';
 
@@ -12,8 +12,8 @@ async function bootstrap() {
   app.enableCors();
 
   const logger = app.get('GLOBAL_LOGGER');
-  setupSwagger(app);
-  setupLogger(app, logger);
+  SetupService.setupSwagger(app);
+  SetupService.setupApiLogger(app, logger);
 
   const port = config.api.port;
   await app.listen(port);

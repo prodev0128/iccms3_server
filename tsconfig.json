@@ -43,6 +43,12 @@
       "@app/logger/*": [
         "libs/logger/src/*"
       ],
+      "@app/setup": [
+        "libs/setup/src"
+      ],
+      "@app/setup/*": [
+        "libs/setup/src/*"
+      ],
       "@app/user": [
         "libs/user/src"
       ],

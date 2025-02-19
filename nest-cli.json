@@ -68,6 +68,15 @@
         "tsConfigPath": "libs/logger/tsconfig.lib.json"
       }
     },
+    "setup": {
+      "type": "library",
+      "root": "libs/setup",
+      "entryFile": "index",
+      "sourceRoot": "libs/setup/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/setup/tsconfig.lib.json"
+      }
+    },
     "user": {
       "type": "library",
       "root": "libs/user",

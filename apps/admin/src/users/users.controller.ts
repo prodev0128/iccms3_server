@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Patch, Put, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param, Patch, Put, Query, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
+import bcrypt from 'bcryptjs';
 
 import { JwtAuthGuard } from '@app/jwt';
 
@@ -13,8 +14,14 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  @ApiQuery({ description: 'Search text', name: 'text', required: false })
+  findUsers(
+    @Query('page') page = 0,
+    @Query('pageSize') pageSize = 10,
+    @Query('filterModel') filterModel?: any,
+    @Query('sortModel') sortModel?: any,
+  ) {
+    return this.usersService.findUsers(page, pageSize, filterModel, sortModel);
   }
 
   @Get(':id')
