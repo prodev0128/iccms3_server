@@ -18,7 +18,11 @@ export class UsersService {
   }
 
   async update(id: string, userDto: UserDto) {
-    return this.userModel.findByIdAndUpdate(id, userDto).exec();
+    return this.userModel.findByIdAndUpdate(id, userDto, { new: true, overwrite: true, runValidators: true }).exec();
+  }
+
+  async updatePartial(id: string, userDto: UserDto) {
+    return this.userModel.findByIdAndUpdate(id, userDto, { new: true, runValidators: true }).exec();
   }
 
   async remove(id: string) {

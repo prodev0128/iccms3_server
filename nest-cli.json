@@ -5,13 +5,13 @@
   },
   "monorepo": true,
   "projects": {
-    "incoming": {
+    "admin": {
       "type": "application",
-      "root": "apps/incoming",
+      "root": "apps/admin",
       "entryFile": "main",
-      "sourceRoot": "apps/incoming/src",
+      "sourceRoot": "apps/admin/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/incoming/tsconfig.app.json"
+        "tsConfigPath": "apps/admin/tsconfig.app.json"
       }
     },
     "api": {
@@ -21,15 +21,6 @@
       "sourceRoot": "apps/api/src",
       "compilerOptions": {
         "tsConfigPath": "apps/api/tsconfig.app.json"
-      }
-    },
-    "admin": {
-      "type": "application",
-      "root": "apps/admin",
-      "entryFile": "main",
-      "sourceRoot": "apps/admin/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/admin/tsconfig.app.json"
       }
     },
     "config": {
@@ -50,6 +41,15 @@
         "tsConfigPath": "libs/database/tsconfig.lib.json"
       }
     },
+    "incoming": {
+      "type": "application",
+      "root": "apps/incoming",
+      "entryFile": "main",
+      "sourceRoot": "apps/incoming/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/incoming/tsconfig.app.json"
+      }
+    },
     "jwt": {
       "type": "library",
       "root": "libs/jwt",
@@ -59,15 +59,6 @@
         "tsConfigPath": "libs/jwt/tsconfig.lib.json"
       }
     },
-    "utils": {
-      "type": "library",
-      "root": "libs/utils",
-      "entryFile": "index",
-      "sourceRoot": "libs/utils/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/utils/tsconfig.lib.json"
-      }
-    },
     "logger": {
       "type": "library",
       "root": "libs/logger",
@@ -75,6 +66,24 @@
       "sourceRoot": "libs/logger/src",
       "compilerOptions": {
         "tsConfigPath": "libs/logger/tsconfig.lib.json"
+      }
+    },
+    "user": {
+      "type": "library",
+      "root": "libs/user",
+      "entryFile": "index",
+      "sourceRoot": "libs/user/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/user/tsconfig.lib.json"
+      }
+    },
+    "utils": {
+      "type": "library",
+      "root": "libs/utils",
+      "entryFile": "index",
+      "sourceRoot": "libs/utils/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/utils/tsconfig.lib.json"
       }
     }
   }

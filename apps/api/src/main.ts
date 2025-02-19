@@ -9,6 +9,7 @@ import { AppModule } from './app/app.module';
 async function bootstrap() {
   execSync(`del logs\\${config.api.name}*.*`);
   const app = await NestFactory.create(AppModule);
+  app.enableCors();
 
   const logger = app.get('GLOBAL_LOGGER');
   setupSwagger(app);

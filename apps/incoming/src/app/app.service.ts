@@ -4,10 +4,10 @@ import { OnEvent } from '@nestjs/event-emitter';
 
 import { AppInfo } from '@app/config';
 
-import { DbRegisterService } from '../modules/db-register/db-register.service';
-import { FileMoveService } from '../modules/file-move/file-move.service';
-import { FileWatcherService } from '../modules/file-watcher/file-watcher.service';
-import { Task, TaskQueueService } from '../modules/task-queue/task-queue.service';
+import { DbRegisterService } from '../db-register/db-register.service';
+import { FileMoveService } from '../file-move/file-move.service';
+import { FileWatcherService } from '../file-watcher/file-watcher.service';
+import { Task, TaskQueueService } from '../task-queue/task-queue.service';
 
 @Injectable()
 export class AppService implements OnModuleInit {

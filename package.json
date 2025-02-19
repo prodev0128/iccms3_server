@@ -42,6 +42,8 @@
     "@nestjs/swagger": "^11.0.3",
     "bcryptjs": "^2.4.3",
     "chokidar": "^4.0.3",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
     "eslint-plugin-n": "^17.15.1",
     "eslint-plugin-sort": "^4.0.0",
     "fs-extra": "^11.3.0",
@@ -118,8 +120,9 @@
       "^@app/config(|/.*)$": "<rootDir>/libs/config/src/$1",
       "^@app/database(|/.*)$": "<rootDir>/libs/database/src/$1",
       "^@app/jwt(|/.*)$": "<rootDir>/libs/jwt/src/$1",
-      "^@app/utils(|/.*)$": "<rootDir>/libs/utils/src/$1",
-      "^@app/logger(|/.*)$": "<rootDir>/libs/logger/src/$1"
+      "^@app/logger(|/.*)$": "<rootDir>/libs/logger/src/$1",
+      "^@app/user(|/.*)$": "<rootDir>/libs/user/src/$1",
+      "^@app/utils(|/.*)$": "<rootDir>/libs/utils/src/$1"
     }
   }
 }

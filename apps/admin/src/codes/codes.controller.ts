@@ -1,9 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '@app/jwt';
 
 import { CodeDto } from './code.dto';
+import { CodeOptionDto } from './codeoption.dto';
 import { CodesService } from './codes.service';
 
 @ApiBearerAuth()
@@ -13,8 +14,9 @@ export class CodesController {
   constructor(private readonly codesService: CodesService) {}
 
   @Get()
-  findAllCodeOptions() {
-    return this.codesService.findAllCodeOptions();
+  @ApiQuery({ description: 'Search text', name: 'text', required: false })
+  findAllCodeOptions(@Query('text') searchText?: string) {
+    return this.codesService.findAllCodeOptions(searchText);
   }
 
   @Get(':id')
@@ -23,13 +25,18 @@ export class CodesController {
   }
 
   @Post()
-  createCodeOption(@Param('id') id: string, @Body() codeDto: CodeDto) {
-    return this.codesService.createCodeOption(codeDto);
+  createCodeOption(@Body() codeOptionDto: CodeOptionDto) {
+    return this.codesService.createCodeOption(codeOptionDto);
   }
 
   @Put(':id')
-  updateCodeOption(@Param('id') id: string, @Body() codeDto: CodeDto) {
-    return this.codesService.updateCodeOption(id, codeDto);
+  updateCodeOption(@Param('id') id: string, @Body() codeOptionDto: CodeOptionDto) {
+    return this.codesService.updateCodeOption(id, codeOptionDto);
+  }
+
+  @Put(':id')
+  updateCodeOptionPartial(@Param('id') id: string, @Body() codeOptionDto: CodeOptionDto) {
+    return this.codesService.updateCodeOptionPartial(id, codeOptionDto);
   }
 
   @Delete(':id')
@@ -48,13 +55,18 @@ export class CodesController {
   }
 
   @Post(':codeOptionId/codes')
-  createCode(@Param('id') id: string, @Body() codeDto: CodeDto) {
+  createCode(@Body() codeDto: CodeDto) {
     return this.codesService.createCode(codeDto);
   }
 
   @Put(':codeOptionId/codes/:id')
   updateCode(@Param('id') id: string, @Body() codeDto: CodeDto) {
     return this.codesService.updateCode(id, codeDto);
+  }
+
+  @Patch(':codeOptionId/codes/:id')
+  updateCodePartial(@Param('id') id: string, @Body() codeDto: CodeDto) {
+    return this.codesService.updateCodePartial(id, codeDto);
   }
 
   @Delete(':codeOptionId/codes/:id')

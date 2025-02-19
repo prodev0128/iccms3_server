@@ -4,8 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import bcrypt from 'bcryptjs';
 import { Model } from 'mongoose';
 
-import { UserDocument } from '@app/database';
-import { User } from '@app/database';
+import { User, UserDocument } from '@app/database';
 
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -39,5 +38,9 @@ export class AuthService {
       userID,
     });
     return await user.save();
+  }
+
+  async fetchUser({ userID }) {
+    return this.userModel.findOne({ userID }, { _id: 0, name: 1, roles: 1, userID: 1 });
   }
 }
