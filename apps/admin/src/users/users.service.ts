@@ -1,23 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import bcrypt from 'bcryptjs';
 import { Model } from 'mongoose';
 
 import { User, UserDocument } from '@app/database';
+import { filterQueryBuilder, sortQueryBuilder } from '@app/utils';
 
 import { UserDto } from './user.dto';
 
 @Injectable()
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
-  async findUsers(page, pageSize, filterModel, sortModel) {
-    const filterQuery = {};
-    for (const filter of filterModel) {
-      if (filter.operator === 'contains') {
-        filterQuery[filter.field] = filter.value;
-      }
-    }
-    const users = await this.userModel.find(filterQuery).exec();
+
+  async findUsers(page: number, pageSize: number, filterModel: string, sortModel: string) {
+    const filterQuery = filterQueryBuilder(filterModel, ['userID', 'name']);
+    const sortQuery = sortQueryBuilder(sortModel);
+    const users = await this.userModel
+      .find(filterQuery)
+      .sort(sortQuery)
+      .skip(page * pageSize)
+      .limit(pageSize)
+      .exec();
     const totalCount = await this.userModel.countDocuments(filterQuery).exec();
     return { totalCount, users };
   }

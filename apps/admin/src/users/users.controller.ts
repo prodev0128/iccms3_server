@@ -1,6 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Put, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
-import bcrypt from 'bcryptjs';
 
 import { JwtAuthGuard } from '@app/jwt';
 
@@ -14,12 +13,15 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  @ApiQuery({ description: 'Search text', name: 'text', required: false })
+  @ApiQuery({ description: 'page number', name: 'page' })
+  @ApiQuery({ description: 'pageSize', name: 'pageSize' })
+  @ApiQuery({ description: 'filterModel', name: 'filterModel' })
+  @ApiQuery({ description: 'sortModel', name: 'sortModel' })
   findUsers(
     @Query('page') page = 0,
     @Query('pageSize') pageSize = 10,
-    @Query('filterModel') filterModel?: any,
-    @Query('sortModel') sortModel?: any,
+    @Query('filterModel') filterModel: any,
+    @Query('sortModel') sortModel: any,
   ) {
     return this.usersService.findUsers(page, pageSize, filterModel, sortModel);
   }
