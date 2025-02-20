@@ -14,9 +14,17 @@ export class CodesController {
   constructor(private readonly codesService: CodesService) {}
 
   @Get()
-  @ApiQuery({ description: 'Search text', name: 'text', required: false })
-  findAllCodeOptions(@Query('text') searchText?: string) {
-    return this.codesService.findAllCodeOptions(searchText);
+  @ApiQuery({ description: 'page number', name: 'page' })
+  @ApiQuery({ description: 'pageSize', name: 'pageSize' })
+  @ApiQuery({ description: 'filterModel', name: 'filterModel' })
+  @ApiQuery({ description: 'sortModel', name: 'sortModel' })
+  findCodeOptions(
+    @Query('page') page = 0,
+    @Query('pageSize') pageSize = 10,
+    @Query('filterModel') filterModel: string,
+    @Query('sortModel') sortModel: string,
+  ) {
+    return this.codesService.findCodeOptions(page, pageSize, filterModel, sortModel);
   }
 
   @Get(':id')
@@ -44,33 +52,47 @@ export class CodesController {
     return this.codesService.removeCodeOption(id);
   }
 
-  @Get(':codeOptionId/codes')
-  findAllCodes() {
-    return this.codesService.findAllCodes();
+  @Get(':codeOptionType/codes')
+  @ApiQuery({ description: 'page number', name: 'page' })
+  @ApiQuery({ description: 'pageSize', name: 'pageSize' })
+  @ApiQuery({ description: 'filterModel', name: 'filterModel' })
+  @ApiQuery({ description: 'sortModel', name: 'sortModel' })
+  findCodes(
+    @Param('codeOptionType') codeOptionType: string,
+    @Query('page') page = 0,
+    @Query('pageSize') pageSize = 10,
+    @Query('filterModel') filterModel: string,
+    @Query('sortModel') sortModel: string,
+  ) {
+    return this.codesService.findCodes(codeOptionType, page, pageSize, filterModel, sortModel);
   }
 
-  @Get(':codeOptionId/codes/:id')
-  findOneCode(@Param('id') id: string) {
-    return this.codesService.findOneCode(id);
+  @Get(':codeOptionType/codes/:id')
+  findOneCode(@Param('codeOptionType') codeOptionType: string, @Param('id') id: string) {
+    return this.codesService.findOneCode(codeOptionType, id);
   }
 
-  @Post(':codeOptionId/codes')
-  createCode(@Body() codeDto: CodeDto) {
-    return this.codesService.createCode(codeDto);
+  @Post(':codeOptionType/codes')
+  createCode(@Param('codeOptionType') codeOptionType: string, @Body() codeDto: CodeDto) {
+    return this.codesService.createCode(codeOptionType, codeDto);
   }
 
-  @Put(':codeOptionId/codes/:id')
-  updateCode(@Param('id') id: string, @Body() codeDto: CodeDto) {
-    return this.codesService.updateCode(id, codeDto);
+  @Put(':codeOptionType/codes/:id')
+  updateCode(@Param('codeOptionType') codeOptionType: string, @Param('id') id: string, @Body() codeDto: CodeDto) {
+    return this.codesService.updateCode(codeOptionType, id, codeDto);
   }
 
-  @Patch(':codeOptionId/codes/:id')
-  updateCodePartial(@Param('id') id: string, @Body() codeDto: CodeDto) {
-    return this.codesService.updateCodePartial(id, codeDto);
+  @Patch(':codeOptionType/codes/:id')
+  updateCodePartial(
+    @Param('codeOptionType') codeOptionType: string,
+    @Param('id') id: string,
+    @Body() codeDto: CodeDto,
+  ) {
+    return this.codesService.updateCodePartial(codeOptionType, id, codeDto);
   }
 
-  @Delete(':codeOptionId/codes/:id')
-  removeCode(@Param('id') id: string) {
-    return this.codesService.removeCode(id);
+  @Delete(':codeOptionType/codes/:id')
+  removeCode(@Param('codeOptionType') codeOptionType: string, @Param('id') id: string) {
+    return this.codesService.removeCode(codeOptionType, id);
   }
 }

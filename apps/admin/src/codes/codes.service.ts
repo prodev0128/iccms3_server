@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { Code, CodeDocument, CodeOption, CodeOptionDocument } from '@app/database';
+import { delay, filterQueryBuilder, sortQueryBuilder } from '@app/utils';
 
 import { CodeDto } from './code.dto';
 import { CodeOptionDto } from './codeoption.dto';
@@ -14,21 +15,21 @@ export class CodesService {
     @InjectModel(CodeOption.name) private codeOptionModel: Model<CodeOptionDocument>,
   ) {}
 
-  async findAllCodeOptions(searchText?: string) {
-    if (!searchText) {
-      return this.codeOptionModel.find().exec();
-    }
-    return this.codeOptionModel
-      .find()
-      .or([
-        { name: { $options: 'i', $regex: `.*${searchText}.*` } },
-        { type: { $options: 'i', $regex: `.*${searchText}.*` } },
-      ])
+  async findCodeOptions(page: number, pageSize: number, filterModel: string, sortModel: string) {
+    const filterQuery = filterQueryBuilder(filterModel, ['name', 'type']);
+    const sortQuery = sortQueryBuilder(sortModel);
+    const codeOptions = await this.codeOptionModel
+      .find(filterQuery)
+      .sort(sortQuery)
+      .skip(page * pageSize)
+      .limit(pageSize)
       .exec();
+    const totalCount = await this.codeOptionModel.countDocuments(filterQuery).exec();
+    return { codeOptions, totalCount };
   }
 
   async findOneCodeOption(id: string) {
-    return this.codeModel.findById(id).exec();
+    return this.codeOptionModel.findById(id).exec();
   }
 
   async createCodeOption(codeOptionDto: CodeOptionDto) {
@@ -37,39 +38,51 @@ export class CodesService {
   }
 
   async updateCodeOption(id: string, codeOptionDto: CodeOptionDto) {
-    return this.codeModel.findByIdAndUpdate(id, codeOptionDto).exec();
+    return this.codeOptionModel.findByIdAndUpdate(id, codeOptionDto).exec();
   }
 
   async updateCodeOptionPartial(id: string, codeOptionDto: CodeOptionDto) {
-    return this.codeModel.findByIdAndUpdate(id, codeOptionDto).exec();
+    return this.codeOptionModel.findByIdAndUpdate(id, codeOptionDto).exec();
   }
 
   async removeCodeOption(id: string) {
-    return this.codeModel.findByIdAndDelete(id).exec();
+    return this.codeOptionModel.findByIdAndDelete(id).exec();
   }
 
-  async findAllCodes() {
-    return this.codeOptionModel.find().exec();
+  async findCodes(codeOptionType: string, page: number, pageSize: number, filterModel: string, sortModel: string) {
+    const codeQuery = { type: codeOptionType };
+    console.log(codeQuery);
+    const filterQuery = filterQueryBuilder(filterModel, ['name']);
+    const sortQuery = sortQueryBuilder(sortModel);
+    const codes = await this.codeModel
+      .find(codeQuery)
+      .find(filterQuery)
+      .sort(sortQuery)
+      .skip(page * pageSize)
+      .limit(pageSize)
+      .exec();
+    const totalCount = await this.codeModel.countDocuments({ $and: [codeQuery, filterQuery] }).exec();
+    return { codes, totalCount };
   }
 
-  async findOneCode(id: string) {
+  async findOneCode(codeOptionType: string, id: string) {
     return this.codeOptionModel.findById(id).exec();
   }
 
-  async createCode(codeDto: CodeDto) {
+  async createCode(codeOptionType: string, codeDto: CodeDto) {
     const newUser = new this.codeOptionModel(codeDto);
     return newUser.save();
   }
 
-  async updateCode(id: string, codeDto: CodeDto) {
+  async updateCode(codeOptionType: string, id: string, codeDto: CodeDto) {
     return this.codeOptionModel.findByIdAndUpdate(id, codeDto).exec();
   }
 
-  async updateCodePartial(id: string, codeDto: CodeDto) {
+  async updateCodePartial(codeOptionType: string, id: string, codeDto: CodeDto) {
     return this.codeOptionModel.findByIdAndUpdate(id, codeDto).exec();
   }
 
-  async removeCode(id: string) {
+  async removeCode(codeOptionType: string, id: string) {
     return this.codeOptionModel.findByIdAndDelete(id).exec();
   }
 }

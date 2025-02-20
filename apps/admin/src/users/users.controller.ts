@@ -20,8 +20,8 @@ export class UsersController {
   findUsers(
     @Query('page') page = 0,
     @Query('pageSize') pageSize = 10,
-    @Query('filterModel') filterModel: any,
-    @Query('sortModel') sortModel: any,
+    @Query('filterModel') filterModel: string,
+    @Query('sortModel') sortModel: string,
   ) {
     return this.usersService.findUsers(page, pageSize, filterModel, sortModel);
   }
