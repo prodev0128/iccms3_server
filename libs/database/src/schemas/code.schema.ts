@@ -9,10 +9,16 @@ export class Code {
   type: string;
 
   @Prop({ required: true })
-  value: string;
+  name: string;
 
   @Prop({ required: true })
-  name: string;
+  value: string;
+
+  @Prop()
+  isActive: boolean;
+
+  @Prop()
+  options: Array<object>;
 }
 
 export const CodeSchema = SchemaFactory.createForClass(Code);

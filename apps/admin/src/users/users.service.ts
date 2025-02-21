@@ -15,7 +15,20 @@ export class UsersService {
     const filterQuery = filterQueryBuilder(filterModel, ['userID', 'name']);
     const sortQuery = sortQueryBuilder(sortModel);
     const users = await this.userModel
-      .find(filterQuery)
+      .find(filterQuery, {
+        _id: 0,
+        birthday: 1,
+        createdAt: 1,
+        depNo: 1,
+        genderNo: 1,
+        id: '$_id',
+        isActive: 1,
+        name: 1,
+        roles: 1,
+        stampNo: 1,
+        updatedAt: 1,
+        userID: 1,
+      })
       .sort(sortQuery)
       .skip(page * pageSize)
       .limit(pageSize)

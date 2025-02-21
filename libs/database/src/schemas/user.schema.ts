@@ -15,6 +15,24 @@ export class User {
   name: string;
 
   @Prop()
+  genderNo: number;
+
+  @Prop()
+  birthday: Date;
+
+  @Prop()
+  stampNo: number;
+
+  @Prop()
+  depNo: number;
+
+  @Prop()
+  jobNo: number;
+
+  @Prop()
+  isActive: boolean;
+
+  @Prop()
   roles: Array<string>;
 }
 
