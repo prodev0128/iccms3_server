@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import normalize from 'normalize-mongoose';
 
 export type SettingDocument = Setting & Document;
 
@@ -12,4 +13,8 @@ export class Setting {
   value: string;
 }
 
-export const SettingSchema = SchemaFactory.createForClass(Setting);
+const SettingSchema = SchemaFactory.createForClass(Setting);
+
+SettingSchema.plugin(normalize);
+
+export { SettingSchema };

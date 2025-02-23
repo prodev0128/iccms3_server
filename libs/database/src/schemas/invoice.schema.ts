@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { Types } from 'mongoose';
+import normalize from 'normalize-mongoose';
 
 export type InvoiceDocument = Invoice & Document;
 
@@ -13,4 +14,8 @@ export class Invoice {
   orgID: Types.ObjectId;
 }
 
-export const InvoiceSchema = SchemaFactory.createForClass(Invoice);
+const InvoiceSchema = SchemaFactory.createForClass(Invoice);
+
+InvoiceSchema.plugin(normalize);
+
+export { InvoiceSchema };

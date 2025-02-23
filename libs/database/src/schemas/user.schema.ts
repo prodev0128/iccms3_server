@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import normalize from 'normalize-mongoose';
 
 export type UserDocument = User & Document;
 
@@ -36,4 +37,8 @@ export class User {
   roles: Array<string>;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+const UserSchema = SchemaFactory.createForClass(User);
+
+UserSchema.plugin(normalize);
+
+export { UserSchema };

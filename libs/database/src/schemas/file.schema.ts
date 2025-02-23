@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { Types } from 'mongoose';
+import normalize from 'normalize-mongoose';
 
 export type FileDocument = File & Document;
 
@@ -19,4 +20,8 @@ export class File {
   createdAt: Date;
 }
 
-export const FileSchema = SchemaFactory.createForClass(File);
+const FileSchema = SchemaFactory.createForClass(File);
+
+FileSchema.plugin(normalize);
+
+export { FileSchema };

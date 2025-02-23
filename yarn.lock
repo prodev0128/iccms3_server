@@ -4983,6 +4983,11 @@ nodemailer@^6.10.0:
   resolved "https://registry.yarnpkg.com/nodemailer/-/nodemailer-6.10.0.tgz#1f24c9de94ad79c6206f66d132776b6503003912"
   integrity sha512-SQ3wZCExjeSatLE/HBaXS5vqUOQk6GtBdIIKxiFdmm01mOQZX/POJkO3SUX1wDiYcwUOJwT23scFSC9fY2H8IA==
 
+normalize-mongoose@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/normalize-mongoose/-/normalize-mongoose-1.0.0.tgz#9556fe7e0e44a2066abb2b22bf0c2c8c5bdd3830"
+  integrity sha512-06gKa6YoKRpV4QK0qKI+VZPuVicnmrKyz62QdltvuYOxCbPTZK6Hao0e5s9z1v2iYY1jtZUdam8cgUyILWvwZw==
+
 normalize-path@^3.0.0, normalize-path@~3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/normalize-path/-/normalize-path-3.0.0.tgz#0dcd69ff23a1c9b11fd0978316644a0388216a65"

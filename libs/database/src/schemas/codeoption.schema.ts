@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import normalize from 'normalize-mongoose';
 
 export type CodeOptionDocument = CodeOption & Document;
 
@@ -18,4 +19,8 @@ export class CodeOption {
   options: Array<object>;
 }
 
-export const CodeOptionSchema = SchemaFactory.createForClass(CodeOption);
+const CodeOptionSchema = SchemaFactory.createForClass(CodeOption);
+
+CodeOptionSchema.plugin(normalize);
+
+export { CodeOptionSchema };
