@@ -22,6 +22,9 @@ export class AuthService {
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new UnauthorizedException();
     }
+    if (!user.isActive) {
+      throw new UnauthorizedException('Un Allowed User');
+    }
     const payload = {
       name: user.name,
       roles: user.roles,
