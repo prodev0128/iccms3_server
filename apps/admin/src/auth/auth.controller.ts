@@ -14,19 +14,19 @@ export class AuthController {
 
   @Post('login')
   @ApiOperation({ summary: 'User Login' })
-  async login(@Body() body: LoginDto) {
-    return this.authService.login(body);
+  async login(@Body() loginDto: LoginDto) {
+    return this.authService.login(loginDto);
   }
 
   @Post('register')
-  async register(@Body() body: RegisterDto) {
-    return this.authService.register(body);
+  async register(@Body() registerDto: RegisterDto) {
+    return this.authService.register(registerDto);
   }
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get('profile')
-  async fetchUser(@User() user: any) {
-    return this.authService.fetchUser(user);
+  async fetchProfile(@User() user: any) {
+    return this.authService.fetchProfile(user);
   }
 }

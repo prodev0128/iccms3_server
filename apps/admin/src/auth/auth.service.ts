@@ -16,8 +16,8 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async login(body: LoginDto) {
-    const { password, userID } = body;
+  async login(loginDto: LoginDto) {
+    const { password, userID } = loginDto;
     const user = await this.userModel.findOne({ userID });
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new UnauthorizedException();
@@ -30,8 +30,8 @@ export class AuthService {
     return { accessToken: this.jwtService.sign(payload) };
   }
 
-  async register(body: RegisterDto) {
-    const { name, password, userID } = body;
+  async register(registerDto: RegisterDto) {
+    const { name, password, userID } = registerDto;
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new this.userModel({
       name,
@@ -41,7 +41,7 @@ export class AuthService {
     return await user.save();
   }
 
-  async fetchUser({ userID }) {
+  async fetchProfile({ userID }) {
     return this.userModel.findOne({ userID }, { _id: 0, name: 1, roles: 1, userID: 1 });
   }
 }

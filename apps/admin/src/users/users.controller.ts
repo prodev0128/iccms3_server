@@ -1,9 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Patch, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '@app/jwt';
 
-import { UserDto } from './user.dto';
+import { UserDto } from './dto/user.dto';
 import { UsersService } from './users.service';
 
 @ApiBearerAuth()
@@ -44,5 +44,10 @@ export class UsersController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);
+  }
+
+  @Post('reset-password/:id')
+  async resetPassword(@Param('id') id: string) {
+    return this.usersService.resetPassword(id);
   }
 }

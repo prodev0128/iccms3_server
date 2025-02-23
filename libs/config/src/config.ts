@@ -21,6 +21,7 @@ export const config = {
     progress: JSON.parse(process.env.PROGRESS) || {},
     watchDirectory: process.env.WATCH_DIRECTORY || '',
     watchSubDirs: (JSON.parse(process.env.WATCH_SUB_DIRS) || []) as AppInfo[],
+    initialPassword: process.env.INITIAL_PASSWORD || '12345678',
   },
   incoming: {
     name: 'IncomingApp',

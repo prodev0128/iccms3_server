@@ -7,7 +7,6 @@ import { JwtStrategy } from '@app/jwt/jwt/jwt.strategy';
 
 @Global()
 @Module({
-  exports: [NestJwtModule],
   imports: [
     PassportModule,
     NestJwtModule.register({
@@ -18,5 +17,6 @@ import { JwtStrategy } from '@app/jwt/jwt/jwt.strategy';
     }),
   ],
   providers: [JwtStrategy],
+  exports: [NestJwtModule],
 })
 export class JwtModule {}

@@ -3,10 +3,10 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { Code, CodeDocument, CodeOption, CodeOptionDocument } from '@app/database';
-import { delay, filterQueryBuilder, sortQueryBuilder } from '@app/utils';
+import { filterQueryBuilder, sortQueryBuilder } from '@app/utils';
 
-import { CodeDto } from './code.dto';
-import { CodeOptionDto } from './codeoption.dto';
+import { CodeDto } from './dto/code.dto';
+import { CodeOptionDto } from './dto/codeoption.dto';
 
 @Injectable()
 export class CodesService {

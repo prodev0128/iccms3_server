@@ -3,9 +3,9 @@ import { ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '@app/jwt';
 
-import { CodeDto } from './code.dto';
-import { CodeOptionDto } from './codeoption.dto';
 import { CodesService } from './codes.service';
+import { CodeDto } from './dto/code.dto';
+import { CodeOptionDto } from './dto/codeoption.dto';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)

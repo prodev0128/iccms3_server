@@ -1,9 +1,9 @@
 import { INestApplication, Injectable, Logger } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-import { LoggingInterceptor } from '@app/setup/middleware/logging.interceptor';
+import { LoggingInterceptor } from '@app/setup/interceptor/logging.interceptor';
 
-import { SwaggerInfoDto } from './dto/swaggerInfo.dto';
+import { SwaggerInfoDto } from './dto/swagger-info.dto';
 
 @Injectable()
 export class SetupService {

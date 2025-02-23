@@ -4,8 +4,8 @@ import { CodesController } from './codes.controller';
 import { CodesService } from './codes.service';
 
 @Module({
-  controllers: [CodesController],
   imports: [],
+  controllers: [CodesController],
   providers: [CodesService],
 })
 export class CodesModule {}

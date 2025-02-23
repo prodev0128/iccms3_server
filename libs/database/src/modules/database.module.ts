@@ -10,7 +10,6 @@ import { User, UserSchema } from '@app/database/schemas/user.schema';
 
 @Global()
 @Module({
-  exports: [MongooseModule], // Export MongooseModule for use in other apps
   imports: [
     MongooseModule.forRoot(config.mongodb.uri),
     MongooseModule.forFeature([
@@ -21,5 +20,6 @@ import { User, UserSchema } from '@app/database/schemas/user.schema';
       { name: User.name, schema: UserSchema },
     ]),
   ],
+  exports: [MongooseModule], // Export MongooseModule for use in other apps
 })
 export class DatabaseModule {}

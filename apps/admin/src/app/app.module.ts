@@ -13,7 +13,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 @Module({
-  controllers: [AppController],
   imports: [
     DatabaseModule,
     JwtModule,
@@ -23,6 +22,7 @@ import { AppService } from './app.service';
     CodesModule,
     UsersModule,
   ],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}

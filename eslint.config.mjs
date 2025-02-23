@@ -40,6 +40,7 @@ export default tseslint.config(
           separator: '\n',
         },
       ],
+      'sort/object-properties': 'off',
     },
   },
 );
