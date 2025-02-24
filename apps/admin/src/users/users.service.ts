@@ -31,6 +31,15 @@ export class UsersService {
     return this.userModel.findById(id).exec();
   }
 
+  async create(userDto: UserDto) {
+    const hashedPassword = await bcrypt.hash(config.env.initialPassword, 10);
+    const user = new this.userModel({
+      ...userDto,
+      password: hashedPassword,
+    });
+    return await user.save();
+  }
+
   async update(id: string, userDto: UserDto) {
     return this.userModel.findByIdAndUpdate(id, userDto, { new: true, overwrite: true }).exec();
   }
