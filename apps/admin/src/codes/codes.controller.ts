@@ -42,11 +42,6 @@ export class CodesController {
     return this.codesService.updateCodeOption(id, codeOptionDto);
   }
 
-  @Put(':id')
-  updateCodeOptionPartial(@Param('id') id: string, @Body() codeOptionDto: CodeOptionDto) {
-    return this.codesService.updateCodeOptionPartial(id, codeOptionDto);
-  }
-
   @Delete(':id')
   removeCodeOption(@Param('id') id: string) {
     return this.codesService.removeCodeOption(id);
@@ -80,15 +75,6 @@ export class CodesController {
   @Put(':codeOptionType/codes/:id')
   updateCode(@Param('codeOptionType') codeOptionType: string, @Param('id') id: string, @Body() codeDto: CodeDto) {
     return this.codesService.updateCode(codeOptionType, id, codeDto);
-  }
-
-  @Patch(':codeOptionType/codes/:id')
-  updateCodePartial(
-    @Param('codeOptionType') codeOptionType: string,
-    @Param('id') id: string,
-    @Body() codeDto: CodeDto,
-  ) {
-    return this.codesService.updateCodePartial(codeOptionType, id, codeDto);
   }
 
   @Delete(':codeOptionType/codes/:id')

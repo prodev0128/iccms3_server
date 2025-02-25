@@ -6,7 +6,7 @@ export type UserDocument = User & Document;
 
 @Schema({ timestamps: true })
 export class User {
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   userID: string;
 
   @Prop({ required: true })
@@ -18,7 +18,7 @@ export class User {
   @Prop()
   genderNo: number;
 
-  @Prop()
+  @Prop({ default: new Date() })
   birthday: Date;
 
   @Prop()
@@ -30,7 +30,7 @@ export class User {
   @Prop()
   jobNo: number;
 
-  @Prop()
+  @Prop({ default: false })
   isActive: boolean;
 
   @Prop()

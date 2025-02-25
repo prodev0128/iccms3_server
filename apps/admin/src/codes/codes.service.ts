@@ -38,11 +38,7 @@ export class CodesService {
   }
 
   async updateCodeOption(id: string, codeOptionDto: CodeOptionDto) {
-    return this.codeOptionModel.findByIdAndUpdate(id, codeOptionDto).exec();
-  }
-
-  async updateCodeOptionPartial(id: string, codeOptionDto: CodeOptionDto) {
-    return this.codeOptionModel.findByIdAndUpdate(id, codeOptionDto).exec();
+    return this.codeOptionModel.findByIdAndUpdate(id, codeOptionDto, { new: true }).exec();
   }
 
   async removeCodeOption(id: string) {
@@ -51,7 +47,6 @@ export class CodesService {
 
   async findCodes(codeOptionType: string, page: number, pageSize: number, filterModel: string, sortModel: string) {
     const codeQuery = { type: codeOptionType };
-    console.log(codeQuery);
     const filterQuery = filterQueryBuilder(filterModel, ['name']);
     const sortQuery = sortQueryBuilder(sortModel);
     const codes = await this.codeModel
@@ -75,11 +70,7 @@ export class CodesService {
   }
 
   async updateCode(codeOptionType: string, id: string, codeDto: CodeDto) {
-    return this.codeOptionModel.findByIdAndUpdate(id, codeDto).exec();
-  }
-
-  async updateCodePartial(codeOptionType: string, id: string, codeDto: CodeDto) {
-    return this.codeOptionModel.findByIdAndUpdate(id, codeDto).exec();
+    return this.codeOptionModel.findByIdAndUpdate(id, codeDto, { new: true }).exec();
   }
 
   async removeCode(codeOptionType: string, id: string) {

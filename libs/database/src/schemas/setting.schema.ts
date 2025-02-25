@@ -6,7 +6,7 @@ export type SettingDocument = Setting & Document;
 
 @Schema({ timestamps: true })
 export class Setting {
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   key: string;
 
   @Prop({ required: true })

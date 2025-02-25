@@ -12,10 +12,10 @@ export class Code {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   value: string;
 
-  @Prop()
+  @Prop({ default: false })
   isActive: boolean;
 
   @Prop()

@@ -23,7 +23,6 @@ export class UsersService {
       .limit(pageSize)
       .exec();
     const totalCount = await this.userModel.countDocuments(filterQuery).exec();
-    console.log(sortQuery);
     return { totalCount, users };
   }
 
@@ -41,10 +40,6 @@ export class UsersService {
   }
 
   async update(id: string, userDto: UserDto) {
-    return this.userModel.findByIdAndUpdate(id, userDto, { new: true, overwrite: true }).exec();
-  }
-
-  async updatePartial(id: string, userDto: UserDto) {
     return this.userModel.findByIdAndUpdate(id, userDto, { new: true }).exec();
   }
 
@@ -53,7 +48,6 @@ export class UsersService {
   }
 
   async resetPassword(id: string) {
-    console.log(config.env.initialPassword, id);
     const hashedPassword = await bcrypt.hash(config.env.initialPassword, 10);
     return this.userModel.findByIdAndUpdate(id, { password: hashedPassword }).exec();
   }

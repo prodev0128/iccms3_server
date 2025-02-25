@@ -12,7 +12,7 @@ export class CodeOption {
   @Prop({ required: true })
   name: string;
 
-  @Prop()
+  @Prop({ default: false })
   isActive: boolean;
 
   @Prop()

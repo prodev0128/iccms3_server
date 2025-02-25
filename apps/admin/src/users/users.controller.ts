@@ -41,11 +41,6 @@ export class UsersController {
     return this.usersService.update(id, userDto);
   }
 
-  @Patch(':id')
-  updatePartial(@Param('id') id: string, @Body() userDto: UserDto) {
-    return this.usersService.updatePartial(id, userDto);
-  }
-
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);
