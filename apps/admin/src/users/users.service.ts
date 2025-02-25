@@ -26,11 +26,11 @@ export class UsersService {
     return { totalCount, users };
   }
 
-  async findOne(id: string) {
+  async findUser(id: string) {
     return this.userModel.findById(id).exec();
   }
 
-  async create(userDto: UserDto) {
+  async createUser(userDto: UserDto) {
     const hashedPassword = await bcrypt.hash(config.env.initialPassword, 10);
     const user = new this.userModel({
       ...userDto,
@@ -39,11 +39,11 @@ export class UsersService {
     return await user.save();
   }
 
-  async update(id: string, userDto: UserDto) {
+  async updateUser(id: string, userDto: UserDto) {
     return this.userModel.findByIdAndUpdate(id, userDto, { new: true }).exec();
   }
 
-  async remove(id: string) {
+  async removeUser(id: string) {
     return this.userModel.findByIdAndDelete(id).exec();
   }
 

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '@app/jwt';
@@ -27,23 +27,23 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
+  findUser(@Param('id') id: string) {
+    return this.usersService.findUser(id);
   }
 
   @Post()
-  create(@Body() userDto: UserDto) {
-    return this.usersService.create(userDto);
+  createUser(@Body() userDto: UserDto) {
+    return this.usersService.createUser(userDto);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() userDto: UserDto) {
-    return this.usersService.update(id, userDto);
+  updateUser(@Param('id') id: string, @Body() userDto: UserDto) {
+    return this.usersService.updateUser(id, userDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(id);
+  removeUser(@Param('id') id: string) {
+    return this.usersService.removeUser(id);
   }
 
   @Post('reset-password/:id')
