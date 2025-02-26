@@ -12,24 +12,25 @@ import { CodesService } from './codes.service';
 export class CodesController {
   constructor(private readonly codesService: CodesService) {}
 
-  @Get(':codeOptionID')
+  @Get()
+  @ApiQuery({ description: 'types', name: 'types' })
+  findCodesByType(@Query('types') typeText: string) {
+    return this.codesService.findCodesByType(typeText);
+  }
+
+  @Get(':type')
   @ApiQuery({ description: 'page number', name: 'page' })
   @ApiQuery({ description: 'pageSize', name: 'pageSize' })
   @ApiQuery({ description: 'filterModel', name: 'filterModel' })
   @ApiQuery({ description: 'sortModel', name: 'sortModel' })
   findCodes(
-    @Param('codeOptionID') codeOptionID: string,
+    @Param('type') type: string,
     @Query('page') page = 0,
     @Query('pageSize') pageSize = 10,
     @Query('filterModel') filterModel: string,
     @Query('sortModel') sortModel: string,
   ) {
-    return this.codesService.findCodes(codeOptionID, page, pageSize, filterModel, sortModel);
-  }
-
-  @Get(':id')
-  findCode(@Param('id') id: string) {
-    return this.codesService.findCode(id);
+    return this.codesService.findCodes(type, page, pageSize, filterModel, sortModel);
   }
 
   @Post('')

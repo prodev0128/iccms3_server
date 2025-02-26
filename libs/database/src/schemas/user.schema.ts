@@ -16,7 +16,7 @@ export class User {
   name: string;
 
   @Prop()
-  genderNo: number;
+  gender: string;
 
   @Prop({ default: new Date() })
   birthday: Date;
@@ -25,10 +25,10 @@ export class User {
   stampNo: number;
 
   @Prop()
-  depNo: number;
+  dep: string;
 
   @Prop()
-  jobNo: number;
+  job: string;
 
   @Prop({ default: false })
   isActive: boolean;

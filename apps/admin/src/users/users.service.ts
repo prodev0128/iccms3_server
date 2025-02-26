@@ -17,17 +17,13 @@ export class UsersService {
     const filterQuery = filterQueryBuilder(filterModel, ['userID', 'name']);
     const sortQuery = sortQueryBuilder(sortModel);
     const users = await this.userModel
-      .find(filterQuery, { password: 0 })
+      .find(filterQuery)
       .sort(sortQuery)
       .skip(page * pageSize)
       .limit(pageSize)
       .exec();
     const totalCount = await this.userModel.countDocuments(filterQuery).exec();
     return { totalCount, users };
-  }
-
-  async findUser(id: string) {
-    return this.userModel.findById(id).exec();
   }
 
   async createUser(userDto: UserDto) {

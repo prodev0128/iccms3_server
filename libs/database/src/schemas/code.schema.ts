@@ -1,13 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import { Document } from 'mongoose';
 import normalize from 'normalize-mongoose';
 
 export type CodeDocument = Code & Document;
 
 @Schema({ timestamps: true })
 export class Code {
-  @Prop({ type: Types.ObjectId, ref: 'CodeOption', required: true })
-  optionID: Types.ObjectId;
+  @Prop({ required: true })
+  type: string;
 
   @Prop({ required: true })
   name: string;

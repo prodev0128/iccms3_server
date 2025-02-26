@@ -26,11 +26,6 @@ export class CodeOptionsController {
     return this.codesService.findCodeOptions(page, pageSize, filterModel, sortModel);
   }
 
-  @Get(':id')
-  findOneCodeOption(@Param('id') id: string) {
-    return this.codesService.findCodeOption(id);
-  }
-
   @Post()
   createCodeOption(@Body() codeOptionDto: CodeOptionDto) {
     return this.codesService.createCodeOption(codeOptionDto);

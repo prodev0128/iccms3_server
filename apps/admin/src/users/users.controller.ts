@@ -26,11 +26,6 @@ export class UsersController {
     return this.usersService.findUsers(page, pageSize, filterModel, sortModel);
   }
 
-  @Get(':id')
-  findUser(@Param('id') id: string) {
-    return this.usersService.findUser(id);
-  }
-
   @Post()
   createUser(@Body() userDto: UserDto) {
     return this.usersService.createUser(userDto);

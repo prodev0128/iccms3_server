@@ -11,22 +11,31 @@ import { CodeDto } from '../dto/code.dto';
 export class CodesService {
   constructor(@InjectModel(Code.name) private codeModel: Model<CodeDocument>) {}
 
-  async findCodes(codeOptionID: string, page: number, pageSize: number, filterModel: string, sortModel: string) {
-    const codeQuery = { optionID: new Types.ObjectId(codeOptionID) };
+  async findCodesByType(typeText: string) {
+    const types = typeText.split(',').map((type) => type.trim());
+    const allCodes = await this.codeModel.find({ type: { $in: types } }).exec();
+    return allCodes.reduce((total, code) => {
+      const type = code.type;
+      if (!total[type]) {
+        total[type] = [code];
+      } else {
+        total[type] = [...total[type], code];
+      }
+      return total;
+    }, {});
+  }
+
+  async findCodes(type: string, page: number, pageSize: number, filterModel: string, sortModel: string) {
     const filterQuery = filterQueryBuilder(filterModel, ['name']);
     const sortQuery = sortQueryBuilder(sortModel);
     const codes = await this.codeModel
-      .find({ $and: [codeQuery, filterQuery] })
+      .find({ $and: [{ type }, filterQuery] })
       .sort(sortQuery)
       .skip(page * pageSize)
       .limit(pageSize)
       .exec();
-    const totalCount = await this.codeModel.countDocuments({ $and: [codeQuery, filterQuery] }).exec();
+    const totalCount = await this.codeModel.countDocuments({ $and: [{ type }, filterQuery] }).exec();
     return { codes, totalCount };
-  }
-
-  async findCode(id: string) {
-    return this.codeModel.findById(id).exec();
   }
 
   async createCode(codeDto: CodeDto) {

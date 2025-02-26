@@ -24,10 +24,6 @@ export class CodeOptionsService {
     return { codeOptions, totalCount };
   }
 
-  async findCodeOption(id: string) {
-    return this.codeOptionModel.findById(id).exec();
-  }
-
   async createCodeOption(codeOptionDto: CodeOptionDto) {
     const newUser = new this.codeOptionModel(codeOptionDto);
     return newUser.save();
