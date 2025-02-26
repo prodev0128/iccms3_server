@@ -6,13 +6,13 @@ export type CodeDocument = Code & Document;
 
 @Schema({ timestamps: true })
 export class Code {
-  @Prop({ required: true, type: Types.ObjectId, ref: 'CodeOption' })
+  @Prop({ type: Types.ObjectId, ref: 'CodeOption', required: true })
   optionID: Types.ObjectId;
 
   @Prop({ required: true })
   name: string;
 
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true })
   value: string;
 
   @Prop({ default: false })

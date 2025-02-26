@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 
 import { Code, CodeDocument } from '@app/database';
 import { filterQueryBuilder, sortQueryBuilder } from '@app/utils';
@@ -12,7 +12,7 @@ export class CodesService {
   constructor(@InjectModel(Code.name) private codeModel: Model<CodeDocument>) {}
 
   async findCodes(codeOptionID: string, page: number, pageSize: number, filterModel: string, sortModel: string) {
-    const codeQuery = { optionID: codeOptionID };
+    const codeQuery = { optionID: new Types.ObjectId(codeOptionID) };
     const filterQuery = filterQueryBuilder(filterModel, ['name']);
     const sortQuery = sortQueryBuilder(sortModel);
     const codes = await this.codeModel
@@ -30,12 +30,12 @@ export class CodesService {
   }
 
   async createCode(codeDto: CodeDto) {
-    console.log('codeDto', codeDto);
-    const newCode = new this.codeModel(codeDto);
+    const newCode = new this.codeModel({ ...codeDto, optionID: new Types.ObjectId(codeDto.optionID) });
     return newCode.save();
   }
 
   async updateCode(id: string, codeDto: CodeDto) {
+    delete codeDto.optionID;
     return this.codeModel.findByIdAndUpdate(id, codeDto, { new: true }).exec();
   }
 
