@@ -8,10 +8,19 @@ import { SetupModule } from '@app/setup';
 
 import { AppController } from '../../../admin/src/app/app.controller';
 import { AppService } from '../../../admin/src/app/app.service';
+import { FilesModule } from '../files/files.module';
+import { InvoicesModule } from '../invoices/invoices.module';
 
 @Module({
+  imports: [
+    DatabaseModule,
+    JwtModule,
+    LoggerModule.forRoot(config.censor.name),
+    SetupModule,
+    FilesModule,
+    InvoicesModule,
+  ],
   controllers: [AppController],
-  imports: [DatabaseModule, JwtModule, LoggerModule.forRoot(config.censor.name), SetupModule],
   providers: [AppService],
 })
 export class AppModule {}
