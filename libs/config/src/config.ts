@@ -12,9 +12,9 @@ export const config = {
     name: 'AdminApp',
     port: parseInt(process.env.PORT_APP_ADMIN, 10) || 3128,
   },
-  api: {
-    name: 'ApiApp',
-    port: parseInt(process.env.PORT_APP_API, 10) || 3129,
+  censor: {
+    name: 'CensorApp',
+    port: parseInt(process.env.PORT_APP_CENSOR, 10) || 3129,
   },
   env: {
     intervalTime: 10 * 1000,

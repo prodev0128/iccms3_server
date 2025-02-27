@@ -14,13 +14,13 @@
         "tsConfigPath": "apps/admin/tsconfig.app.json"
       }
     },
-    "api": {
+    "censor": {
       "type": "application",
-      "root": "apps/api",
+      "root": "apps/censor",
       "entryFile": "main",
-      "sourceRoot": "apps/api/src",
+      "sourceRoot": "apps/censor/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/api/tsconfig.app.json"
+        "tsConfigPath": "apps/censor/tsconfig.app.json"
       }
     },
     "config": {

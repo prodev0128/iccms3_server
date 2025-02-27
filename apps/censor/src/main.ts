@@ -7,7 +7,7 @@ import { SetupService } from '@app/setup';
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
-  execSync(`del logs\\${config.api.name}*.*`);
+  execSync(`del logs\\${config.censor.name}*.*`);
   const app = await NestFactory.create(AppModule);
   app.enableCors();
 
@@ -15,9 +15,9 @@ async function bootstrap() {
   SetupService.setupSwagger(app);
   SetupService.setupApiLogger(app, logger);
 
-  const port = config.api.port;
+  const port = config.censor.port;
   await app.listen(port);
-  logger.log(`🟢 Api Module listening at ${port} 🟢`);
+  logger.log(`🟢 Censor Module listening at ${port} 🟢`);
 }
 
 bootstrap();

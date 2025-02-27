@@ -11,7 +11,7 @@ import { AppService } from '../../../admin/src/app/app.service';
 
 @Module({
   controllers: [AppController],
-  imports: [DatabaseModule, JwtModule, LoggerModule.forRoot(config.api.name), SetupModule],
+  imports: [DatabaseModule, JwtModule, LoggerModule.forRoot(config.censor.name), SetupModule],
   providers: [AppService],
 })
 export class AppModule {}
