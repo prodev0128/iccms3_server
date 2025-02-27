@@ -18,7 +18,7 @@ export class User {
   @Prop()
   gender: string;
 
-  @Prop({ default: new Date() })
+  @Prop({ default: Date.now })
   birthday: Date;
 
   @Prop()

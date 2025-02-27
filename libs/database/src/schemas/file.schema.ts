@@ -7,17 +7,29 @@ export type FileDocument = File & Document;
 
 @Schema({ timestamps: true })
 export class File {
-  @Prop({ ref: 'Organization', type: Types.ObjectId })
-  orgID: Types.ObjectId;
-
   @Prop({ required: true })
   name: string;
 
   @Prop({ required: true })
   path: string;
 
-  @Prop({ default: Date.now })
-  createdAt: Date;
+  @Prop({ required: true })
+  fileType: string;
+
+  @Prop()
+  org: string;
+
+  @Prop({ type: Types.ObjectId, ref: 'Invoice' })
+  invoiceID: Types.ObjectId;
+
+  @Prop()
+  cenFlag: string;
+
+  @Prop()
+  censoredBy: string;
+
+  @Prop()
+  censoredAt: string;
 }
 
 const FileSchema = SchemaFactory.createForClass(File);
