@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { find } from 'rxjs';
 
 import { Invoice, InvoiceDocument } from '@app/database';
 import { filterQueryBuilder, sortQueryBuilder } from '@app/globals/query-builder';
@@ -13,7 +14,15 @@ import { InvoiceDto } from './dto/invoice.dto';
 export class InvoicesService {
   constructor(@InjectModel(Invoice.name) private invoiceModel: Model<InvoiceDocument>) {}
 
-  async findInvoices(page: number, pageSize: number, filterModel: string, sortModel: string) {
+  async findInvoices(
+    user: any,
+    status: string,
+    fileType: string,
+    page: number,
+    pageSize: number,
+    filterModel: string,
+    sortModel: string,
+  ) {
     // const fileTypes = ['Email', 'Ftp', 'Out-Ftp'];
     // const invoice = new this.invoiceModel({
     //   name: `${getRandomInt(1000, 9999)}`,
@@ -22,15 +31,25 @@ export class InvoicesService {
     //   status: '',
     // });
     // await invoice.save();
+
+    const checkQuery = (value) => value && value !== 'ALL';
+    let findQuery: any = {};
+    if (checkQuery(status)) {
+      findQuery.status = status;
+    }
+    if (checkQuery(fileType)) {
+      findQuery.fileType = fileType;
+    }
     const filterQuery = filterQueryBuilder(filterModel, ['userID', 'name']);
+    findQuery = { ...findQuery, ...filterQuery };
     const sortQuery = sortQueryBuilder(sortModel);
     const invoices = await this.invoiceModel
-      .find(filterQuery)
+      .find(findQuery)
       .sort(sortQuery)
       .skip(page * pageSize)
       .limit(pageSize)
       .exec();
-    const totalCount = await this.invoiceModel.countDocuments(filterQuery).exec();
+    const totalCount = await this.invoiceModel.countDocuments(findQuery).exec();
     return { totalCount, invoices };
   }
 
