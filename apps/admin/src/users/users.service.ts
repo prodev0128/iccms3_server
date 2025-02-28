@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 
 import { config } from '@app/config';
 import { User, UserDocument } from '@app/database';
-import { filterQueryBuilder, sortQueryBuilder } from '@app/utils';
+import { filterQueryBuilder, sortQueryBuilder } from '@app/globals/query-builder';
 
 import { UserDto } from './dto/user.dto';
 

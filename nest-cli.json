@@ -86,13 +86,13 @@
         "tsConfigPath": "libs/user/tsconfig.lib.json"
       }
     },
-    "utils": {
+    "globals": {
       "type": "library",
-      "root": "libs/utils",
+      "root": "libs/globals",
       "entryFile": "index",
-      "sourceRoot": "libs/utils/src",
+      "sourceRoot": "libs/globals/src",
       "compilerOptions": {
-        "tsConfigPath": "libs/utils/tsconfig.lib.json"
+        "tsConfigPath": "libs/globals/tsconfig.lib.json"
       }
     }
   }

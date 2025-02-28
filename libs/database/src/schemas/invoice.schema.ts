@@ -34,6 +34,12 @@ export class Invoice {
 
   @Prop({ type: [String], default: [], required: true })
   flags: string[];
+
+  @Prop()
+  dep: string;
+
+  @Prop()
+  censor: string;
 }
 
 const InvoiceSchema = SchemaFactory.createForClass(Invoice);

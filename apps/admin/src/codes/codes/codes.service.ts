@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 
 import { Code, CodeDocument } from '@app/database';
-import { filterQueryBuilder, sortQueryBuilder } from '@app/utils';
+import { filterQueryBuilder, sortQueryBuilder } from '@app/globals/query-builder';
 
 import { CodeDto } from '../dto/code.dto';
 

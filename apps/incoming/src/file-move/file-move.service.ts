@@ -4,7 +4,7 @@ import fs from 'fs-extra';
 import path from 'path';
 
 import { config } from '@app/config';
-import { delay } from '@app/utils';
+import { delay } from '@app/globals/utils';
 
 @Injectable()
 export class FileMoveService {

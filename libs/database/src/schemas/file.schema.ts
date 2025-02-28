@@ -13,9 +13,6 @@ export class File {
   @Prop({ required: true })
   path: string;
 
-  @Prop({ required: true })
-  fileType: string;
-
   @Prop()
   org: string;
 

@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { CodeOption, CodeOptionDocument } from '@app/database';
-import { filterQueryBuilder, sortQueryBuilder } from '@app/utils';
+import { filterQueryBuilder, sortQueryBuilder } from '@app/globals/query-builder';
 
 import { CodeOptionDto } from '../dto/codeoption.dto';
 

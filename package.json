@@ -13,7 +13,7 @@
     "build:config": "nest build config",
     "build:database": "nest build database",
     "build:jwt": "nest build jwt",
-    "build:utils": "nest build utils",
+    "build:globals": "nest build globals",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\" \"scripts/**/*.ts\"",
     "lint": "eslint {apps,libs,scripts}/**/*.ts --fix",
     "start:dev": "ts-node scripts/start-dev.ts",
@@ -124,7 +124,7 @@
       "^@app/logger(|/.*)$": "<rootDir>/libs/logger/src/$1",
       "^@app/setup(|/.*)$": "<rootDir>/libs/setup/src/$1",
       "^@app/user(|/.*)$": "<rootDir>/libs/user/src/$1",
-      "^@app/utils(|/.*)$": "<rootDir>/libs/utils/src/$1"
+      "^@app/globals(|/.*)$": "<rootDir>/libs/globals/src/$1"
     }
   }
 }

@@ -55,11 +55,11 @@
       "@app/user/*": [
         "libs/user/src/*"
       ],
-      "@app/utils": [
-        "libs/utils/src"
+      "@app/globals": [
+        "libs/globals/src"
       ],
-      "@app/utils/*": [
-        "libs/utils/src/*"
+      "@app/globals/*": [
+        "libs/globals/src/*"
       ]
     }
   },
