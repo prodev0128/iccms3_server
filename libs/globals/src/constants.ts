@@ -1,3 +1,22 @@
-export const status = {
+export const invoiceStatus = {
   UNDEFINED: 'UNDEFINED',
+  REGISTERED: 'REGISTERED',
+  TRANSFERRED: 'TRANSFERRED',
+  ASSIGNED: 'ASSIGNED',
+  CENSORED: 'CENSORED',
+  CHECKED: 'CHECKED',
+  RECEIVED: 'RECEIVED',
+  OUTED: 'OUTED',
+  COMPLETED: 'COMPLETED',
+};
+
+export const invoiceActions = {
+  REGISTER: 'REGISTER',
+  TRANSFER: 'TRANSFER',
+  ASSIGN: 'ASSIGN',
+  CENSOR: 'CENSOR',
+  CHECK: 'CHECK',
+  RECEIVE: 'RECEIVE',
+  OUT: 'OUT',
+  COMPLETE: 'COMPLETE',
 };

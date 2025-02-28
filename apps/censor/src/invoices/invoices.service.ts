@@ -4,8 +4,10 @@ import { Model } from 'mongoose';
 import { find } from 'rxjs';
 
 import { Invoice, InvoiceDocument } from '@app/database';
+import { invoiceActions, invoiceStatus } from '@app/globals/constants';
 import { filterQueryBuilder, sortQueryBuilder } from '@app/globals/query-builder';
 
+import { EventDto } from './dto/event.dto';
 // import { getRandomInt } from '@app/globals/utils';
 
 import { InvoiceDto } from './dto/invoice.dto';
@@ -23,6 +25,7 @@ export class InvoicesService {
     filterModel: string,
     sortModel: string,
   ) {
+    // Add Query
     // const fileTypes = ['Email', 'Ftp', 'Out-Ftp'];
     // const invoice = new this.invoiceModel({
     //   name: `${getRandomInt(1000, 9999)}`,
@@ -55,14 +58,34 @@ export class InvoicesService {
 
   async createInvoice(invoiceDto: InvoiceDto) {
     const invoice = new this.invoiceModel(invoiceDto);
-    return await invoice.save();
+    return invoice.save();
   }
 
   async updateInvoice(id: string, invoiceDto: InvoiceDto) {
     return this.invoiceModel.findByIdAndUpdate(id, invoiceDto, { new: true }).exec();
   }
 
-  async removeInvoice(id: string) {
-    return this.invoiceModel.findByIdAndDelete(id).exec();
+  async updateInvoicesStatus(ids: string[], event: EventDto) {
+    // let prevStatus = '';
+    // let nextStatus = '';
+    // switch (event.action) {
+    //   case invoiceActions.REGISTER:
+    //     if (event.work) {
+    //       prevStatus = invoiceStatus.UNDEFINED;
+    //       nextStatus = invoiceStatus.REGISTERED;
+    //     } else {
+    //       nextStatus = invoiceStatus.UNDEFINED;
+    //       prevStatus = invoiceStatus.REGISTERED;
+    //     }
+    //     break;
+    //   case invoiceActions.:
+    // }
+    // if (event.work) {
+    // } else {
+    // }
+  }
+
+  async removeInvoices(ids: string[]) {
+    return this.invoiceModel.deleteMany({ _id: { $in: ids } }).exec();
   }
 }

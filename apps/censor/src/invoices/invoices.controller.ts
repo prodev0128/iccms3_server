@@ -3,6 +3,7 @@ import { ApiQuery } from '@nestjs/swagger';
 
 import { User } from '@app/user';
 
+import { EventDto } from './dto/event.dto';
 import { InvoiceDto } from './dto/invoice.dto';
 import { InvoicesService } from './invoices.service';
 
@@ -37,8 +38,13 @@ export class InvoicesController {
     return this.invoicesService.updateInvoice(id, invoiceDto);
   }
 
-  @Delete(':id')
-  removeInvoice(@Param('id') id: string) {
-    return this.invoicesService.removeInvoice(id);
+  @Put('status')
+  updateInvoicesStatus(@Body() ids: string[], @Body() event: EventDto) {
+    return this.invoicesService.updateInvoicesStatus(ids, event);
+  }
+
+  @Delete()
+  removeInvoice(ids: string[]) {
+    return this.invoicesService.removeInvoices(ids);
   }
 }
