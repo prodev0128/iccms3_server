@@ -2,8 +2,7 @@ import { DynamicModule } from '@nestjs/common';
 import { Module } from '@nestjs/common';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 
-import { AppInfo } from '@app/config';
-import { config } from '@app/config';
+import { AppInfo, config } from '@app/globals/config';
 import { LoggerModule } from '@app/logger';
 
 import { DbRegisterModule } from '../db-register/db-register.module';

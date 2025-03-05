@@ -3,7 +3,7 @@ import { ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '@app/jwt';
 
-import { CodeOptionDto } from '../dto/codeoption.dto';
+import { CodeOptionDto } from '../dto/code-option.dto';
 import { CodeOptionsService } from './code-options.service';
 
 @ApiBearerAuth()

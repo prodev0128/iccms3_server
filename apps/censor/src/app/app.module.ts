@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 
-import { config } from '@app/config';
 import { DatabaseModule } from '@app/database';
+import { GlobalsModule } from '@app/globals';
+import { config } from '@app/globals/config';
 import { JwtModule } from '@app/jwt';
 import { LoggerModule } from '@app/logger';
 import { SetupModule } from '@app/setup';
@@ -14,6 +15,7 @@ import { InvoicesModule } from '../invoices/invoices.module';
 @Module({
   imports: [
     DatabaseModule,
+    GlobalsModule,
     JwtModule,
     LoggerModule.forRoot(config.censor.name),
     SetupModule,

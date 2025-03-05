@@ -18,8 +18,8 @@ export class Code {
   @Prop({ default: false })
   isActive: boolean;
 
-  @Prop()
-  options: Array<object>;
+  @Prop({ type: Object, default: () => ({}) })
+  options!: Record<string, any>;
 }
 
 const CodeSchema = SchemaFactory.createForClass(Code);

@@ -14,6 +14,15 @@
         "tsConfigPath": "apps/admin/tsconfig.app.json"
       }
     },
+    "auth": {
+      "type": "application",
+      "root": "apps/auth",
+      "entryFile": "main",
+      "sourceRoot": "apps/auth/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/auth/tsconfig.app.json"
+      }
+    },
     "censor": {
       "type": "application",
       "root": "apps/censor",
@@ -23,15 +32,6 @@
         "tsConfigPath": "apps/censor/tsconfig.app.json"
       }
     },
-    "config": {
-      "type": "library",
-      "root": "libs/config",
-      "entryFile": "index",
-      "sourceRoot": "libs/config/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/config/tsconfig.lib.json"
-      }
-    },
     "database": {
       "type": "library",
       "root": "libs/database",
@@ -39,6 +39,15 @@
       "sourceRoot": "libs/database/src",
       "compilerOptions": {
         "tsConfigPath": "libs/database/tsconfig.lib.json"
+      }
+    },
+    "globals": {
+      "type": "library",
+      "root": "libs/globals",
+      "entryFile": "index",
+      "sourceRoot": "libs/globals/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/globals/tsconfig.lib.json"
       }
     },
     "incoming": {
@@ -84,15 +93,6 @@
       "sourceRoot": "libs/user/src",
       "compilerOptions": {
         "tsConfigPath": "libs/user/tsconfig.lib.json"
-      }
-    },
-    "globals": {
-      "type": "library",
-      "root": "libs/globals",
-      "entryFile": "index",
-      "sourceRoot": "libs/globals/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/globals/tsconfig.lib.json"
       }
     }
   }

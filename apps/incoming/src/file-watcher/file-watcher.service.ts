@@ -6,7 +6,7 @@ import chokidar from 'chokidar';
 import fs from 'fs-extra';
 import path from 'path';
 
-import { config } from '@app/config';
+import { config } from '@app/globals/config';
 
 @Injectable()
 export class FileWatcherService implements OnModuleDestroy {

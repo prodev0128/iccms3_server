@@ -1,10 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from '@nestjs/common';
 import { ApiQuery } from '@nestjs/swagger';
 
 import { User } from '@app/user';
 
-import { EventDto } from './dto/event.dto';
 import { InvoiceDto } from './dto/invoice.dto';
+import { UpdateInvoicesStatusDto } from './dto/update-invoice-status.dto';
 import { InvoicesService } from './invoices.service';
 
 @Controller('invoices')
@@ -38,9 +38,9 @@ export class InvoicesController {
     return this.invoicesService.updateInvoice(id, invoiceDto);
   }
 
-  @Put('status')
-  updateInvoicesStatus(@Body() ids: string[], @Body() event: EventDto) {
-    return this.invoicesService.updateInvoicesStatus(ids, event);
+  @Patch('status')
+  updateInvoicesStatus(@Body() updateDto: UpdateInvoicesStatusDto) {
+    return this.invoicesService.updateInvoicesStatus(updateDto);
   }
 
   @Delete()

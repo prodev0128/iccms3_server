@@ -1,21 +1,22 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { find } from 'rxjs';
 
 import { Invoice, InvoiceDocument } from '@app/database';
-import { invoiceActions, invoiceStatus } from '@app/globals/constants';
+// import { invoiceActions, invoiceStatus } from '@app/globals/constants';
 import { filterQueryBuilder, sortQueryBuilder } from '@app/globals/query-builder';
 
-import { EventDto } from './dto/event.dto';
 // import { getRandomInt } from '@app/globals/utils';
 
 import { InvoiceDto } from './dto/invoice.dto';
+import { UpdateInvoicesStatusDto } from './dto/update-invoice-status.dto';
 
 @Injectable()
 export class InvoicesService {
-  constructor(@InjectModel(Invoice.name) private invoiceModel: Model<InvoiceDocument>) {}
-
+  constructor(
+    @InjectModel(Invoice.name) private invoiceModel: Model<InvoiceDocument>,
+    @Inject('GLOBAL_LOGGER') private readonly logger: Logger,
+  ) {}
   async findInvoices(
     user: any,
     status: string,
@@ -65,23 +66,22 @@ export class InvoicesService {
     return this.invoiceModel.findByIdAndUpdate(id, invoiceDto, { new: true }).exec();
   }
 
-  async updateInvoicesStatus(ids: string[], event: EventDto) {
-    // let prevStatus = '';
-    // let nextStatus = '';
+  async updateInvoicesStatus(updateDto: UpdateInvoicesStatusDto) {
+    const { action, ids } = updateDto;
+    console.log(action, ids);
     // switch (event.action) {
     //   case invoiceActions.REGISTER:
     //     if (event.work) {
-    //       prevStatus = invoiceStatus.UNDEFINED;
-    //       nextStatus = invoiceStatus.REGISTERED;
+    //       const prevStatus = invoiceStatus.UNDEFINED;
+    //       const nextStatus = 'REGISTERED';
+    //       const available = await this.invoiceModel.find({ _id: { $in: ids }, status: prevStatus }).exec();
+    //       console.log('available', available);
+    //       return await this.invoiceModel
+    //         .updateMany({ _id: { $in: ids }, status: prevStatus }, { status: nextStatus })
+    //         .exec();
     //     } else {
-    //       nextStatus = invoiceStatus.UNDEFINED;
-    //       prevStatus = invoiceStatus.REGISTERED;
     //     }
     //     break;
-    //   case invoiceActions.:
-    // }
-    // if (event.work) {
-    // } else {
     // }
   }
 

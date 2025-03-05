@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 import { CodeOption, CodeOptionDocument } from '@app/database';
 import { filterQueryBuilder, sortQueryBuilder } from '@app/globals/query-builder';
 
-import { CodeOptionDto } from '../dto/codeoption.dto';
+import { CodeOptionDto } from '../dto/code-option.dto';
 
 @Injectable()
 export class CodeOptionsService {

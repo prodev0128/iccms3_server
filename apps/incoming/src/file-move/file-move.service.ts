@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import fs from 'fs-extra';
 import path from 'path';
 
-import { config } from '@app/config';
+import { config } from '@app/globals/config';
 import { delay } from '@app/globals/utils';
 
 @Injectable()

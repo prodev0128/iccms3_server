@@ -2,7 +2,7 @@ import { Logger, OnModuleInit } from '@nestjs/common';
 import { Inject, Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 
-import { AppInfo } from '@app/config';
+import { AppInfo } from '@app/globals/config';
 
 import { DbRegisterService } from '../db-register/db-register.service';
 import { FileMoveService } from '../file-move/file-move.service';

@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { execSync } from 'child_process';
 
-import { config } from '@app/config';
+import { config } from '@app/globals/config';
 
 import { AppModule } from './app/app.module';
 

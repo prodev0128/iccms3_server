@@ -7,7 +7,7 @@ import { SetupService } from '@app/setup';
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
-  const name = config.admin.name;
+  const name = config.auth.name;
   execSync(`del logs\\${name}*.*`);
 
   const app = await NestFactory.create(AppModule);
@@ -17,7 +17,7 @@ async function bootstrap() {
   SetupService.setupSwagger(app);
   SetupService.setupApiLogger(app, logger);
 
-  const port = config.admin.port;
+  const port = config.auth.port;
   await app.listen(port);
   logger.log(`🟢 ${name} listening at ${port} 🟢`);
 }

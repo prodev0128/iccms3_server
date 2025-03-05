@@ -3,8 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import bcrypt from 'bcryptjs';
 import { Model } from 'mongoose';
 
-import { config } from '@app/config';
 import { User, UserDocument } from '@app/database';
+import { config } from '@app/globals/config';
 import { filterQueryBuilder, sortQueryBuilder } from '@app/globals/query-builder';
 
 import { UserDto } from './dto/user.dto';

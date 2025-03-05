@@ -1,2 +1,2 @@
-export * from '@app/logger/logger/logger.module';
-export * from '@app/logger/logger/logger.provider';
+export * from './logger/logger.module';
+export * from './logger/logger.provider';

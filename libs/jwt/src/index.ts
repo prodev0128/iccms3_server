@@ -1,2 +1,2 @@
-export * from '@app/jwt/jwt/jwt.guard';
-export * from '@app/jwt/jwt/jwt.module';
+export * from './jwt/jwt.guard';
+export * from './jwt/jwt.module';

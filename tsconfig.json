@@ -19,17 +19,17 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@app/config": [
-        "libs/config/src"
-      ],
-      "@app/config/*": [
-        "libs/config/src/*"
-      ],
       "@app/database": [
         "libs/database/src"
       ],
       "@app/database/*": [
         "libs/database/src/*"
+      ],
+      "@app/globals": [
+        "libs/globals/src"
+      ],
+      "@app/globals/*": [
+        "libs/globals/src/*"
       ],
       "@app/jwt": [
         "libs/jwt/src"
@@ -54,12 +54,6 @@
       ],
       "@app/user/*": [
         "libs/user/src/*"
-      ],
-      "@app/globals": [
-        "libs/globals/src"
-      ],
-      "@app/globals/*": [
-        "libs/globals/src/*"
       ]
     }
   },
