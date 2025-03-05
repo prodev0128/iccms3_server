@@ -7,6 +7,7 @@ import { User, UserDocument } from '@app/database';
 import { config } from '@app/globals/config';
 import { filterQueryBuilder, sortQueryBuilder } from '@app/globals/query-builder';
 
+import { RolesDto } from './dto/role.dto';
 import { UserDto } from './dto/user.dto';
 
 @Injectable()
@@ -37,6 +38,10 @@ export class UsersService {
 
   async updateUser(id: string, userDto: UserDto) {
     return this.userModel.findByIdAndUpdate(id, userDto, { new: true }).exec();
+  }
+
+  async updateUserRoles(id: string, rolesDto: RolesDto) {
+    return this.userModel.findByIdAndUpdate(id, rolesDto, { new: true }).exec();
   }
 
   async removeUser(id: string) {

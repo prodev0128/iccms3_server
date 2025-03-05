@@ -1,8 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '@app/jwt';
 
+import { RolesDto } from './dto/role.dto';
 import { UserDto } from './dto/user.dto';
 import { UsersService } from './users.service';
 
@@ -34,6 +35,11 @@ export class UsersController {
   @Put(':id')
   updateUser(@Param('id') id: string, @Body() userDto: UserDto) {
     return this.usersService.updateUser(id, userDto);
+  }
+
+  @Patch('roles/:id')
+  updateUserRoles(@Param('id') id: string, @Body() rolesDto: RolesDto) {
+    return this.usersService.updateUserRoles(id, rolesDto);
   }
 
   @Delete(':id')
