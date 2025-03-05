@@ -1,12 +1,10 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { Invoice, InvoiceDocument } from '@app/database';
-// import { invoiceActions, invoiceStatus } from '@app/globals/constants';
+import { GlobalsService } from '@app/globals';
 import { filterQueryBuilder, sortQueryBuilder } from '@app/globals/query-builder';
-
-// import { getRandomInt } from '@app/globals/utils';
 
 import { InvoiceDto } from './dto/invoice.dto';
 import { UpdateInvoicesStatusDto } from './dto/update-invoice-status.dto';
@@ -16,6 +14,7 @@ export class InvoicesService {
   constructor(
     @InjectModel(Invoice.name) private invoiceModel: Model<InvoiceDocument>,
     @Inject('GLOBAL_LOGGER') private readonly logger: Logger,
+    private readonly globalsService: GlobalsService,
   ) {}
   async findInvoices(
     user: any,
@@ -26,17 +25,7 @@ export class InvoicesService {
     filterModel: string,
     sortModel: string,
   ) {
-    // Add Query
-    // const fileTypes = ['Email', 'Ftp', 'Out-Ftp'];
-    // const invoice = new this.invoiceModel({
-    //   name: `${getRandomInt(1000, 9999)}`,
-    //   fileType: fileTypes[getRandomInt(0, 2)],
-    //   org: '',
-    //   status: '',
-    // });
-    // await invoice.save();
-
-    const checkQuery = (value) => value && value !== 'ALL';
+    const checkQuery = (value: any) => value && value !== 'ALL';
     let findQuery: any = {};
     if (checkQuery(status)) {
       findQuery.status = status;
@@ -68,21 +57,16 @@ export class InvoicesService {
 
   async updateInvoicesStatus(updateDto: UpdateInvoicesStatusDto) {
     const { action, ids } = updateDto;
-    console.log(action, ids);
-    // switch (event.action) {
-    //   case invoiceActions.REGISTER:
-    //     if (event.work) {
-    //       const prevStatus = invoiceStatus.UNDEFINED;
-    //       const nextStatus = 'REGISTERED';
-    //       const available = await this.invoiceModel.find({ _id: { $in: ids }, status: prevStatus }).exec();
-    //       console.log('available', available);
-    //       return await this.invoiceModel
-    //         .updateMany({ _id: { $in: ids }, status: prevStatus }, { status: nextStatus })
-    //         .exec();
-    //     } else {
-    //     }
-    //     break;
-    // }
+    const actions = this.globalsService.getCodes('action');
+    const findAction = actions.find((item: any) => item.value === action);
+    if (!findAction) {
+      throw new InternalServerErrorException();
+    }
+    const { nextStatus, prevStatus } = findAction.options;
+    if (!prevStatus || !nextStatus) {
+      throw new InternalServerErrorException();
+    }
+    return await this.invoiceModel.updateMany({ _id: { $in: ids }, status: prevStatus }, { status: nextStatus }).exec();
   }
 
   async removeInvoices(ids: string[]) {

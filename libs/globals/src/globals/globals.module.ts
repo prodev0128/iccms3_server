@@ -1,13 +1,12 @@
 import { Global, Module } from '@nestjs/common';
 
 import { DatabaseModule } from '@app/database';
-import { config } from '@app/globals/config';
-import { LoggerModule } from '@app/logger';
+import { GlobalsService } from '@app/globals/globals/globals.service';
 
 @Global()
 @Module({
-  imports: [LoggerModule.forRoot(`${config.globals.name}`), DatabaseModule],
-  providers: [],
-  exports: [],
+  imports: [DatabaseModule],
+  providers: [GlobalsService],
+  exports: [GlobalsService],
 })
 export class GlobalsModule {}

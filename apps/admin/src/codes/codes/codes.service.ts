@@ -15,12 +15,11 @@ export class CodesService {
     const types = typeText.split(',').map((type) => type.trim());
     const allCodes = await this.codeModel.find({ type: { $in: types } }).exec();
     return allCodes.reduce((total, code) => {
-      const type = code.type;
+      const { type } = code;
       if (!total[type]) {
-        total[type] = [code];
-      } else {
-        total[type] = [...total[type], code];
+        total[type] = [];
       }
+      total[type] = total[type].concat(code);
       return total;
     }, {});
   }

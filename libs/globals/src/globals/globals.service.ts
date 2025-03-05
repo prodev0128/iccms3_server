@@ -2,18 +2,35 @@ import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
-import { Code, CodeDocument, CodeOption, CodeOptionDocument } from '@app/database';
+import { Code, CodeDocument } from '@app/database';
 
 @Injectable()
 export class GlobalsService implements OnModuleInit {
+  private codes: any = [];
+
   constructor(
     @InjectModel(Code.name) private codeModel: Model<CodeDocument>,
-    @InjectModel(CodeOption.name) private codeOptionModel: Model<CodeOptionDocument>,
     @Inject('GLOBAL_LOGGER') private readonly logger: Logger,
   ) {}
 
-  onModuleInit() {
-    const res = this.codeOptionModel.find().exec();
-    console.log('res', res);
+  async onModuleInit() {
+    await this.fetchAllCodes();
+    this.logger.log('Load Codes Successfully.');
+  }
+
+  async fetchAllCodes() {
+    const allCodes = await this.codeModel.find({}).exec();
+    this.codes = allCodes.reduce((total, code) => {
+      const { type } = code;
+      if (!total[type]) {
+        total[type] = [];
+      }
+      total[type] = total[type].concat(code);
+      return total;
+    }, {});
+  }
+
+  getCodes(codeOption: string) {
+    return this.codes[codeOption] || [];
   }
 }
