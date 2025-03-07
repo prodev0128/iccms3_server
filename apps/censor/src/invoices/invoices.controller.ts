@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 
+import { fileTypes, findCategory, initialPaginationModel, invoiceStatus } from '@app/globals/constants';
 import { JwtAuthGuard } from '@app/jwt';
 import { User } from '@app/user';
 
@@ -15,24 +16,35 @@ export class InvoicesController {
   constructor(private readonly invoicesService: InvoicesService) {}
 
   @Get()
-  @ApiQuery({ description: 'dep', name: 'dep' })
+  @ApiQuery({ description: 'category', name: 'category' })
   @ApiQuery({ description: 'status', name: 'status' })
-  @ApiQuery({ description: 'fileType', name: 'fileType' })
+  @ApiQuery({ description: 'file type', name: 'fileType' })
   @ApiQuery({ description: 'page number', name: 'page' })
-  @ApiQuery({ description: 'pageSize', name: 'pageSize' })
-  @ApiQuery({ description: 'filterModel', name: 'filterModel' })
-  @ApiQuery({ description: 'sortModel', name: 'sortModel' })
+  @ApiQuery({ description: 'page size', name: 'pageSize' })
+  @ApiQuery({ description: 'filter model', name: 'filterModel' })
+  @ApiQuery({ description: 'sort model', name: 'sortModel' })
   findInvoices(
     @User() user: any,
-    @Query('dep') dep = true,
-    @Query('status') status = '',
-    @Query('fileType') fileType = '',
-    @Query('page') page = 0,
-    @Query('pageSize') pageSize = 10,
+    @Query('category') category = findCategory.ALL,
+    @Query('minStatus') minStatus = invoiceStatus.UNDEFINED,
+    @Query('maxStatus') maxStatus = invoiceStatus.COMPLETED,
+    @Query('fileType') fileType = fileTypes.ALL,
+    @Query('page') page = initialPaginationModel.page,
+    @Query('pageSize') pageSize = initialPaginationModel.pageSize,
     @Query('filterModel') filterModel?: string,
     @Query('sortModel') sortModel?: string,
   ) {
-    return this.invoicesService.findInvoices(user, dep, status, fileType, page, pageSize, filterModel, sortModel);
+    return this.invoicesService.findInvoices(
+      user,
+      category,
+      minStatus,
+      maxStatus,
+      fileType,
+      page,
+      pageSize,
+      filterModel,
+      sortModel,
+    );
   }
 
   @Post()

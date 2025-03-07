@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 
 import { Invoice, InvoiceDocument } from '@app/database';
 import { GlobalsService } from '@app/globals';
+import { fileTypes, findCategory } from '@app/globals/constants';
 import { filterQueryBuilder, sortQueryBuilder } from '@app/globals/query-builder';
 
 import { InvoiceDto } from './dto/invoice.dto';
@@ -18,29 +19,54 @@ export class InvoicesService {
   ) {}
   async findInvoices(
     user: any,
-    dep: boolean,
-    status: string,
+    category: string,
+    minStatus: string,
+    maxStatus: string,
     fileType: string,
     page: number,
     pageSize: number,
     filterModel: string,
     sortModel: string,
   ) {
+    const filterQuery1: any = {};
+
+    // category
+    if (category === findCategory.DEP) {
+      filterQuery1.dep = user.dep;
+    } else if (category === findCategory.ME) {
+      filterQuery1.censor = user.userID;
+    }
+
+    // min, max status
     const allStatus = this.globalsService.getCodes('status');
-    console.log('allStatus', allStatus);
-    const checkQuery = (value: any) => value && value !== 'ALL';
-    let findQuery: any = {};
-    if (checkQuery(status)) {
-      findQuery.status = status;
+    const foundMinStatus = allStatus.find((status: any) => status.value === minStatus);
+    const foundMaxStatus = allStatus.find((status: any) => status.value === maxStatus);
+    if (!foundMinStatus || !foundMaxStatus) {
+      throw new InternalServerErrorException();
     }
-    if (checkQuery(fileType)) {
-      findQuery.fileType = fileType;
+    const foundStatus = allStatus
+      .filter(
+        (status: any) =>
+          status.options.value >= foundMinStatus.options.value && status.options.value <= foundMaxStatus.options.value,
+      )
+      .map((status: any) => status.value);
+    if (!foundStatus.length) {
+      throw new InternalServerErrorException();
     }
-    if (dep) {
-      findQuery.dep = user.dep;
+    if (foundStatus.length === 1) {
+      filterQuery1.status = foundStatus[0];
+    } else {
+      filterQuery1.status = { $in: foundStatus };
     }
-    const filterQuery = filterQueryBuilder(filterModel, ['userID', 'name']);
-    findQuery = { ...findQuery, ...filterQuery };
+
+    // file type
+    if (fileType !== fileTypes.ALL) {
+      filterQuery1.fileType = fileType;
+    }
+
+    // filter with grid
+    const filterQuery2 = filterQueryBuilder(filterModel, ['name']);
+    const findQuery = { $and: [filterQuery1, filterQuery2] };
     const sortQuery = sortQueryBuilder(sortModel);
     const invoices = await this.invoiceModel
       .find(findQuery)
