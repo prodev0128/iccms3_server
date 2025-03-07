@@ -18,6 +18,7 @@ export class InvoicesService {
   ) {}
   async findInvoices(
     user: any,
+    dep: boolean,
     status: string,
     fileType: string,
     page: number,
@@ -25,6 +26,8 @@ export class InvoicesService {
     filterModel: string,
     sortModel: string,
   ) {
+    const allStatus = this.globalsService.getCodes('status');
+    console.log('allStatus', allStatus);
     const checkQuery = (value: any) => value && value !== 'ALL';
     let findQuery: any = {};
     if (checkQuery(status)) {
@@ -32,6 +35,9 @@ export class InvoicesService {
     }
     if (checkQuery(fileType)) {
       findQuery.fileType = fileType;
+    }
+    if (dep) {
+      findQuery.dep = user.dep;
     }
     const filterQuery = filterQueryBuilder(filterModel, ['userID', 'name']);
     findQuery = { ...findQuery, ...filterQuery };
