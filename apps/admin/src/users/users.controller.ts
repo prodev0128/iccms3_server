@@ -19,8 +19,8 @@ export class UsersController {
   @ApiQuery({ description: 'filterModel', name: 'filterModel' })
   @ApiQuery({ description: 'sortModel', name: 'sortModel' })
   findUsers(
-    @Query('page') page = 0,
-    @Query('pageSize') pageSize = 10,
+    @Query('page') page: number,
+    @Query('pageSize') pageSize: number,
     @Query('filterModel') filterModel: string,
     @Query('sortModel') sortModel: string,
   ) {

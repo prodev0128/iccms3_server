@@ -17,13 +17,19 @@ export class UsersService {
   async findUsers(page: number, pageSize: number, filterModel: string, sortModel: string) {
     const filterQuery = filterQueryBuilder(filterModel, ['userID', 'name']);
     const sortQuery = sortQueryBuilder(sortModel);
+    const totalCount = await this.userModel.countDocuments(filterQuery).exec();
+    if (!page) {
+      page = 0;
+    }
+    if (!pageSize) {
+      pageSize = totalCount;
+    }
     const users = await this.userModel
       .find(filterQuery)
       .sort(sortQuery)
       .skip(page * pageSize)
       .limit(pageSize)
       .exec();
-    const totalCount = await this.userModel.countDocuments(filterQuery).exec();
     return { totalCount, users };
   }
 

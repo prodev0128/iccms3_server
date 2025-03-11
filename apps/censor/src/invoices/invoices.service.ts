@@ -101,7 +101,7 @@ export class InvoicesService {
   }
 
   async updateInvoicesStatus(updateDto: UpdateInvoicesStatusDto) {
-    const { action, ids } = updateDto;
+    const { action, ids, ...more } = updateDto;
     const actions = this.globalsService.getCodes('action');
     const findAction = actions.find((item: any) => item.value === action);
     if (!findAction) {
@@ -111,7 +111,9 @@ export class InvoicesService {
     if (!prevStatus || !nextStatus) {
       throw new InternalServerErrorException();
     }
-    return await this.invoiceModel.updateMany({ _id: { $in: ids }, status: prevStatus }, { status: nextStatus }).exec();
+    return await this.invoiceModel
+      .updateMany({ _id: { $in: ids }, status: prevStatus }, { status: nextStatus, ...more })
+      .exec();
   }
 
   async removeInvoices(ids: string[]) {

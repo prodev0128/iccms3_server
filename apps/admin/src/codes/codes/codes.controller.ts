@@ -25,8 +25,8 @@ export class CodesController {
   @ApiQuery({ description: 'sortModel', name: 'sortModel' })
   findCodes(
     @Param('type') type: string,
-    @Query('page') page = 0,
-    @Query('pageSize') pageSize = 10,
+    @Query('page') page: number,
+    @Query('pageSize') pageSize: number,
     @Query('filterModel') filterModel: string,
     @Query('sortModel') sortModel: string,
   ) {

@@ -14,13 +14,19 @@ export class CodeOptionsService {
   async findCodeOptions(page: number, pageSize: number, filterModel: string, sortModel: string) {
     const filterQuery = filterQueryBuilder(filterModel, ['name', 'type']);
     const sortQuery = sortQueryBuilder(sortModel);
+    const totalCount = await this.codeOptionModel.countDocuments(filterQuery).exec();
+    if (!page) {
+      page = 0;
+    }
+    if (!pageSize) {
+      pageSize = totalCount;
+    }
     const codeOptions = await this.codeOptionModel
       .find(filterQuery)
       .sort(sortQuery)
       .skip(page * pageSize)
       .limit(pageSize)
       .exec();
-    const totalCount = await this.codeOptionModel.countDocuments(filterQuery).exec();
     return { codeOptions, totalCount };
   }
 

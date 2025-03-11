@@ -27,13 +27,20 @@ export class CodesService {
   async findCodes(type: string, page: number, pageSize: number, filterModel: string, sortModel: string) {
     const filterQuery = filterQueryBuilder(filterModel, ['name']);
     const sortQuery = sortQueryBuilder(sortModel);
+    const findQuery = { $and: [{ type }, filterQuery] };
+    const totalCount = await this.codeModel.countDocuments(findQuery).exec();
+    if (!page) {
+      page = 0;
+    }
+    if (!pageSize) {
+      pageSize = totalCount;
+    }
     const codes = await this.codeModel
-      .find({ $and: [{ type }, filterQuery] })
+      .find(findQuery)
       .sort(sortQuery)
       .skip(page * pageSize)
       .limit(pageSize)
       .exec();
-    const totalCount = await this.codeModel.countDocuments({ $and: [{ type }, filterQuery] }).exec();
     return { codes, totalCount };
   }
 

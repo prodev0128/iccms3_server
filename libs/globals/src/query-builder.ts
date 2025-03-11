@@ -25,6 +25,9 @@ export const filterQueryItemBuilder = (query: any) => {
 };
 
 export const filterQueryBuilder = (queryText: string, quickFilterFields = []) => {
+  if (!queryText) {
+    return {};
+  }
   const queryObject = JSON.parse(queryText);
   const { items = [], logicOperator = 'and', quickFilterLogicOperator = 'and', quickFilterValues = [] } = queryObject;
   const query1 = { [`$${logicOperator}`]: [] };
@@ -45,6 +48,9 @@ export const filterQueryBuilder = (queryText: string, quickFilterFields = []) =>
 };
 
 export const sortQueryBuilder = (queryText: string) => {
+  if (!queryText) {
+    return {};
+  }
   const sortQuery = {};
   const queryObject = JSON.parse(queryText);
   for (const query of queryObject) {
