@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 
 import { Invoice, InvoiceDocument } from '@app/database';
 import { GlobalsService } from '@app/globals';
-import { fileTypes, findCategory, roles } from '@app/globals/constants';
+import { fileTypes, findCategory, invoiceActions, roles } from '@app/globals/constants';
 import { filterQueryBuilder, sortQueryBuilder } from '@app/globals/query-builder';
 
 import { InvoiceDto } from './dto/invoice.dto';
@@ -110,6 +110,14 @@ export class InvoicesService {
     const { nextStatus, prevStatus } = findAction.options;
     if (!prevStatus || !nextStatus) {
       throw new InternalServerErrorException();
+    }
+    switch (action) {
+      case invoiceActions.UNTRANSFER:
+        more.dep = '';
+        break;
+      case invoiceActions.UNASSIGN:
+        more.censor = more.checker = '';
+        break;
     }
     return await this.invoiceModel
       .updateMany({ _id: { $in: ids }, status: prevStatus }, { status: nextStatus, ...more })

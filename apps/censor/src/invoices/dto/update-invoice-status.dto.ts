@@ -1,5 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { ArrayNotEmpty, IsArray, IsString } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ArrayNotEmpty, IsArray, IsOptional, IsString } from 'class-validator';
 
 export class UpdateInvoicesStatusDto {
   @ApiProperty({
@@ -18,4 +18,19 @@ export class UpdateInvoicesStatusDto {
   })
   @IsString()
   action: string;
+
+  @ApiPropertyOptional({ description: 'Department information (if applicable).' })
+  @IsString()
+  @IsOptional()
+  dep?: string;
+
+  @ApiPropertyOptional({ description: 'Censor information (if applicable).' })
+  @IsString()
+  @IsOptional()
+  censor?: string;
+
+  @ApiPropertyOptional({ description: 'Checker information (if applicable).' })
+  @IsString()
+  @IsOptional()
+  checker?: string;
 }
