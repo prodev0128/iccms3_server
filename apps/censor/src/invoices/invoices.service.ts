@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 
 import { Invoice, InvoiceDocument } from '@app/database';
 import { GlobalsService } from '@app/globals';
-import { fileTypes, findCategory } from '@app/globals/constants';
+import { fileTypes, findCategory, roles } from '@app/globals/constants';
 import { filterQueryBuilder, sortQueryBuilder } from '@app/globals/query-builder';
 
 import { InvoiceDto } from './dto/invoice.dto';
@@ -31,9 +31,22 @@ export class InvoicesService {
     const filterQuery1: any = {};
 
     // category
+    if (category === findCategory.ALL) {
+      if (!user.roles.includes(roles.RECEIPT_VIEW)) {
+        category = findCategory.DEP;
+      }
+    }
     if (category === findCategory.DEP) {
-      filterQuery1.dep = user.dep;
-    } else if (category === findCategory.ME) {
+      if (!user.roles.includes(roles.DEP_VIEW)) {
+        category = findCategory.MINE;
+      } else {
+        filterQuery1.dep = user.dep;
+      }
+    }
+    if (category === findCategory.MINE) {
+      if (!user.roles.includes(roles.PERSONAL_VIEW)) {
+        return { totalCount: 0, invoices: [] };
+      }
       filterQuery1.censor = user.userID;
     }
 

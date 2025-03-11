@@ -25,11 +25,7 @@ export class AuthService {
     if (!user.isActive) {
       throw new UnauthorizedException('Un Allowed User');
     }
-    const payload = {
-      name: user.name,
-      roles: user.roles,
-      userID: user.userID,
-    };
+    const payload = JSON.parse(JSON.stringify(user));
     return { accessToken: this.jwtService.sign(payload) };
   }
 
@@ -45,6 +41,6 @@ export class AuthService {
   }
 
   async fetchProfile({ userID }) {
-    return this.userModel.findOne({ userID }, { _id: 0, name: 1, roles: 1, userID: 1 });
+    return this.userModel.findOne({ userID });
   }
 }

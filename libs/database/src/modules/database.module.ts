@@ -1,13 +1,14 @@
 import { Global, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { Code, CodeSchema } from '@app/database/schemas/code.schema';
-import { CodeOption, CodeOptionSchema } from '@app/database/schemas/code-option.schema';
-import { File, FileSchema } from '@app/database/schemas/file.schema';
-import { Invoice, InvoiceSchema } from '@app/database/schemas/invoice.schema';
-import { Setting, SettingSchema } from '@app/database/schemas/setting.schema';
-import { User, UserSchema } from '@app/database/schemas/user.schema';
 import { config } from '@app/globals/config';
+
+import { Code, CodeSchema } from '../schemas/code.schema';
+import { CodeOption, CodeOptionSchema } from '../schemas/code-option.schema';
+import { File, FileSchema } from '../schemas/file.schema';
+import { Invoice, InvoiceSchema } from '../schemas/invoice.schema';
+import { Setting, SettingSchema } from '../schemas/setting.schema';
+import { User, UserSchema } from '../schemas/user.schema';
 
 @Global()
 @Module({
