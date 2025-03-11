@@ -40,6 +40,9 @@ export class Invoice {
 
   @Prop()
   censor: string;
+
+  @Prop()
+  checker: string;
 }
 
 const InvoiceSchema = SchemaFactory.createForClass(Invoice);
