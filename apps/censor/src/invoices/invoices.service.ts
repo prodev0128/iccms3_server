@@ -119,9 +119,9 @@ export class InvoicesService {
         more.censor = more.checker = '';
         break;
     }
-    return await this.invoiceModel
-      .updateMany({ _id: { $in: ids }, status: prevStatus }, { status: nextStatus, ...more })
-      .exec();
+    const findQuery = { _id: { $in: ids }, status: prevStatus };
+    const updateQuery = { status: nextStatus, ...more };
+    return this.invoiceModel.updateMany(findQuery, updateQuery).exec();
   }
 
   async removeInvoices(ids: string[]) {

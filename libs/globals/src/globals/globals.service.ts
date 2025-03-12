@@ -19,7 +19,7 @@ export class GlobalsService implements OnModuleInit {
   }
 
   async fetchAllCodes() {
-    const allCodes = await this.codeModel.find({}).exec();
+    const allCodes = await this.codeModel.find().exec();
     this.codes = allCodes.reduce((total, code) => {
       const { type } = code;
       if (!total[type]) {
