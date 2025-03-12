@@ -46,10 +46,6 @@ export class UsersService {
     return this.userModel.findByIdAndUpdate(id, userDto, { new: true }).exec();
   }
 
-  async updateUserRoles(id: string, rolesDto: RolesDto) {
-    return this.userModel.findByIdAndUpdate(id, rolesDto, { new: true }).exec();
-  }
-
   async removeUser(id: string) {
     return this.userModel.findByIdAndDelete(id).exec();
   }
