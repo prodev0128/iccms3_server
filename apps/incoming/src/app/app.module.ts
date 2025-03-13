@@ -2,6 +2,7 @@ import { DynamicModule } from '@nestjs/common';
 import { Module } from '@nestjs/common';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 
+import { GlobalsModule } from '@app/globals';
 import { AppInfo, config } from '@app/globals/config';
 import { LoggerModule } from '@app/logger';
 
@@ -19,6 +20,7 @@ export class AppModule {
       imports: [
         LoggerModule.forRoot(`${config.incoming.name}-${appInfo.path}`),
         EventEmitterModule.forRoot(),
+        GlobalsModule,
         TaskQueueModule,
         FileWatcherModule,
         FileMoveModule,

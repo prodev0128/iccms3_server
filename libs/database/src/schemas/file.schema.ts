@@ -20,13 +20,22 @@ export class File {
   invoiceID: Types.ObjectId;
 
   @Prop()
+  size: number;
+
+  @Prop()
   cenFlag: string;
 
   @Prop()
   censoredBy: string;
 
   @Prop()
-  censoredAt: string;
+  censoredAt: Date;
+
+  @Prop()
+  checkedBy: string;
+
+  @Prop()
+  checkedAt: Date;
 }
 
 const FileSchema = SchemaFactory.createForClass(File);

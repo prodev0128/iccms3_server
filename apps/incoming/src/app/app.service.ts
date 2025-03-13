@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 
 import { AppInfo } from '@app/globals/config';
+import { fileTypes } from '@app/globals/constants';
 
 import { DbRegisterService } from '../db-register/db-register.service';
 import { FileMoveService } from '../file-move/file-move.service';
@@ -33,13 +34,13 @@ export class AppService implements OnModuleInit {
   @OnEvent('task.added')
   handleTask(task: Task) {
     switch (this.appInfo.type) {
-      case 'mail':
+      case fileTypes.EMAIL:
         this.handleIncomingMail(task);
         break;
-      case 'ftp':
+      case fileTypes.FTP:
         this.handleIncomingFtp(task);
         break;
-      case 'outftp':
+      case fileTypes.OUTFTP:
         break;
       default:
         break;
@@ -47,10 +48,13 @@ export class AppService implements OnModuleInit {
   }
 
   async handleIncomingMail(task: Task) {
-    const res1 = await this.fileMoveService.start(this.appInfo.path, task.data);
-    await this.dbRegisterService.start(res1);
+    const fileMoveRes = await this.fileMoveService.start(this.appInfo, task.data);
+    await this.dbRegisterService.start(this.appInfo, fileMoveRes);
     this.taskQueueService.completeTask(task);
   }
 
-  async handleIncomingFtp(_: Task) {}
+  async handleIncomingFtp(task: Task) {
+    const fileMoveRes = await this.fileMoveService.start(this.appInfo, task.data);
+    await this.dbRegisterService.start(this.appInfo, fileMoveRes);
+  }
 }

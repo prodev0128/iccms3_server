@@ -24,7 +24,6 @@ export class Invoice {
         action: { type: String, required: true },
         at: { type: Date, required: true, default: Date.now },
         by: { type: String, required: true },
-        work: { type: Boolean, required: true },
       },
     ],
     default: [],
