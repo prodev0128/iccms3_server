@@ -8,6 +8,8 @@ import path from 'path';
 
 import { config } from '@app/globals/config';
 
+import { EventType } from '../types';
+
 @Injectable()
 export class FileWatcherService implements OnModuleDestroy {
   private watcher: FSWatcher;
@@ -31,7 +33,7 @@ export class FileWatcherService implements OnModuleDestroy {
 
       this.watcher.on('add', (path) => {
         this.logger.log(`File added: ${path}`);
-        this.eventEmitter.emit(`file.added`, path);
+        this.eventEmitter.emit(EventType.FileAdded, path);
       });
 
       this.watcher.on('error', (error: Error) => {

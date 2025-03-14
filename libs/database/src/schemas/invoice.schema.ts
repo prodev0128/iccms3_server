@@ -10,6 +10,9 @@ export class Invoice {
   name: string;
 
   @Prop({ required: true })
+  dataType: string;
+
+  @Prop({ required: true })
   fileType: string;
 
   @Prop()
@@ -30,9 +33,6 @@ export class Invoice {
     required: true,
   })
   events: { type: string; at: Date; by: string; work: boolean }[];
-
-  @Prop({ type: [String], default: [], required: true })
-  flags: string[];
 
   @Prop()
   dep: string;

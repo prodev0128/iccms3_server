@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 
 import { Invoice, InvoiceDocument } from '@app/database';
 import { GlobalsService } from '@app/globals';
-import { fileTypes, findCategory, invoiceActions, roles } from '@app/globals/constants';
+import { DataTypes, FindCategory, InvoiceActions, Roles } from '@app/globals/constants';
 import { filterQueryBuilder, sortQueryBuilder } from '@app/globals/query-builder';
 
 import { InvoiceDto } from './dto/invoice.dto';
@@ -22,7 +22,7 @@ export class InvoicesService {
     category: string,
     minStatus: string,
     maxStatus: string,
-    fileType: string,
+    dataType: string,
     page: number,
     pageSize: number,
     filterModel: string,
@@ -31,20 +31,20 @@ export class InvoicesService {
     const filterQuery1: any = {};
 
     // category
-    if (category === findCategory.ALL) {
-      if (!user.roles.includes(roles.RECEIPT_VIEW)) {
-        category = findCategory.DEP;
+    if (category === FindCategory.ALL) {
+      if (!user.roles.includes(Roles.RECEIPT_VIEW)) {
+        category = FindCategory.DEP;
       }
     }
-    if (category === findCategory.DEP) {
-      if (!user.roles.includes(roles.DEP_VIEW)) {
-        category = findCategory.MINE;
+    if (category === FindCategory.DEP) {
+      if (!user.roles.includes(Roles.DEP_VIEW)) {
+        category = FindCategory.MINE;
       } else {
         filterQuery1.dep = user.dep;
       }
     }
-    if (category === findCategory.MINE) {
-      if (!user.roles.includes(roles.PERSONAL_VIEW)) {
+    if (category === FindCategory.MINE) {
+      if (!user.roles.includes(Roles.PERSONAL_VIEW)) {
         return { totalCount: 0, invoices: [] };
       }
       filterQuery1.censor = user.userID;
@@ -73,8 +73,8 @@ export class InvoicesService {
     }
 
     // file type
-    if (fileType !== fileTypes.ALL) {
-      filterQuery1.fileType = fileType;
+    if (dataType !== DataTypes.ALL) {
+      filterQuery1.dataType = dataType;
     }
 
     // filter with grid
@@ -112,10 +112,10 @@ export class InvoicesService {
       throw new InternalServerErrorException();
     }
     switch (action) {
-      case invoiceActions.UNTRANSFER:
+      case InvoiceActions.UNTRANSFER:
         more.dep = '';
         break;
-      case invoiceActions.UNASSIGN:
+      case InvoiceActions.UNASSIGN:
         more.censor = more.checker = '';
         break;
     }

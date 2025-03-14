@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 
-import { fileTypes, findCategory, initialPaginationModel, invoiceStatus } from '@app/globals/constants';
+import { DataTypes, FindCategory, initialPaginationModel, InvoiceStatus } from '@app/globals/constants';
 import { JwtAuthGuard } from '@app/jwt';
 import { User } from '@app/user';
 
@@ -18,17 +18,17 @@ export class InvoicesController {
   @Get()
   @ApiQuery({ description: 'category', name: 'category' })
   @ApiQuery({ description: 'status', name: 'status' })
-  @ApiQuery({ description: 'file type', name: 'fileType' })
+  @ApiQuery({ description: 'data type', name: 'dataType' })
   @ApiQuery({ description: 'page number', name: 'page' })
   @ApiQuery({ description: 'page size', name: 'pageSize' })
   @ApiQuery({ description: 'filter model', name: 'filterModel' })
   @ApiQuery({ description: 'sort model', name: 'sortModel' })
   findInvoices(
     @User() user: any,
-    @Query('category') category = findCategory.ALL,
-    @Query('minStatus') minStatus = invoiceStatus.UNDEFINED,
-    @Query('maxStatus') maxStatus = invoiceStatus.COMPLETED,
-    @Query('fileType') fileType = fileTypes.ALL,
+    @Query('category') category = FindCategory.ALL,
+    @Query('minStatus') minStatus = InvoiceStatus.UNDEFINED,
+    @Query('maxStatus') maxStatus = InvoiceStatus.COMPLETED,
+    @Query('dataType') dataType = DataTypes.ALL,
     @Query('page') page = initialPaginationModel.page,
     @Query('pageSize') pageSize = initialPaginationModel.pageSize,
     @Query('filterModel') filterModel?: string,
@@ -39,7 +39,7 @@ export class InvoicesController {
       category,
       minStatus,
       maxStatus,
-      fileType,
+      dataType,
       page,
       pageSize,
       filterModel,

@@ -3,12 +3,13 @@ import { Inject, Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 
 import { AppInfo } from '@app/globals/config';
-import { fileTypes } from '@app/globals/constants';
+import { DataTypes } from '@app/globals/constants';
 
 import { DbRegisterService } from '../db-register/db-register.service';
 import { FileMoveService } from '../file-move/file-move.service';
 import { FileWatcherService } from '../file-watcher/file-watcher.service';
-import { Task, TaskQueueService } from '../task-queue/task-queue.service';
+import { TaskQueueService } from '../task-queue/task-queue.service';
+import { EventType, Task } from '../types';
 
 @Injectable()
 export class AppService implements OnModuleInit {
@@ -26,21 +27,21 @@ export class AppService implements OnModuleInit {
     this.fileWatcherService.start(this.appInfo.path);
   }
 
-  @OnEvent('file.added')
+  @OnEvent(EventType.FileAdded)
   async handleFileAdded(filePath: string) {
     this.taskQueueService.addTask(filePath);
   }
 
-  @OnEvent('task.added')
+  @OnEvent(EventType.TaskAdded)
   handleTask(task: Task) {
     switch (this.appInfo.type) {
-      case fileTypes.EMAIL:
+      case DataTypes.EMAIL:
         this.handleIncomingMail(task);
         break;
-      case fileTypes.FTP:
+      case DataTypes.FTP:
         this.handleIncomingFtp(task);
         break;
-      case fileTypes.OUTFTP:
+      case DataTypes.OUTFTP:
         break;
       default:
         break;
@@ -56,5 +57,6 @@ export class AppService implements OnModuleInit {
   async handleIncomingFtp(task: Task) {
     const fileMoveRes = await this.fileMoveService.start(this.appInfo, task.data);
     await this.dbRegisterService.start(this.appInfo, fileMoveRes);
+    this.taskQueueService.completeTask(task);
   }
 }

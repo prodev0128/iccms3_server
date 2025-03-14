@@ -1,12 +1,12 @@
 import dotenv from 'dotenv';
 
-import { fileTypes } from '@app/globals/constants';
+import { DataTypes } from '@app/globals/constants';
 
 dotenv.config();
 
 export interface AppInfo {
   path: string;
-  type: fileTypes.EMAIL | fileTypes.FTP | fileTypes.OUTFTP;
+  type: DataTypes.EMAIL | DataTypes.FTP | DataTypes.OUTFTP;
 }
 
 export const config = {

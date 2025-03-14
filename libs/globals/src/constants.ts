@@ -1,6 +1,6 @@
 export const initialPaginationModel = { page: 0, pageSize: 10 };
 
-export enum invoiceStatus {
+export enum InvoiceStatus {
   UNDEFINED = 'UNDEFINED',
   REGISTERED = 'REGISTERED',
   TRANSFERRED = 'TRANSFERRED',
@@ -12,7 +12,7 @@ export enum invoiceStatus {
   COMPLETED = 'COMPLETED',
 }
 
-export enum invoiceActions {
+export enum InvoiceActions {
   REGISTER = 'REGISTER',
   UNREGISTER = 'UNREGISTER',
   TRANSFER = 'TRANSFER',
@@ -31,20 +31,20 @@ export enum invoiceActions {
   UNCOMPLETE = 'UNCOMPLETE',
 }
 
-export enum fileTypes {
+export enum DataTypes {
   ALL = 'ALL',
   EMAIL = 'EMAIL',
   FTP = 'FTP',
   OUTFTP = 'OUTFTP',
 }
 
-export enum findCategory {
+export enum FindCategory {
   ALL = 'ALL',
   DEP = 'DEP',
   MINE = 'MINE',
 }
 
-export enum roles {
+export enum Roles {
   ADMIN = 'ADMIN',
 
   // USERS
@@ -90,7 +90,9 @@ export enum roles {
   FLOW_VIEW = 'FLOW_VIEW',
 }
 
-export const compressionFileExtensions = ['rar', 'zip', '7z'];
-export enum invoiceFlagTypes {
+export enum FileTypes {
   PART = 'PART',
+  COMPRESSION = 'COMPRESSION',
+  NORMAL = 'NORMAL',
+  ATTACHMENT = 'ATTACHMENT',
 }
