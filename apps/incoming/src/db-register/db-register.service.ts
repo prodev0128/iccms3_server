@@ -8,6 +8,7 @@ import { File, FileDocument, Invoice, InvoiceDocument } from '@app/database';
 import { GlobalsService } from '@app/globals';
 import { AppInfo, config } from '@app/globals/config';
 import { DataTypes, FileTypes, InvoiceStatus } from '@app/globals/constants';
+import { textToRegExp } from '@app/globals/utils';
 
 @Injectable()
 export class DbRegisterService {
@@ -22,12 +23,12 @@ export class DbRegisterService {
     // Check Part File
     const compressionPartTypes = this.globalsService.getCodes('compressionPartType');
     const foundCompressionPart = compressionPartTypes.find((compressionPartType: any) =>
-      fileName.match(new RegExp(compressionPartType.options.type, 'i')),
+      fileName.match(textToRegExp(compressionPartType.options.type)),
     );
     if (foundCompressionPart) {
       return {
         name: fileName.replace(
-          new RegExp(foundCompressionPart?.options?.type, 'i'),
+          textToRegExp(foundCompressionPart?.options?.type),
           foundCompressionPart?.options?.originalType,
         ),
         fileType: FileTypes.PART,
@@ -45,7 +46,7 @@ export class DbRegisterService {
 
   checkOrganization(fileName: string) {
     const orgs = this.globalsService.getCodes('org');
-    return orgs.find((org: any) => fileName.match(new RegExp(org?.options?.content, 'i')));
+    return orgs.find((org: any) => fileName.match(textToRegExp(org?.options?.content)));
   }
 
   async registerFtp(appInfo: AppInfo, srcPath: string) {
