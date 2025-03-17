@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 
 import { Invoice, InvoiceDocument } from '@app/database';
 import { GlobalsService } from '@app/globals';
-import { DataTypes, FindCategory, InvoiceActions, Roles } from '@app/globals/constants';
+import { DataTypes, FindCategory, InvoiceActions, InvoiceStatus, Roles } from '@app/globals/constants';
 import { filterQueryBuilder, sortQueryBuilder } from '@app/globals/query-builder';
 
 import { InvoiceDto } from './dto/invoice.dto';
@@ -28,7 +28,7 @@ export class InvoicesService {
     filterModel: string,
     sortModel: string,
   ) {
-    const filterQuery1: any = {};
+    const findQuery1: any = {};
 
     // category
     if (category === FindCategory.ALL) {
@@ -40,14 +40,20 @@ export class InvoicesService {
       if (!user.roles.includes(Roles.DEP_VIEW)) {
         category = FindCategory.MINE;
       } else {
-        filterQuery1.dep = user.dep;
+        findQuery1.dep = user.dep;
       }
     }
     if (category === FindCategory.MINE) {
       if (!user.roles.includes(Roles.PERSONAL_VIEW)) {
         return { totalCount: 0, invoices: [] };
       }
-      filterQuery1.censor = user.userID;
+      if (minStatus === InvoiceStatus.ASSIGNED && maxStatus === InvoiceStatus.ASSIGNED) {
+        findQuery1.censor = user.userID;
+      } else if (minStatus === InvoiceStatus.CENSORED && maxStatus === InvoiceStatus.CENSORED) {
+        findQuery1.checker = user.userID;
+      } else {
+        findQuery1.$or = [{ censor: user.userID }, { checker: user.userID }];
+      }
     }
 
     // min, max status
@@ -67,20 +73,22 @@ export class InvoicesService {
       throw new InternalServerErrorException();
     }
     if (foundStatus.length === 1) {
-      filterQuery1.status = foundStatus[0];
+      findQuery1.status = foundStatus[0];
     } else {
-      filterQuery1.status = { $in: foundStatus };
+      findQuery1.status = { $in: foundStatus };
     }
 
     // file type
     if (dataType !== DataTypes.ALL) {
-      filterQuery1.dataType = dataType;
+      findQuery1.dataType = dataType;
     }
 
     // filter with grid
-    const filterQuery2 = filterQueryBuilder(filterModel, ['name']);
-    const findQuery = { $and: [filterQuery1, filterQuery2] };
-    const sortQuery = sortQueryBuilder(sortModel);
+    const findQuery2 = filterQueryBuilder(filterModel, ['name']);
+    const findQuery = { $and: [findQuery1, findQuery2] };
+    const sortQuery1: Record<string, 1 | -1> = { createdAt: -1 };
+    const sortQuery2: Record<string, 1 | -1> = sortQueryBuilder(sortModel);
+    const sortQuery: Record<string, 1 | -1> = { ...sortQuery1, ...sortQuery2 };
     const invoices = await this.invoiceModel
       .find(findQuery)
       .sort(sortQuery)
