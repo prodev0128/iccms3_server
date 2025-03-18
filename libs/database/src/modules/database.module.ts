@@ -7,6 +7,7 @@ import { Code, CodeSchema } from '../schemas/code.schema';
 import { CodeOption, CodeOptionSchema } from '../schemas/code-option.schema';
 import { File, FileSchema } from '../schemas/file.schema';
 import { Invoice, InvoiceSchema } from '../schemas/invoice.schema';
+import { News, NewsSchema } from '../schemas/news.schema';
 import { Setting, SettingSchema } from '../schemas/setting.schema';
 import { User, UserSchema } from '../schemas/user.schema';
 
@@ -19,8 +20,9 @@ import { User, UserSchema } from '../schemas/user.schema';
       { name: CodeOption.name, schema: CodeOptionSchema },
       { name: File.name, schema: FileSchema },
       { name: Invoice.name, schema: InvoiceSchema },
-      { name: User.name, schema: UserSchema },
+      { name: News.name, schema: NewsSchema },
       { name: Setting.name, schema: SettingSchema },
+      { name: User.name, schema: UserSchema },
     ]),
   ],
   exports: [MongooseModule], // Export MongooseModule for use in other apps
