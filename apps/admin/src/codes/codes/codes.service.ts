@@ -25,9 +25,10 @@ export class CodesService {
   }
 
   async findCodes(type: string, page: number, pageSize: number, filterModel: string, sortModel: string) {
-    const filterQuery = filterQueryBuilder(filterModel, ['name']);
+    const findQuery1 = filterQueryBuilder(filterModel, ['name']);
+    const findQuery2 = { type };
+    const findQuery = { $and: [findQuery1, findQuery2] };
     const sortQuery = sortQueryBuilder(sortModel);
-    const findQuery = { $and: [{ type }, filterQuery] };
     const totalCount = await this.codeModel.countDocuments(findQuery).exec();
     if (!page) {
       page = 0;

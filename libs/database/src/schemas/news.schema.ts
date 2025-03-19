@@ -11,9 +11,6 @@ export class News {
 
   @Prop()
   content: string;
-
-  @Prop()
-  viewCount: number;
 }
 
 const NewsSchema = SchemaFactory.createForClass(News);

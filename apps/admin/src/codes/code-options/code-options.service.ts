@@ -12,9 +12,9 @@ export class CodeOptionsService {
   constructor(@InjectModel(CodeOption.name) private codeOptionModel: Model<CodeOptionDocument>) {}
 
   async findCodeOptions(page: number, pageSize: number, filterModel: string, sortModel: string) {
-    const filterQuery = filterQueryBuilder(filterModel, ['name', 'type']);
+    const findQuery = filterQueryBuilder(filterModel, ['name', 'type']);
     const sortQuery = sortQueryBuilder(sortModel);
-    const totalCount = await this.codeOptionModel.countDocuments(filterQuery).exec();
+    const totalCount = await this.codeOptionModel.countDocuments(findQuery).exec();
     if (!page) {
       page = 0;
     }
@@ -22,7 +22,7 @@ export class CodeOptionsService {
       pageSize = totalCount;
     }
     const codeOptions = await this.codeOptionModel
-      .find(filterQuery)
+      .find(findQuery)
       .sort(sortQuery)
       .skip(page * pageSize)
       .limit(pageSize)

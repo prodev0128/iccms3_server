@@ -13,17 +13,9 @@ export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
   @Get()
-  @ApiQuery({ description: 'page number', name: 'page' })
-  @ApiQuery({ description: 'pageSize', name: 'pageSize' })
-  @ApiQuery({ description: 'filterModel', name: 'filterModel' })
-  @ApiQuery({ description: 'sortModel', name: 'sortModel' })
-  findFiles(
-    @Query('page') page = 0,
-    @Query('pageSize') pageSize = 10,
-    @Query('filterModel') filterModel: string,
-    @Query('sortModel') sortModel: string,
-  ) {
-    return this.filesService.findFiles(page, pageSize, filterModel, sortModel);
+  @ApiQuery({ description: 'ids', name: 'ids' })
+  findFiles(@Query('ids') idsText: string) {
+    return this.filesService.findFiles(idsText);
   }
 
   @Post()

@@ -15,9 +15,9 @@ export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   async findUsers(page: number, pageSize: number, filterModel: string, sortModel: string) {
-    const filterQuery = filterQueryBuilder(filterModel, ['userID', 'name']);
+    const findQuery = filterQueryBuilder(filterModel, ['userID', 'name']);
     const sortQuery = sortQueryBuilder(sortModel);
-    const totalCount = await this.userModel.countDocuments(filterQuery).exec();
+    const totalCount = await this.userModel.countDocuments(findQuery).exec();
     if (!page) {
       page = 0;
     }
@@ -25,7 +25,7 @@ export class UsersService {
       pageSize = totalCount;
     }
     const users = await this.userModel
-      .find(filterQuery)
+      .find(findQuery)
       .sort(sortQuery)
       .skip(page * pageSize)
       .limit(pageSize)

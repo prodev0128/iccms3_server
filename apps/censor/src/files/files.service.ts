@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 
 import { File, FileDocument } from '@app/database';
-import { filterQueryBuilder, sortQueryBuilder } from '@app/globals/query-builder';
 
 import { FileDto } from './dto/file.dto';
 
@@ -11,22 +10,18 @@ import { FileDto } from './dto/file.dto';
 export class FilesService {
   constructor(@InjectModel(File.name) private fileModel: Model<FileDocument>) {}
 
-  async findFiles(page: number, pageSize: number, filterModel: string, sortModel: string) {
-    const filterQuery = filterQueryBuilder(filterModel, ['userID', 'name']);
-    const sortQuery = sortQueryBuilder(sortModel);
-    const users = await this.fileModel
-      .find(filterQuery)
-      .sort(sortQuery)
-      .skip(page * pageSize)
-      .limit(pageSize)
-      .exec();
-    const totalCount = await this.fileModel.countDocuments(filterQuery).exec();
-    return { totalCount, users };
+  async findFiles(idsText: string) {
+    const ids = idsText.split(',').map((item) => new Types.ObjectId(item));
+
+    const findQuery = { invoiceID: { $in: ids } };
+    const files = await this.fileModel.find(findQuery).exec();
+    const totalCount = await this.fileModel.countDocuments(findQuery).exec();
+    return { totalCount, files };
   }
 
   async createFile(fileDto: FileDto) {
-    const user = new this.fileModel(fileDto);
-    return await user.save();
+    const file = new this.fileModel(fileDto);
+    return await file.save();
   }
 
   async updateFile(id: string, fileDto: FileDto) {
