@@ -1,8 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '@app/jwt';
 
+import { CensorFilesDto } from './dto/censor-files.dto';
+import { CheckFilesDto } from './dto/check-files.dto';
 import { FileDto } from './dto/file.dto';
 import { FilesService } from './files.service';
 
@@ -26,6 +28,16 @@ export class FilesController {
   @Put(':id')
   updateFile(@Param('id') id: string, @Body() fileDto: FileDto) {
     return this.filesService.updateFile(id, fileDto);
+  }
+
+  @Patch('censor')
+  censorFiles(@Body() censorFilesDto: CensorFilesDto) {
+    return this.filesService.censorFiles(censorFilesDto);
+  }
+
+  @Patch('check')
+  checkFiles(@Body() checkFileDto: CheckFilesDto) {
+    return this.filesService.checkFiles(checkFileDto);
   }
 
   @Delete(':id')

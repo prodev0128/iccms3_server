@@ -1,11 +1,12 @@
 import { Inject, Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 
-import { Invoice, InvoiceDocument } from '@app/database';
+import { File, FileDocument, Invoice, InvoiceDocument } from '@app/database';
 import { GlobalsService } from '@app/globals';
 import { DataTypes, FindCategory, InvoiceActions, InvoiceStatus, Roles } from '@app/globals/constants';
 import { filterQueryBuilder, sortQueryBuilder } from '@app/globals/query-builder';
+import { divideWithPrecision } from '@app/globals/utils';
 
 import { InvoiceDto } from './dto/invoice.dto';
 import { UpdateInvoicesStatusDto } from './dto/update-invoice-status.dto';
@@ -13,6 +14,7 @@ import { UpdateInvoicesStatusDto } from './dto/update-invoice-status.dto';
 @Injectable()
 export class InvoicesService {
   constructor(
+    @InjectModel(File.name) private fileModel: Model<FileDocument>,
     @InjectModel(Invoice.name) private invoiceModel: Model<InvoiceDocument>,
     @Inject('GLOBAL_LOGGER') private readonly logger: Logger,
     private readonly globalsService: GlobalsService,
@@ -126,6 +128,8 @@ export class InvoicesService {
       case InvoiceActions.UNASSIGN:
         more.censor = more.checker = '';
         break;
+      case InvoiceActions.CENSOR:
+        more.progress = 100;
     }
     const findQuery = { _id: { $in: ids }, status: prevStatus };
     const updateQuery = { status: nextStatus, ...more };
@@ -134,5 +138,15 @@ export class InvoicesService {
 
   async removeInvoices(ids: string[]) {
     return this.invoiceModel.deleteMany({ _id: { $in: ids } }).exec();
+  }
+
+  async updateInvoiceProgress(id: string) {
+    const fileItems = await this.fileModel
+      .find({ invoiceID: new Types.ObjectId(id) })
+      .select(['cenFlag'])
+      .exec();
+    const cenCount = fileItems.filter((item) => item.cenFlag).length;
+    const progress = divideWithPrecision(100 * cenCount, fileItems.length, 2);
+    return this.invoiceModel.findByIdAndUpdate(id, { progress }, { new: true }).exec();
   }
 }

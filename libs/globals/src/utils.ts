@@ -21,3 +21,11 @@ export const textToRegExp = (text: string) => {
   }
   return new RegExp('', 'i');
 };
+
+export const divideWithPrecision = (first: number, second: number, precision: number) => {
+  if (second === 0) {
+    throw new Error('Division by zero is not allowed.');
+  }
+  const factor = Math.pow(10, precision);
+  return Math.floor((factor * first) / second) / factor;
+};

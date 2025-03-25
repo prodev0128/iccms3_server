@@ -42,6 +42,9 @@ export class Invoice {
 
   @Prop()
   checker: string;
+
+  @Prop({ default: 0 })
+  progress: number;
 }
 
 const InvoiceSchema = SchemaFactory.createForClass(Invoice);

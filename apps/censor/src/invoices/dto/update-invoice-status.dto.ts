@@ -3,8 +3,8 @@ import { ArrayNotEmpty, IsArray, IsOptional, IsString } from 'class-validator';
 
 export class UpdateInvoicesStatusDto {
   @ApiProperty({
-    description: 'Array of invoice IDs to update.',
-    example: ['invoice123', 'invoice456'],
+    description: 'Array of invoice ids to update.',
+    example: ['invoice1', 'invoice2', 'invoice3'],
     type: [String],
   })
   @IsArray()
@@ -33,4 +33,9 @@ export class UpdateInvoicesStatusDto {
   @IsString()
   @IsOptional()
   checker?: string;
+
+  @ApiPropertyOptional({ description: 'Progress of invoice' })
+  @IsString()
+  @IsOptional()
+  progress?: number;
 }

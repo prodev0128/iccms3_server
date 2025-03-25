@@ -19,15 +19,15 @@ export const config = {
   },
   auth: {
     name: 'AuthApp',
-    port: parseInt(process.env.PORT_APP_AUTH) || 3128,
+    port: parseInt(process.env.PORT_APP_AUTH) || 3130,
   },
   admin: {
     name: 'AdminApp',
-    port: parseInt(process.env.PORT_APP_ADMIN) || 3129,
+    port: parseInt(process.env.PORT_APP_ADMIN) || 3131,
   },
   censor: {
     name: 'CensorApp',
-    port: parseInt(process.env.PORT_APP_CENSOR) || 3130,
+    port: parseInt(process.env.PORT_APP_CENSOR) || 3132,
   },
   incoming: {
     name: 'IncomingApp',
