@@ -41,8 +41,6 @@ export class AppService implements OnModuleInit {
       case DataTypes.FTP:
         this.handleIncomingFtp(task);
         break;
-      case DataTypes.OUTFTP:
-        break;
       default:
         break;
     }

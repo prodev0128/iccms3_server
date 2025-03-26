@@ -15,8 +15,8 @@ export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
   @Get()
-  @ApiQuery({ description: 'ids', name: 'ids' })
-  findFiles(@Query('ids') idsText: string) {
+  @ApiQuery({ description: 'invoiceIds', name: 'invoiceIds' })
+  findFiles(@Query('invoiceIds') idsText: string) {
     return this.filesService.findFiles(idsText);
   }
 

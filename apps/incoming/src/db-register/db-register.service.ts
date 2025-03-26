@@ -58,7 +58,6 @@ export class DbRegisterService {
 
     const checkFileTypeResult = this.checkFileType(fileName);
     const foundOrg: any = this.checkOrganization(fileName);
-    console.log('foundOrg', foundOrg, foundOrg?.value);
 
     let invoiceID = null;
     if (checkFileTypeResult.fileType !== FileTypes.NORMAL) {

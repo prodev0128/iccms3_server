@@ -36,7 +36,7 @@ export class FilesService {
   }
 
   async censorFiles(censorFilesDto: CensorFilesDto) {
-    const findQuery = { id: { $in: censorFilesDto.ids.map((fileId) => new Types.ObjectId(fileId)) } };
+    const findQuery = { _id: { $in: censorFilesDto.ids } };
     const updateQuery = { cenFlag: censorFilesDto.cenFlag };
     await this.fileModel.updateMany(findQuery, updateQuery).exec();
 

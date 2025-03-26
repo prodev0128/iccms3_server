@@ -1,9 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '@app/jwt';
+import { User } from '@app/user';
 
-import { RolesDto } from './dto/role.dto';
 import { UserDto } from './dto/user.dto';
 import { UsersService } from './users.service';
 
@@ -25,6 +25,11 @@ export class UsersController {
     @Query('sortModel') sortModel: string,
   ) {
     return this.usersService.findUsers(page, pageSize, filterModel, sortModel);
+  }
+
+  @Get('dep')
+  findDepUsers(@User() user: any) {
+    return this.usersService.findDepUsers(user);
   }
 
   @Post()

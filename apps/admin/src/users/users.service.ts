@@ -7,7 +7,6 @@ import { User, UserDocument } from '@app/database';
 import { config } from '@app/globals/config';
 import { filterQueryBuilder, sortQueryBuilder } from '@app/globals/query-builder';
 
-import { RolesDto } from './dto/role.dto';
 import { UserDto } from './dto/user.dto';
 
 @Injectable()
@@ -31,6 +30,12 @@ export class UsersService {
       .limit(pageSize)
       .exec();
     return { totalCount, users };
+  }
+
+  async findDepUsers(user: any) {
+    const findQuery = { dep: user.dep };
+    const depUsers = await this.userModel.find(findQuery).exec();
+    return { depUsers };
   }
 
   async createUser(userDto: UserDto) {

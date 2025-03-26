@@ -6,7 +6,7 @@ dotenv.config();
 
 export interface AppInfo {
   path: string;
-  type: DataTypes.EMAIL | DataTypes.FTP | DataTypes.OUTFTP;
+  type: DataTypes.EMAIL | DataTypes.FTP;
 }
 
 export const config = {
@@ -28,6 +28,14 @@ export const config = {
   censor: {
     name: 'CensorApp',
     port: parseInt(process.env.PORT_APP_CENSOR) || 3132,
+  },
+  stat: {
+    name: 'StatApp',
+    port: parseInt(process.env.PORT_APP_STAT) || 3133,
+  },
+  media: {
+    name: 'MediaApp',
+    port: parseInt(process.env.PORT_APP_MEDIA) || 3134,
   },
   incoming: {
     name: 'IncomingApp',
