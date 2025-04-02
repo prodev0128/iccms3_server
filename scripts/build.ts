@@ -1,4 +1,3 @@
-import './App.css';
 import fs from 'fs-extra';
 import { runProcess } from './run-process';
 

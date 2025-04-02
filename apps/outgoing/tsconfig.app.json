@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "declaration": false,
-    "outDir": "../../dist/apps/media",
+    "outDir": "../../dist/apps/outgoing",
     "rootDir": "../../"
   },
   "include": ["src/**/*", "../../libs/**/*"],

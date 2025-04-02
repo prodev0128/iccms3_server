@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "tsConfigPath": "tsconfig.json",
     "webpack": true
   },
   "monorepo": true,
@@ -84,6 +83,15 @@
       "sourceRoot": "apps/media/src",
       "compilerOptions": {
         "tsConfigPath": "apps/media/tsconfig.app.json"
+      }
+    },
+    "outgoing": {
+      "type": "application",
+      "root": "apps/outgoing",
+      "entryFile": "main",
+      "sourceRoot": "apps/outgoing/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/outgoing/tsconfig.app.json"
       }
     },
     "setup": {
