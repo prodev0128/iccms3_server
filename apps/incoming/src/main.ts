@@ -6,12 +6,15 @@ import { config } from '@app/globals/config';
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
-  execSync(`del logs\\${config.incoming.name}*.*`);
+  const name = config.incoming.name;
+  if (process.env.NODE_ENV === 'development') {
+    execSync(`del logs\\${name}*.*`);
+  }
 
   for (const appInfo of config.env.watchSubDirs) {
     const app = await NestFactory.createApplicationContext(AppModule.forRoot(appInfo));
     const logger = app.get('GLOBAL_LOGGER');
-    logger.log(`🟢 Incoming-${appInfo.path} Module working at background 🟢`);
+    logger.log(`🟢 ${name}-${appInfo.path} Module working at background 🟢`);
   }
 }
 

@@ -8,7 +8,9 @@ import { AppModule } from './app/app.module';
 
 async function bootstrap() {
   const name = config.admin.name;
-  execSync(`del logs\\${name}*.*`);
+  if (process.env.NODE_ENV === 'development') {
+    execSync(`del logs\\${name}*.*`);
+  }
 
   const app = await NestFactory.create(AppModule);
   app.enableCors();
