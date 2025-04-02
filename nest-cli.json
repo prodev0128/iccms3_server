@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "tsConfigPath": "tsconfig.json",
     "webpack": true
   },
   "monorepo": true,

@@ -35,7 +35,6 @@ export enum DataTypes {
   ALL = 'ALL',
   EMAIL = 'EMAIL',
   FTP = 'FTP',
-  OUTFTP = 'OUTFTP',
 }
 
 export enum FindCategory {

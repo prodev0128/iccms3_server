@@ -3,8 +3,7 @@
   "compilerOptions": {
     "declaration": false,
     "outDir": "../../dist/apps/censor",
-    "rootDir": "../../"
   },
-  "include": ["src/**/*", "../../libs/**/*"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
 }
