@@ -14,6 +14,7 @@ export class FileLogger extends Logger {
     this.logFilePath = path.join(
       process.cwd(),
       'logs',
+      this.appName,
       `${this.appName}_${moment().format('YYYY-MM-DD-HH-mm-ss')}.log`,
     );
     this.ensureLogFile();

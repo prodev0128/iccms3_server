@@ -1,5 +1,4 @@
 import { NestFactory } from '@nestjs/core';
-import { execSync } from 'child_process';
 
 import { config } from '@app/globals/config';
 import { SetupService } from '@app/setup';
@@ -7,11 +6,6 @@ import { SetupService } from '@app/setup';
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
-  const name = config.media.name;
-  if (process.env.NODE_ENV === 'development') {
-    execSync(`del logs\\${name}*.*`);
-  }
-
   const app = await NestFactory.create(AppModule);
   app.enableCors();
 
@@ -21,7 +15,7 @@ async function bootstrap() {
 
   const port = config.media.port;
   await app.listen(port);
-  logger.log(`🟢 ${name} listening at ${port} 🟢`);
+  logger.log(`🟢 ${config.media.name} listening at ${port} 🟢`);
 }
 
 bootstrap();
