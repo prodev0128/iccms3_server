@@ -88,10 +88,18 @@ export enum Roles {
   PUB_VIEW = 'PUB_VIEW',
   FLOW_VIEW = 'FLOW_VIEW',
 }
-
-export enum FileTypes {
-  PART = 'PART',
-  COMPRESSION = 'COMPRESSION',
+export enum InvoiceTypes {
   NORMAL = 'NORMAL',
-  ATTACHMENT = 'ATTACHMENT',
+  ATTACHEMENT = 'ATTACHEMENT',
+  COMPRESSION = 'COMPRESSION',
+  PART = 'PART',
+}
+
+export enum FileTypes {}
+
+export enum SettingKeys {
+  AUTO_INCOMING = 'AUTO_INCOMING',
+  AUTO_OUTGOING = 'AUTO_OUTGOING',
+  AUTO_TRANSFER = 'AUTO_TRANSFER',
+  AUTO_RECEIVE = 'AUTO_RECEIVE',
 }

@@ -4,29 +4,25 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { FSWatcher } from 'chokidar';
 import chokidar from 'chokidar';
 import fs from 'fs-extra';
-import path from 'path';
-
-import { config } from '@app/globals/config';
 
 import { EventType } from '../types';
 
 @Injectable()
 export class FileWatcherService implements OnModuleDestroy {
   private watcher: FSWatcher;
-  private instanceID = '';
+  private watchDirectory = '';
 
   constructor(
     @Inject('GLOBAL_LOGGER') private readonly logger: Logger,
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
-  async start(instanceID: string) {
-    this.instanceID = instanceID;
-    const watchDirectory = path.join(config.env.watchDirectory, this.instanceID, config.env.progress.before);
+  async start(watchDirectory: string) {
+    this.watchDirectory = watchDirectory;
     try {
-      await fs.mkdir(watchDirectory, { recursive: true });
+      await fs.mkdir(this.watchDirectory, { recursive: true });
 
-      this.watcher = chokidar.watch(watchDirectory, {
+      this.watcher = chokidar.watch(this.watchDirectory, {
         ignored: /^\./, // Ignore dotfiles
         persistent: true, // Keep watching indefinitely
       });
@@ -37,20 +33,24 @@ export class FileWatcherService implements OnModuleDestroy {
       });
 
       this.watcher.on('error', (error: Error) => {
-        this.logger.error(`Error in file watcher for instance ${this.instanceID}: ${error.message}`);
+        this.logger.error(`Error in file watcher for instance ${this.watchDirectory}: ${error.message}`);
       });
 
-      this.logger.log(`File watcher started for directory: ${watchDirectory}`);
+      this.logger.log(`File watcher started for directory: ${this.watchDirectory}`);
     } catch (error) {
-      this.logger.error(`Failed to start file watcher for directory: ${watchDirectory}. Reason: ${error.message}`);
+      this.logger.error(`Failed to start file watcher for directory: ${this.watchDirectory}. ${error.message}`);
     }
   }
 
-  async onModuleDestroy() {
+  async stop() {
     if (!this.watcher) {
       return;
     }
     await this.watcher.close();
-    this.logger.log(`File watcher ${this.instanceID} stopped.`);
+    this.logger.log(`File watcher ${this.watchDirectory} stopped.`);
+  }
+
+  onModuleDestroy() {
+    stop();
   }
 }

@@ -5,7 +5,6 @@ import { GlobalsModule } from '@app/globals';
 import { config } from '@app/globals/config';
 import { JwtModule } from '@app/jwt';
 import { LoggerModule } from '@app/logger';
-import { SetupModule } from '@app/setup';
 
 import { FilesModule } from '../files/files.module';
 import { InvoicesModule } from '../invoices/invoices.module';
@@ -18,7 +17,6 @@ import { AppService } from './app.service';
     GlobalsModule,
     JwtModule,
     LoggerModule.forRoot(config.censor.name),
-    SetupModule,
     FilesModule,
     InvoicesModule,
   ],

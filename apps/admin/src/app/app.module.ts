@@ -4,7 +4,6 @@ import { DatabaseModule } from '@app/database';
 import { config } from '@app/globals/config';
 import { JwtModule } from '@app/jwt';
 import { LoggerModule } from '@app/logger';
-import { SetupModule } from '@app/setup';
 
 import { CodesModule } from '../codes/codes.module';
 import { NewsModule } from '../news/news.module';
@@ -18,7 +17,6 @@ import { AppService } from './app.service';
     DatabaseModule,
     JwtModule,
     LoggerModule.forRoot(config.admin.name),
-    SetupModule,
     UsersModule,
     CodesModule,
     SettingsModule,

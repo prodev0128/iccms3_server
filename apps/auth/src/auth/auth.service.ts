@@ -19,6 +19,7 @@ export class AuthService {
   async login(loginDto: LoginDto) {
     const { password, userID } = loginDto;
     const user = await this.userModel.findOne({ userID });
+    console.log('user', await bcrypt.hash(password, 10));
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new UnauthorizedException();
     }

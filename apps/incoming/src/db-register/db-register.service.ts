@@ -7,7 +7,7 @@ import path from 'path';
 import { File, FileDocument, Invoice, InvoiceDocument } from '@app/database';
 import { GlobalsService } from '@app/globals';
 import { AppInfo, config } from '@app/globals/config';
-import { DataTypes, FileTypes, InvoiceStatus } from '@app/globals/constants';
+import { DataTypes, FileTypes, InvoiceStatus, InvoiceTypes } from '@app/globals/constants';
 import { textToRegExp } from '@app/globals/utils';
 
 @Injectable()
@@ -31,7 +31,7 @@ export class DbRegisterService {
           textToRegExp(foundCompressionPart?.options?.type),
           foundCompressionPart?.options?.originalType,
         ),
-        fileType: FileTypes.PART,
+        fileType: InvoiceTypes.PART,
       };
     }
 
@@ -39,9 +39,9 @@ export class DbRegisterService {
     const compressionTypes = this.globalsService.getCodes('compressionType');
     const foundCompression = compressionTypes.find((compressionType: any) => fileName.endsWith(compressionType.value));
     if (foundCompression) {
-      return { name: fileName, fileType: FileTypes.COMPRESSION };
+      return { name: fileName, fileType: InvoiceTypes.COMPRESSION };
     }
-    return { name: fileName, fileType: FileTypes.NORMAL };
+    return { name: fileName, fileType: InvoiceTypes.NORMAL };
   }
 
   checkOrganization(fileName: string) {
@@ -50,9 +50,8 @@ export class DbRegisterService {
   }
 
   async registerFtp(appInfo: AppInfo, srcPath: string) {
-    const srcDir = path.join(config.env.watchDirectory, appInfo.path, config.env.progress.registering);
     const fileName = path.basename(srcPath);
-    const filePath = path.relative(srcDir, srcPath);
+    const filePath = path.relative(config.env.watchDirectory, srcPath);
     const fileStats = await fs.stat(srcPath);
     const fileSize = fileStats.size;
 
@@ -60,9 +59,9 @@ export class DbRegisterService {
     const foundOrg: any = this.checkOrganization(fileName);
 
     let invoiceID = null;
-    if (checkFileTypeResult.fileType !== FileTypes.NORMAL) {
+    if (checkFileTypeResult.fileType !== InvoiceTypes.NORMAL) {
       const foundInvoiceItem = await this.invoiceModel
-        .findOne({ name: checkFileTypeResult.name, status: InvoiceStatus.UNDEFINED, fileType: FileTypes.PART })
+        .findOne({ name: checkFileTypeResult.name, status: InvoiceStatus.UNDEFINED, fileType: InvoiceTypes.PART })
         .exec();
       if (foundInvoiceItem) {
         invoiceID = foundInvoiceItem.id;
@@ -89,7 +88,7 @@ export class DbRegisterService {
     await file.save();
   }
 
-  async start(appInfo: AppInfo, srcPath: string) {
+  async start(appInfo: AppInfo, srcPath: string, org: object | null, compressionInfo: object) {
     if (!fs.existsSync(srcPath)) {
       this.logger.warn(`Database register skipped. File not found: ${srcPath}`);
       return;

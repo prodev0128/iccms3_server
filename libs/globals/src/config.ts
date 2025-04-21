@@ -37,11 +37,17 @@ export const config = {
     name: 'MediaApp',
     port: parseInt(process.env.PORT_APP_MEDIA) || 3134,
   },
+  upload: {
+    name: 'UploadApp',
+    port: parseInt(process.env.PORT_APP_UPLOAD) || 3135,
+  },
   incoming: {
     name: 'IncomingApp',
+    port: parseInt(process.env.PORT_APP_INCOMING) || 3136,
   },
   outgoing: {
     name: 'OutgoingApp',
+    port: parseInt(process.env.PORT_APP_OUTGOING) || 3137,
   },
   globals: {
     name: 'GlobalsLib',
@@ -53,6 +59,6 @@ export const config = {
   },
   mongodb: {
     name: 'MongoLib',
-    uri: process.env.MONGODB_URI || 'mongodb://admin:qjsslftys128@0.0.0.0:27017/iccms3',
+    uri: process.env.MONGO_URI || 'mongodb://admin:qjsslftys128@0.0.0.0:27017/iccms3?authSource=admin',
   },
 };

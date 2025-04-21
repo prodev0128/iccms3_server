@@ -21,6 +21,10 @@ export class FileMoveService {
     const destDir = path.dirname(destPath);
     while (true) {
       try {
+        if (!fs.existsSync(srcPath)) {
+          this.logger.warn(`File move skipped. File not found: ${srcPath}`);
+          return;
+        }
         await fs.mkdir(destDir, { recursive: true });
         await fs.rename(srcPath, destPath);
         this.logger.log(`File successfully moved to: ${destPath}`);

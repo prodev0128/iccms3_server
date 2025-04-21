@@ -1,15 +1,21 @@
 import { NestFactory } from '@nestjs/core';
 
 import { config } from '@app/globals/config';
+import { SetupService } from '@app/setup';
 
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
-  for (const appInfo of config.env.watchSubDirs) {
-    const app = await NestFactory.createApplicationContext(AppModule.forRoot(appInfo));
-    const logger = app.get('GLOBAL_LOGGER');
-    logger.log(`🟢 ${config.outgoing.name}-${appInfo.path} Module working at background 🟢`);
-  }
+  const app = await NestFactory.create(AppModule);
+  app.enableCors();
+
+  const logger = app.get('GLOBAL_LOGGER');
+  SetupService.setupSwagger(app);
+  SetupService.setupApiLogger(app, logger);
+
+  const port = config.outgoing.port;
+  await app.listen(port);
+  logger.log(`🟢 ${config.outgoing.name} listening at ${port} 🟢`);
 }
 
 bootstrap();
