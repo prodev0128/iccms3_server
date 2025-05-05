@@ -1,4 +1,4 @@
-import { Logger, OnModuleDestroy, Scope } from '@nestjs/common';
+import { Logger, OnModuleDestroy } from '@nestjs/common';
 import { Inject, Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { FSWatcher } from 'chokidar';
@@ -7,7 +7,7 @@ import fs from 'fs-extra';
 
 import { EventType, ProviderName } from '../types';
 
-@Injectable({ scope: Scope.TRANSIENT })
+@Injectable()
 export class FileWatcherService implements OnModuleDestroy {
   private watcher: FSWatcher;
   private watchDirectory = '';

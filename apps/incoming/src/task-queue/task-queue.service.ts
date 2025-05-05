@@ -7,7 +7,7 @@ import { EventType, ProviderName, Task, TaskStatus } from '../types';
 @Injectable()
 export class TaskQueueService {
   private tasks: Task[] = [];
-  private taskThresholdCount = 1;
+  private taskThresholdCount = 10;
 
   constructor(
     @Inject(ProviderName.GLOBAL_LOGGER) private readonly logger: Logger,

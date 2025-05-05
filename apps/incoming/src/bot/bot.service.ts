@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, Scope } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -19,7 +19,7 @@ import { FileNameCheckService } from '../work/file-name-check.service';
 import { InvoiceCheckService } from '../work/invoice-check.service';
 import { OrgFindService } from '../work/org-find.service';
 
-@Injectable()
+@Injectable({ scope: Scope.TRANSIENT })
 export class BotService {
   constructor(
     @Inject(ProviderName.APP_INFO) private readonly appInfo: AppInfo,
@@ -39,6 +39,7 @@ export class BotService {
   @OnEvent(EventType.BotStarted)
   async handleStart() {
     const watchDirectory = path.join(config.env.watchDirectory, this.appInfo.path, config.env.progress.before);
+    console.log('watchDirectory', watchDirectory);
     await this.fileWatcherService.start(watchDirectory);
   }
 
