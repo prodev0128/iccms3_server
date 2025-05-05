@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { TaskQueueService } from './task-queue.service';
 
 @Module({
-  exports: [TaskQueueService],
   providers: [TaskQueueService],
+  exports: [TaskQueueService],
 })
 export class TaskQueueModule {}

@@ -15,7 +15,6 @@ export class GlobalsService implements OnModuleInit {
 
   async onModuleInit() {
     await this.fetchAllCodes();
-    this.logger.log('Load Codes Successfully.');
   }
 
   async fetchAllCodes() {
@@ -28,6 +27,7 @@ export class GlobalsService implements OnModuleInit {
       total[type] = total[type].concat(code);
       return total;
     }, {});
+    this.logger.log('Load Codes Successfully.');
   }
 
   getCodes(codeOption: string) {

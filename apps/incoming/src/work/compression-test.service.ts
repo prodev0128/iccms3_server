@@ -8,10 +8,12 @@ import { File, FileDocument } from '@app/database';
 import { GlobalsService } from '@app/globals';
 import { textToRegExp } from '@app/globals/utils';
 
+import { ProviderName } from '../types';
+
 @Injectable()
 export class CompressionTestService {
   constructor(
-    @Inject('GLOBAL_LOGGER') private readonly logger: Logger,
+    @Inject(ProviderName.GLOBAL_LOGGER) private readonly logger: Logger,
     @InjectModel(File.name) private fileModel: Model<FileDocument>,
     private readonly globalsService: GlobalsService,
   ) {}

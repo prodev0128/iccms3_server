@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 import { DatabaseModule } from '@app/database';
 import { GlobalsModule } from '@app/globals';
@@ -6,12 +7,17 @@ import { config } from '@app/globals/config';
 import { LoggerModule } from '@app/logger';
 
 import { BotModule } from '../bot/bot.module';
-import { TaskQueueModule } from '../task-queue/task-queue.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 @Module({
-  imports: [DatabaseModule, GlobalsModule, TaskQueueModule, LoggerModule.forRoot(config.incoming.name), BotModule],
+  imports: [
+    DatabaseModule,
+    GlobalsModule,
+    EventEmitterModule.forRoot(),
+    LoggerModule.forRoot(config.incoming.name),
+    ...config.env.watchSubDirs.map((dir) => BotModule.register(dir)),
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

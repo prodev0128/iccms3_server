@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { FileWatcherService } from './file-watcher.service';
 
 @Module({
-  exports: [FileWatcherService],
   providers: [FileWatcherService],
+  exports: [FileWatcherService],
 })
 export class FileWatcherModule {}

@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -6,23 +6,24 @@ import path from 'path';
 
 import { Setting, SettingDocument } from '@app/database';
 import { AppInfo, config } from '@app/globals/config';
-import { DataTypes, SettingKeys } from '@app/globals/constants';
+import { DataTypes } from '@app/globals/constants';
 
-import { CompressionTestService } from '../compression-test/compression-test.service';
-import { DbRegisterService } from '../db-register/db-register.service';
-import { EmailParserService } from '../email-parser/email-parser.service';
-import { FileMoveService } from '../file-move/file-move.service';
-import { FileNameCheckService } from '../file-name-check/file-name-check.service';
 import { FileWatcherService } from '../file-watcher/file-watcher.service';
-import { InvoiceCheckService } from '../invoice-check/invoice-check.service';
-import { OrgFindService } from '../org-find/org-find.service';
 import { TaskQueueService } from '../task-queue/task-queue.service';
-import { EventType, Task } from '../types';
+import { EventType, ProviderName, Task } from '../types';
+import { CompressionTestService } from '../work/compression-test.service';
+import { DbRegisterService } from '../work/db-register.service';
+import { EmailParserService } from '../work/email-parser.service';
+import { FileMoveService } from '../work/file-move.service';
+import { FileNameCheckService } from '../work/file-name-check.service';
+import { InvoiceCheckService } from '../work/invoice-check.service';
+import { OrgFindService } from '../work/org-find.service';
 
 @Injectable()
-export class BotService implements OnModuleInit, OnModuleDestroy {
+export class BotService {
   constructor(
-    @Inject('GLOBAL_LOGGER') private readonly logger: Logger,
+    @Inject(ProviderName.APP_INFO) private readonly appInfo: AppInfo,
+    @Inject(ProviderName.GLOBAL_LOGGER) private readonly logger: Logger,
     @InjectModel(Setting.name) private settingModel: Model<SettingDocument>,
     private readonly taskQueueService: TaskQueueService,
     private readonly emailParserService: EmailParserService,
@@ -35,55 +36,43 @@ export class BotService implements OnModuleInit, OnModuleDestroy {
     private readonly invoiceCheckService: InvoiceCheckService,
   ) {}
 
-  onModuleInit() {
-    this.check();
+  @OnEvent(EventType.BotStarted)
+  async handleStart() {
+    const watchDirectory = path.join(config.env.watchDirectory, this.appInfo.path, config.env.progress.before);
+    await this.fileWatcherService.start(watchDirectory);
   }
 
-  onModuleDestroy() {
-    this.stop();
-  }
-
-  async check() {
-    const flagItem = await this.settingModel.findOne({ key: SettingKeys.AUTO_INCOMING });
-    console.log('flagItem', flagItem);
-    if (!flagItem || !flagItem.value) {
-      return;
-    }
-    this.logger.log(`Incoming bot started`);
-    for (const appInfo of config.env.watchSubDirs) {
-      const watchDirectory = path.join(config.env.watchDirectory, appInfo.path, config.env.progress.before);
-      await this.fileWatcherService.start(watchDirectory);
-    }
-  }
-
-  stop() {
+  @OnEvent(EventType.BotStopped)
+  async handleStop() {
     this.fileWatcherService.stop();
-    this.logger.log(`Incoming bot stopped`);
+    this.logger.log('Incoming bot stopped:', this.appInfo.path);
   }
 
   @OnEvent(EventType.FileAdded)
   async handleFileAdded(filePath: string) {
+    this.logger.log(EventType.FileAdded, this.appInfo.path, ':', filePath);
     this.taskQueueService.addTask(filePath);
   }
 
-  // @OnEvent(EventType.TaskAdded)
-  // async handleTask(task: Task) {
-  //   const fileMoveRes = await this.fileMoveService.start(this.appInfo, task.data);
-  //   const fileNameCheckRes = await this.fileNameCheckService.start(fileMoveRes);
-  //   if (fileNameCheckRes) {
-  //     const orgFindRes = await this.orgFindService.start(fileMoveRes);
-  //     if (this.appInfo.type === DataTypes.EMAIL) {
-  //       // const emailParseRes = await this.emailParserService.start();
-  //     }
-  //     const compressionTestRes = await this.compressionTestService.start(fileMoveRes);
-  //     const dbRegisterRes = await this.dbRegisterService.start(
-  //       this.appInfo,
-  //       fileMoveRes,
-  //       orgFindRes,
-  //       compressionTestRes,
-  //     );
-  //     await this.invoiceCheckService.start(dbRegisterRes);
-  //   }
-  //   this.taskQueueService.completeTask(task);
-  // }
+  @OnEvent(EventType.TaskAdded)
+  async handleTask(task: Task) {
+    this.logger.log(EventType.TaskAdded, ':', task.data, this.appInfo.path);
+    const fileMoveRes = await this.fileMoveService.start(this.appInfo, task.data);
+    const fileNameCheckRes = await this.fileNameCheckService.start(fileMoveRes);
+    if (fileNameCheckRes) {
+      const orgFindRes = await this.orgFindService.start(fileMoveRes);
+      if (this.appInfo.type === DataTypes.EMAIL) {
+        // const emailParseRes = await this.emailParserService.start();
+      }
+      const compressionTestRes = await this.compressionTestService.start(fileMoveRes);
+      const dbRegisterRes = await this.dbRegisterService.start(
+        this.appInfo,
+        fileMoveRes,
+        orgFindRes,
+        compressionTestRes,
+      );
+      await this.invoiceCheckService.start(dbRegisterRes);
+    }
+    this.taskQueueService.completeTask(task);
+  }
 }

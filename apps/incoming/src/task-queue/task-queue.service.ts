@@ -2,7 +2,7 @@ import { Logger } from '@nestjs/common';
 import { Inject, Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
-import { EventType, Task, TaskStatus } from '../types';
+import { EventType, ProviderName, Task, TaskStatus } from '../types';
 
 @Injectable()
 export class TaskQueueService {
@@ -10,7 +10,7 @@ export class TaskQueueService {
   private taskThresholdCount = 1;
 
   constructor(
-    @Inject('GLOBAL_LOGGER') private readonly logger: Logger,
+    @Inject(ProviderName.GLOBAL_LOGGER) private readonly logger: Logger,
     private readonly eventEmitter: EventEmitter2,
   ) {}
 

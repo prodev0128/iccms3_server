@@ -6,9 +6,11 @@ import path from 'path';
 import { AppInfo, config } from '@app/globals/config';
 import { delay } from '@app/globals/utils';
 
+import { ProviderName } from '../types';
+
 @Injectable()
 export class FileMoveService {
-  constructor(@Inject('GLOBAL_LOGGER') private readonly logger: Logger) {}
+  constructor(@Inject(ProviderName.GLOBAL_LOGGER) private readonly logger: Logger) {}
 
   async start(appInfo: AppInfo, srcPath: string) {
     if (!fs.existsSync(srcPath)) {

@@ -7,13 +7,15 @@ import path from 'path';
 import { File, FileDocument, Invoice, InvoiceDocument } from '@app/database';
 import { GlobalsService } from '@app/globals';
 import { AppInfo, config } from '@app/globals/config';
-import { DataTypes, FileTypes, InvoiceStatus, InvoiceTypes } from '@app/globals/constants';
+import { DataTypes, InvoiceStatus, InvoiceTypes } from '@app/globals/constants';
 import { textToRegExp } from '@app/globals/utils';
+
+import { ProviderName } from '../types';
 
 @Injectable()
 export class DbRegisterService {
   constructor(
-    @Inject('GLOBAL_LOGGER') private readonly logger: Logger,
+    @Inject(ProviderName.GLOBAL_LOGGER) private readonly logger: Logger,
     @InjectModel(File.name) private fileModel: Model<FileDocument>,
     @InjectModel(Invoice.name) private invoiceModel: Model<InvoiceDocument>,
     private readonly globalsService: GlobalsService,

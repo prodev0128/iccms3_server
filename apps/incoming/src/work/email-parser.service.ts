@@ -5,9 +5,11 @@ import { simpleParser } from 'mailparser';
 import nodemailer from 'nodemailer';
 import path from 'path';
 
+import { ProviderName } from '../types';
+
 @Injectable()
 export class EmailParserService {
-  constructor(@Inject('GLOBAL_LOGGER') private readonly logger: Logger) {}
+  constructor(@Inject(ProviderName.GLOBAL_LOGGER) private readonly logger: Logger) {}
 
   async parseEmail(srcPath: string, destDir: string) {
     try {
