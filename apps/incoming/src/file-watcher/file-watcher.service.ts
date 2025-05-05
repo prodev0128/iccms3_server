@@ -14,7 +14,7 @@ export class FileWatcherService implements OnModuleDestroy {
 
   constructor(
     @Inject(ProviderName.GLOBAL_LOGGER) private readonly logger: Logger,
-    @Inject(ProviderName.EVENT_EMITTER) private readonly eventEmitter: EventEmitter2,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async start(watchDirectory: string) {
