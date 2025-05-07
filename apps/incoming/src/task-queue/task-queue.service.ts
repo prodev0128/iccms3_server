@@ -1,18 +1,25 @@
-import { Logger } from '@nestjs/common';
+import { Logger, Scope } from '@nestjs/common';
 import { Inject, Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
+import { AppInfo } from '@app/globals/config';
+
 import { EventType, ProviderName, Task, TaskStatus } from '../types';
 
-@Injectable()
+@Injectable({ scope: Scope.TRANSIENT })
 export class TaskQueueService {
   private tasks: Task[] = [];
   private taskThresholdCount = 10;
+  private appInfo: AppInfo;
 
   constructor(
     @Inject(ProviderName.GLOBAL_LOGGER) private readonly logger: Logger,
     private readonly eventEmitter: EventEmitter2,
   ) {}
+
+  setAppInfo(appInfo: AppInfo) {
+    this.appInfo = appInfo;
+  }
 
   addTask(data: string) {
     const newTask: Task = {
@@ -32,7 +39,7 @@ export class TaskQueueService {
       return;
     }
     foundTask.status = TaskStatus.InProgress;
-    this.eventEmitter.emit(EventType.TaskAdded, foundTask);
+    this.eventEmitter.emit(`${EventType.TaskAdded}.${this.appInfo.path}`, foundTask, this.appInfo.path);
   }
 
   completeTask(completedTask: Task) {

@@ -28,4 +28,4 @@ import { OrgFindService } from './org-find.service';
     InvoiceCheckService,
   ],
 })
-export class WorkModule {}
+export class MainWorkModule {}

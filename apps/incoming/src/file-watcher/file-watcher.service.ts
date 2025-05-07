@@ -1,24 +1,29 @@
-import { Logger, OnModuleDestroy } from '@nestjs/common';
+import { Logger, OnModuleDestroy, Scope } from '@nestjs/common';
 import { Inject, Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { FSWatcher } from 'chokidar';
 import chokidar from 'chokidar';
 import fs from 'fs-extra';
 
+import { AppInfo } from '@app/globals/config';
+import { delay } from '@app/globals/utils';
+
 import { EventType, ProviderName } from '../types';
 
-@Injectable()
+@Injectable({ scope: Scope.TRANSIENT })
 export class FileWatcherService implements OnModuleDestroy {
   private watcher: FSWatcher;
   private watchDirectory = '';
+  private appInfo: AppInfo;
 
   constructor(
     @Inject(ProviderName.GLOBAL_LOGGER) private readonly logger: Logger,
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
-  async start(watchDirectory: string) {
+  async start(watchDirectory: string, appInfo: AppInfo) {
     this.watchDirectory = watchDirectory;
+    this.appInfo = appInfo;
     try {
       await fs.mkdir(this.watchDirectory, { recursive: true });
 
@@ -27,9 +32,14 @@ export class FileWatcherService implements OnModuleDestroy {
         persistent: true, // Keep watching indefinitely
       });
 
-      this.watcher.on('add', (path) => {
-        this.logger.log(`File added: ${path}`);
-        this.eventEmitter.emit(EventType.FileAdded, path);
+      this.watcher.on('add', async (path) => {
+        this.logger.log(`File detected: ${path}`);
+        try {
+          await this.waitUntilStable(path);
+          this.eventEmitter.emit(`${EventType.FileAdded}.${this.appInfo.path}`, path, this.appInfo.path);
+        } catch (err) {
+          this.logger.error(`File stabilization failed for: ${path}. ${err.message}`);
+        }
       });
 
       this.watcher.on('error', (error: Error) => {
@@ -52,5 +62,31 @@ export class FileWatcherService implements OnModuleDestroy {
 
   onModuleDestroy() {
     stop();
+  }
+
+  private async waitUntilStable(path: string, interval = 1000, stableThreshold = 3): Promise<void> {
+    let lastSize = -1;
+    let stableCount = 0;
+
+    while (true) {
+      try {
+        const { size } = await fs.stat(path);
+
+        if (size === lastSize) {
+          stableCount++;
+          if (stableCount >= stableThreshold) {
+            return; // File is stable
+          }
+        } else {
+          stableCount = 0;
+          lastSize = size;
+        }
+      } catch {
+        this.logger.warn(`Waiting for file to appear or be readable: ${path}`);
+        stableCount = 0;
+      }
+
+      await delay(interval);
+    }
   }
 }

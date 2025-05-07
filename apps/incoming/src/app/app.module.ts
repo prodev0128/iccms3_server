@@ -14,7 +14,12 @@ import { AppService } from './app.service';
   imports: [
     DatabaseModule,
     GlobalsModule,
-    EventEmitterModule.forRoot(),
+    EventEmitterModule.forRoot({
+      wildcard: true,
+      delimiter: '.',
+      newListener: false,
+      maxListeners: 10,
+    }),
     LoggerModule.forRoot(config.incoming.name),
     ...config.env.watchSubDirs.map((dir) => BotModule.register(dir)),
   ],

@@ -1,35 +1,25 @@
-import { DynamicModule, Module, Scope } from '@nestjs/common';
+import { DynamicModule, Module } from '@nestjs/common';
 
 import { AppInfo } from '@app/globals/config';
 
 import { FileWatcherModule } from '../file-watcher/file-watcher.module';
+import { MainWorkModule } from '../main-work/main-work.module';
 import { TaskQueueModule } from '../task-queue/task-queue.module';
 import { ProviderName } from '../types';
-import { WorkModule } from '../work/work.module';
 import { BotService } from './bot.service';
 
 @Module({})
 export class BotModule {
   static register(appInfo: AppInfo): DynamicModule {
-    const appInfoToken = `Incoming_${appInfo.path}_bot`;
-
     return {
       module: BotModule,
-      imports: [FileWatcherModule, TaskQueueModule, WorkModule],
+      imports: [FileWatcherModule, TaskQueueModule, MainWorkModule],
       providers: [
         {
-          provide: appInfoToken,
+          provide: ProviderName.APP_INFO,
           useValue: appInfo,
         },
-        {
-          provide: ProviderName.APP_INFO,
-          useExisting: appInfoToken,
-        },
-        {
-          provide: BotService,
-          useClass: BotService,
-          scope: Scope.TRANSIENT, // ✅ THIS IS CRUCIAL
-        },
+        BotService,
       ],
       exports: [BotService],
     };
