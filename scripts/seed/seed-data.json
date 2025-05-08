@@ -1,0 +1,38 @@
+{
+  "settings": [
+    {
+      "key": "AUTO_INCOMING",
+      "name": "Auto_Incoming",
+      "value": true
+    },
+    {
+      "key": "AUTO_OUTGOING",
+      "name": "Auto_Outgoing",
+      "value": true
+    },
+    {
+      "key": "AUTO_TRANSFER",
+      "name": "Auto_Transfer",
+      "value": true
+    },
+    {
+      "key": "AUTO_RECEIVE",
+      "name": "Auto_Receive",
+      "value": true
+    }
+  ],
+  "users": [
+    {
+      "userID": "admin",
+      "password": "$2a$10$hgvrOsCMg/2sWw8UaYYAQOFCAGLI.xSOOkGEBUySmL48AO16rqvpu",
+      "name": "ADMINISTRATOR",
+      "isActive": true,
+      "roles": ["ADMIN"],
+      "birthday": "2025-04-21T16:10:00.298+00:00",
+      "dep": "79",
+      "gender": "UNDEFINED",
+      "job": "UNDEFINED",
+      "stampNo": 99999
+    }
+  ]
+}
