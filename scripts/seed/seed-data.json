@@ -3,21 +3,25 @@
     {
       "key": "AUTO_INCOMING",
       "name": "Auto_Incoming",
+      "type": "BOOLEAN",
       "value": true
     },
     {
       "key": "AUTO_OUTGOING",
       "name": "Auto_Outgoing",
+      "type": "BOOLEAN",
       "value": true
     },
     {
       "key": "AUTO_TRANSFER",
       "name": "Auto_Transfer",
+      "type": "BOOLEAN",
       "value": true
     },
     {
       "key": "AUTO_RECEIVE",
       "name": "Auto_Receive",
+      "type": "BOOLEAN",
       "value": true
     }
   ],
@@ -28,11 +32,13 @@
       "name": "ADMINISTRATOR",
       "isActive": true,
       "roles": ["ADMIN"],
-      "birthday": "2025-04-21T16:10:00.298+00:00",
+      "birthday": "2003-01-28T00:00:00.000+00:00",
       "dep": "79",
       "gender": "UNDEFINED",
       "job": "UNDEFINED",
       "stampNo": 99999
     }
-  ]
+  ],
+  "codes": [],
+  "codeOptions": []
 }

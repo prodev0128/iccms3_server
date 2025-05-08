@@ -10,7 +10,7 @@
     "build:incoming": "nest build incoming",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\" \"scripts/**/*.ts\"",
     "lint": "eslint {apps,libs,scripts}/**/*.ts --fix",
-    "seed": "ts-node scripts/seed/seed.ts",
+    "seed": "ts-node -r tsconfig-paths/register scripts/seed/seed.ts",
     "start:dev": "rimraf logs && ts-node scripts/build_run/start-dev.ts",
     "start:dev:incoming": "nest start incoming --watch",
     "start:prod": "rimraf logs && ts-node scripts/build_run/start-prod.ts",
